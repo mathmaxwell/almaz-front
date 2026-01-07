@@ -27,5 +27,7 @@ const ru = {
 	payment_history: 'История оплат',
 	payment_amount: 'Сумма оплаты',
 	received_time: 'Время получения',
+	contact_us: 'Связаться с нами',
+	contact_message: 'Мы всегда на связи! Выберите удобный способ общения',
 }
 export default ru

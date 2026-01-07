@@ -4,6 +4,7 @@ const Announcements = () => {
 	return (
 		<>
 			<Header />
+			elonlar
 		</>
 	)
 }

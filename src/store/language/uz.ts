@@ -27,6 +27,7 @@ const uz = {
 	payment_history: "To'lovlar tarixi",
 	payment_amount: "To'lov summasi",
 	received_time: 'Qabul qilingan vaqt',
-  
+	contact_us: "Biz bilan bog'lanish",
+	contact_message: 'Biz har doim aloqadamiz! Qulay muloqot usulini tanlang',
 }
 export default uz
