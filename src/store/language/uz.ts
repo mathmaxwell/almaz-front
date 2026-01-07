@@ -1,0 +1,32 @@
+const uz = {
+	backToMainPage: 'Asosiy sahifaga qaytish',
+	error404Title: 'Sahifa topilmadi',
+	error404Message:
+		"Siz qidirayotgan sahifa mavjud emas yoki boshqa joyga ko'chirilgan.",
+	or: 'yoki',
+	system_login: 'Tizimga kirish',
+	create_account: 'Akkaunt yaratish',
+	register: "Ro'yxatdan o'tish",
+	login: 'Kirish',
+	purchases: 'Xaridlar',
+	announcements: "E'lonlar",
+	light_mode: "Yorug' rejim",
+	dark_theme: 'Tungi rejim',
+	uzbek: "O'zbekcha",
+	russian: 'Ruscha',
+	logout_of_system: 'Tizimdan chiqish',
+	about: 'Biz haqimizda',
+	game_title: "O'yin nomi",
+	donation_name: 'Donat nomi',
+	price: 'Narxi',
+	purchase_time: 'Xarid vaqti',
+	balance_was: 'Hisobda bor edi',
+	balance_became: "Hisobda bo'ldi",
+	status: 'Holati',
+	purchase_history: 'Xaridlar tarixi',
+	payment_history: "To'lovlar tarixi",
+	payment_amount: "To'lov summasi",
+	received_time: 'Qabul qilingan vaqt',
+  
+}
+export default uz
