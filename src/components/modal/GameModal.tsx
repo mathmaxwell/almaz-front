@@ -9,8 +9,6 @@ import LoadingProgress from '../Loading/LoadingProgress'
 const GameModal = () => {
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
-	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
-	if (!isAdmin) return null
 	const { modalOpen, selectedGame, closeModal } = useGamesStoreModal()
 	const [name, setName] = useState('')
 	const [howToUseUz, setHowToUseUz] = useState('')
@@ -234,7 +232,7 @@ const GameModal = () => {
 								onClick={onDelete}
 								fullWidth
 							>
-								{t.delete_game || 'Удалить'}
+								{t.delete_game}
 							</Button>
 						)}
 						<Button
