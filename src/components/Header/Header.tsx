@@ -33,7 +33,7 @@ export default function Header() {
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 	const { setTheme, theme } = useThemeStore()
-	const { resetToken, token } = useTokenStore()
+	const { resetToken, token, resetBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	return (
 		<Box sx={{ flexGrow: 1, width: '100%' }}>
@@ -170,6 +170,7 @@ export default function Header() {
 					<ListItemButton
 						onClick={() => {
 							resetToken()
+							resetBalance()
 						}}
 					>
 						<ListItemIcon>

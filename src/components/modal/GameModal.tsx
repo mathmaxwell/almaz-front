@@ -20,6 +20,7 @@ const GameModal = () => {
 	const [previewMain, setPreviewMain] = useState<string | null>(null)
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
+
 	useEffect(() => {
 		if (selectedGame) {
 			setName(selectedGame.name || '')
@@ -53,8 +54,6 @@ const GameModal = () => {
 			return () => URL.revokeObjectURL(url)
 		}
 	}, [imageHelperFile])
-
-	if (!modalOpen) return null
 
 	const onSubmit = async () => {
 		if (!name.trim()) return

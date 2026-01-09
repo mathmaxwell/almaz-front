@@ -45,5 +45,8 @@ const uz = {
 	delete: "O'chirish",
 	update: 'Yangilash',
 	add: "Qo'shish",
+	add_to_cart: "Savatchaga qo'shish",
+	buy_now: 'Hozir sotib olish',
+	title: 'Sarlavha',
 }
 export default uz

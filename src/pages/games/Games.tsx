@@ -40,15 +40,13 @@ const Games = () => {
 						}}
 					>
 						{data?.map(g => (
-							<Card
-								sx={{ maxWidth: 345 }}
-								key={g.id}
-								onClick={() => {
-									setGame(g)
-									navigate(`/${g.name}/${g.id}`)
-								}}
-							>
-								<CardActionArea>
+							<Card sx={{ maxWidth: 345 }} key={g.id}>
+								<CardActionArea
+									onClick={() => {
+										setGame(g)
+										navigate(`/${g.name}/${g.id}`)
+									}}
+								>
 									<CardMedia
 										component='img'
 										height='200'
@@ -56,9 +54,7 @@ const Games = () => {
 										alt={g.id}
 									/>
 									<CardContent>
-										<Typography gutterBottom variant='h5' component='div'>
-											{g.name}
-										</Typography>
+										<Typography variant='h5'>{g.name}</Typography>
 									</CardContent>
 								</CardActionArea>
 							</Card>

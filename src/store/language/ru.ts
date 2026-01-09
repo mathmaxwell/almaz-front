@@ -45,5 +45,8 @@ const ru = {
 	delete: 'Удалить',
 	update: 'Обновить',
 	add: 'Добавить',
+	add_to_cart: 'Добавить в корзину',
+	buy_now: 'Купить сейчас',
+	title: 'Название',
 }
 export default ru

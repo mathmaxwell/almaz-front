@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 const Register = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [isLogin, setIsLogin] = useState(true)
-	const { setToken } = useTokenStore()
+	const { setToken, setBalance } = useTokenStore()
 	const navigate = useNavigate()
 	const { t } = useTranslationStore()
 	const theme = useTheme()
@@ -35,9 +35,11 @@ const Register = () => {
 			if (isLogin) {
 				const result = await login(form)
 				setToken(result.token)
+				setBalance(result.balance.toString())
 			} else {
 				const result = await register(form)
 				setToken(result.token)
+				setBalance(result.balance.toString())
 			}
 			setIsLoading(false)
 			navigate('/')

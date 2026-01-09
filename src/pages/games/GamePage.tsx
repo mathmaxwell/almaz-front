@@ -2,14 +2,16 @@ import Header from '../../components/Header/Header'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import {
 	Box,
-	Card,
-	CardActionArea,
-	CardContent,
-	CardMedia,
 	IconButton,
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	Typography,
 } from '@mui/material'
-import HelpIcon from '@mui/icons-material/Help'
 import { useGamesStoreModal } from '../../store/modal/useGameModal'
 import EditIcon from '@mui/icons-material/Edit'
 import { useGameStore } from '../../store/game/useGameStore'
@@ -22,9 +24,10 @@ import { useOfferStoreModal } from '../../store/modal/useOfferModal'
 import type { IOffer } from '../../types/games/games'
 import { useQuery } from '@tanstack/react-query'
 import { getOffer } from '../../api/games/offer'
+import { CartRow } from './CartRow'
 const GamePage = () => {
 	const theme = useTheme()
-	const { lang } = useTranslationStore()
+	const { lang, t } = useTranslationStore()
 	const { game } = useGameStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
@@ -63,9 +66,15 @@ const GamePage = () => {
 				}}
 			>
 				<img
+					onClick={e => {
+						e.stopPropagation()
+						setText('')
+						setImg(`${apiUrl}${game.helpImage}`)
+						setOpen(true)
+					}}
 					src={`${apiUrl}${game.image}`}
 					alt='game name'
-					style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+					style={{ width: '50px', height: '50px', objectFit: 'contain' }}
 				/>
 				<Typography variant='h4'>{game.name}</Typography>
 				{isAdmin && (
@@ -94,49 +103,30 @@ const GamePage = () => {
 				<>loading</>
 			) : (
 				<>
-					{data?.map(offer => (
-						<Card sx={{ maxWidth: 345 }} key={offer.id}>
-							<CardActionArea>
-								<CardMedia
-									component='img'
-									height='200'
-									image={`${apiUrl}${offer.image}`}
-									alt={offer.ruName}
-								/>
-								<CardContent
-									sx={{
-										display: 'flex',
-										alignItems: 'center',
-										justifyContent: 'space-between',
-										gap: 2,
-									}}
-								>
-									<Typography gutterBottom variant='h5' component='div'>
-										{lang == 'ru' ? offer.ruName : offer.uzName}
-									</Typography>
-									<Typography
-										sx={{ mr: 'auto' }}
-										gutterBottom
-										variant='h5'
-										component='div'
-									>
-										{offer.price}
-									</Typography>
-
-									<IconButton
-										onClick={e => {
-											e.stopPropagation()
-											setText(lang == 'ru' ? offer.ruDesc : offer.uzDesc)
-											setImg(`${apiUrl}${game.helpImage}`)
-											setOpen(true)
-										}}
-									>
-										<HelpIcon />
-									</IconButton>
-								</CardContent>
-							</CardActionArea>
-						</Card>
-					))}
+					<TableContainer component={Paper} sx={{ p: 0 }}>
+						<Table aria-label='simple table' sx={{ p: 0 }}>
+							<TableHead sx={{ p: 0 }}>
+								<TableRow>
+									<TableCell>{t.title}</TableCell>
+									<TableCell align='center'>{t.image}</TableCell>
+									<TableCell align='center'>{t.price}</TableCell>
+									<TableCell align='center'>{t.add_to_cart}</TableCell>
+									<TableCell align='center'>{t.buy_now}</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{data?.map(row => (
+									<CartRow
+										key={row.id}
+										row={row}
+										setOpen={setOpen}
+										setText={setText}
+										setImg={setImg}
+									/>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
 				</>
 			)}
 		</>
