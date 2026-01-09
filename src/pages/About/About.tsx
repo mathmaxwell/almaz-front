@@ -13,7 +13,6 @@ import telegram from '../../images/telegram.png'
 import instagram from '../../images/instagram.webp'
 import admin from '../../images/admin.jpeg'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-
 const About = () => {
 	const { t } = useTranslationStore()
 	const theme = useTheme()

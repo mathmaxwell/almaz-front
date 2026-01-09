@@ -13,6 +13,9 @@ import { useEffect } from 'react'
 import Announcements from './pages/announcements/Announcements'
 import Profile from './pages/Profile/Profile'
 import About from './pages/About/About'
+import GamePage from './pages/games/GamePage'
+import GameModal from './components/modal/GameModal'
+import OfferModal from './components/modal/OfferModal'
 
 function App() {
 	const { token } = useTokenStore()
@@ -28,10 +31,20 @@ function App() {
 				<Route path='*' element={<ErrorPage />} />
 				<Route path='/' element={<HomePage />} />
 				<Route path='/profile' element={<Profile />} />
+				<Route
+					path='/:gameName/:gameId'
+					element={
+						<>
+							<GamePage />
+							<OfferModal />
+						</>
+					}
+				/>
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
 				<Route path='/register' element={<Register />} />
 			</Routes>
+			<GameModal />
 		</>
 	)
 }

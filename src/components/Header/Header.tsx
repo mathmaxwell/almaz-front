@@ -13,6 +13,7 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import LanguageIcon from '@mui/icons-material/Language'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import {
 	Divider,
 	Drawer,
@@ -25,14 +26,17 @@ import {
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useThemeStore } from '../../store/theme/theme'
 import { useTokenStore } from '../../store/token/useTokenStore'
+import { useGamesStoreModal } from '../../store/modal/useGameModal'
 export default function Header() {
 	const { t, lang, setLang } = useTranslationStore()
+	const { openModal } = useGamesStoreModal()
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 	const { setTheme, theme } = useThemeStore()
-	const { resetToken } = useTokenStore()
+	const { resetToken, token } = useTokenStore()
+	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexGrow: 1, width: '100%' }}>
 			<AppBar position='static'>
 				<Toolbar>
 					<IconButton
@@ -146,6 +150,20 @@ export default function Header() {
 								<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
 							</ListItemButton>
 						</ListItem>
+						{isAdmin && (
+							<ListItem disablePadding>
+								<ListItemButton
+									onClick={() => {
+										openModal()
+									}}
+								>
+									<ListItemIcon>
+										<SportsEsportsIcon />
+									</ListItemIcon>
+									<ListItemText primary={t.add_game} />
+								</ListItemButton>
+							</ListItem>
+						)}
 					</List>
 				</Box>
 				<ListItem disablePadding sx={{ mt: 'auto' }}>

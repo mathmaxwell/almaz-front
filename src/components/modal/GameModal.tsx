@@ -1,0 +1,257 @@
+import { useEffect, useState } from 'react'
+import { useGamesStoreModal } from '../../store/modal/useGameModal'
+import { Box, Button, Dialog, TextField, Typography } from '@mui/material'
+import { useTranslationStore } from '../../store/language/useTranslationStore'
+import { useTokenStore } from '../../store/token/useTokenStore'
+import { createGame, deleteGame, updateGame } from '../../api/games/games'
+import LoadingProgress from '../Loading/LoadingProgress'
+
+const GameModal = () => {
+	const { t } = useTranslationStore()
+	const { token } = useTokenStore()
+	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
+	if (!isAdmin) return null
+	const { modalOpen, selectedGame, closeModal } = useGamesStoreModal()
+	const [name, setName] = useState('')
+	const [howToUseUz, setHowToUseUz] = useState('')
+	const [howToUseRu, setHowToUseRu] = useState('')
+	const [imageFile, setImageFile] = useState<File | null>(null)
+	const [imageHelperFile, setImageHelperFile] = useState<File | null>(null)
+	const [previewMain, setPreviewMain] = useState<string | null>(null)
+	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
+	const [loading, setLoading] = useState(false)
+	useEffect(() => {
+		if (selectedGame) {
+			setName(selectedGame.name || '')
+			setHowToUseUz(selectedGame.howToUseUz || '')
+			setHowToUseRu(selectedGame.howToUseRu || '')
+			setPreviewMain(selectedGame.image || null)
+			setPreviewHelper(selectedGame.helpImage || null)
+			setImageFile(null)
+			setImageHelperFile(null)
+		} else {
+			setName('')
+			setHowToUseUz('')
+			setHowToUseRu('')
+			setPreviewMain(null)
+			setPreviewHelper(null)
+			setImageFile(null)
+			setImageHelperFile(null)
+		}
+	}, [selectedGame, modalOpen])
+	useEffect(() => {
+		if (imageFile) {
+			const url = URL.createObjectURL(imageFile)
+			setPreviewMain(url)
+			return () => URL.revokeObjectURL(url)
+		}
+	}, [imageFile])
+	useEffect(() => {
+		if (imageHelperFile) {
+			const url = URL.createObjectURL(imageHelperFile)
+			setPreviewHelper(url)
+			return () => URL.revokeObjectURL(url)
+		}
+	}, [imageHelperFile])
+
+	if (!modalOpen) return null
+
+	const onSubmit = async () => {
+		if (!name.trim()) return
+
+		const data = new FormData()
+		data.append('token', token)
+		data.append('name', name.trim())
+		data.append('howToUseUz', howToUseUz.trim())
+		data.append('howToUseRu', howToUseRu.trim())
+
+		if (imageFile) data.append('image', imageFile)
+		if (imageHelperFile) data.append('helpImage', imageHelperFile)
+
+		try {
+			setLoading(true)
+			if (selectedGame) {
+				data.append('id', selectedGame.id.toString())
+				await updateGame(data)
+			} else {
+				await createGame(data)
+			}
+			closeModal()
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const onDelete = async () => {
+		if (!selectedGame) return
+
+		try {
+			setLoading(true)
+			await deleteGame({ token, id: selectedGame.id })
+			closeModal()
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	return (
+		<>
+			{loading && <LoadingProgress />}
+			<Dialog open={modalOpen} onClose={closeModal} fullWidth maxWidth='sm'>
+				<Box
+					sx={{
+						p: { xs: 3, sm: 4 },
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 3,
+					}}
+				>
+					<Typography variant='h5' textAlign='center' fontWeight='bold'>
+						{selectedGame ? t.update_game : t.add_game}
+					</Typography>
+
+					<TextField
+						label={t.name}
+						value={name}
+						sx={{ whiteSpace: 'pre-line' }}
+						onChange={e => setName(e.target.value)}
+						fullWidth
+						variant='outlined'
+						autoFocus
+					/>
+
+					<TextField
+						label='Как использовать (UZ)'
+						value={howToUseUz}
+						sx={{ whiteSpace: 'pre-line' }}
+						onChange={e => setHowToUseUz(e.target.value)}
+						fullWidth
+						multiline
+						rows={4}
+						variant='outlined'
+					/>
+
+					<TextField
+						label='Как использовать (RU)'
+						value={howToUseRu}
+						sx={{ whiteSpace: 'pre-line' }}
+						onChange={e => setHowToUseRu(e.target.value)}
+						fullWidth
+						multiline
+						rows={4}
+						variant='outlined'
+					/>
+
+					{/* Основное изображение */}
+					<Box>
+						<Typography variant='subtitle1' gutterBottom>
+							Основное изображение
+						</Typography>
+						<Button
+							variant='outlined'
+							component='label'
+							fullWidth
+							sx={{ py: 2, textTransform: 'none' }}
+						>
+							{imageFile
+								? imageFile.name
+								: t.upload_image || 'Загрузить основное изображение'}
+							<input
+								type='file'
+								hidden
+								accept='image/*'
+								onChange={e => setImageFile(e.target.files?.[0] || null)}
+							/>
+						</Button>
+						{previewMain && (
+							<Box sx={{ textAlign: 'center', mt: 2 }}>
+								<img
+									src={previewMain}
+									alt='Основное превью'
+									style={{
+										maxWidth: '100%',
+										maxHeight: '300px',
+										borderRadius: '12px',
+										boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+									}}
+								/>
+							</Box>
+						)}
+					</Box>
+
+					{/* Вспомогательное изображение */}
+					<Box>
+						<Typography variant='subtitle1' gutterBottom>
+							Вспомогательное изображение (инструкция)
+						</Typography>
+						<Button
+							variant='outlined'
+							component='label'
+							fullWidth
+							sx={{ py: 2, textTransform: 'none' }}
+						>
+							{imageHelperFile
+								? imageHelperFile.name
+								: 'Загрузить вспомогательное изображение'}
+							<input
+								type='file'
+								hidden
+								accept='image/*'
+								onChange={e => setImageHelperFile(e.target.files?.[0] || null)}
+							/>
+						</Button>
+						{previewHelper && (
+							<Box sx={{ textAlign: 'center', mt: 2 }}>
+								<img
+									src={previewHelper}
+									alt='Вспомогательное превью'
+									style={{
+										maxWidth: '100%',
+										maxHeight: '300px',
+										borderRadius: '12px',
+										boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+									}}
+								/>
+							</Box>
+						)}
+					</Box>
+
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							gap: 2,
+							mt: 3,
+						}}
+					>
+						{selectedGame && (
+							<Button
+								variant='contained'
+								color='error'
+								onClick={onDelete}
+								fullWidth
+							>
+								{t.delete_game || 'Удалить'}
+							</Button>
+						)}
+						<Button
+							variant='contained'
+							color='primary'
+							onClick={onSubmit}
+							disabled={!name.trim()}
+							fullWidth
+						>
+							{t.save || 'Сохранить'}
+						</Button>
+					</Box>
+				</Box>
+			</Dialog>
+		</>
+	)
+}
+
+export default GameModal
