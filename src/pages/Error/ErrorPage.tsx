@@ -13,7 +13,6 @@ const ErrorPage = () => {
 	const isSmallScreen = useMediaQuery('(max-width:600px)')
 	const navigate = useNavigate()
 	const { t } = useTranslationStore()
-
 	return (
 		<Box
 			sx={{

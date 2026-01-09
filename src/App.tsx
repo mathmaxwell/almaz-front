@@ -28,7 +28,6 @@ function App() {
 	return (
 		<>
 			<Routes>
-				<Route path='*' element={<ErrorPage />} />
 				<Route path='/' element={<HomePage />} />
 				<Route path='/profile' element={<Profile />} />
 				<Route
@@ -43,6 +42,7 @@ function App() {
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
 				<Route path='/register' element={<Register />} />
+				<Route path='*' element={<ErrorPage />} />
 			</Routes>
 			<GameModal />
 		</>
