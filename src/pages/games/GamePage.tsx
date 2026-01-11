@@ -25,6 +25,7 @@ import type { IOffer } from '../../types/games/games'
 import { useQuery } from '@tanstack/react-query'
 import { getOffer } from '../../api/games/offer'
 import { CartRow } from './CartRow'
+import BottomNavigate from '../home/BottomNavigate'
 const GamePage = () => {
 	const theme = useTheme()
 	const { lang, t } = useTranslationStore()
@@ -129,6 +130,7 @@ const GamePage = () => {
 					</TableContainer>
 				</>
 			)}
+			<BottomNavigate/>
 		</>
 	)
 }

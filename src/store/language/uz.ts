@@ -48,5 +48,7 @@ const uz = {
 	add_to_cart: "Savatchaga qo'shish",
 	buy_now: 'Hozir sotib olish',
 	title: 'Sarlavha',
+	add_advertisement: "E'lon qo'shish",
+	home_page: 'Home page',
 }
 export default uz

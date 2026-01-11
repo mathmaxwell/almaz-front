@@ -9,13 +9,14 @@ import Register from './pages/Register/Register'
 import { useTokenStore } from './store/token/useTokenStore'
 import HomePage from './pages/home/HomePage'
 import { useEffect } from 'react'
-
 import Announcements from './pages/announcements/Announcements'
 import Profile from './pages/Profile/Profile'
 import About from './pages/About/About'
 import GamePage from './pages/games/GamePage'
 import GameModal from './components/modal/GameModal'
 import OfferModal from './components/modal/OfferModal'
+import SavedGames from './pages/games/SavedGames'
+import Cart from './pages/Cart/Cart'
 
 function App() {
 	const { token } = useTokenStore()
@@ -39,8 +40,14 @@ function App() {
 						</>
 					}
 				/>
+				<Route path='/savedGames' element={<SavedGames />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
+				<Route
+					path='/announcements/:announcementsId'
+					element={<Announcements />}
+				/>
+				<Route path='/cart' element={<Cart />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='*' element={<ErrorPage />} />
 			</Routes>

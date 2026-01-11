@@ -242,7 +242,7 @@ const GameModal = () => {
 							disabled={!name.trim()}
 							fullWidth
 						>
-							{t.save || 'Сохранить'}
+							{t.save}
 						</Button>
 					</Box>
 				</Box>

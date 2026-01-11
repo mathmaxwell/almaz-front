@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import HeaderAnnouncements from '../../components/announcements/HeaderAnnouncements'
 import Header from '../../components/Header/Header'
 import GamesPage from '../games/Games'
+import BottomNavigate from './BottomNavigate'
 
 const HomePage = () => {
 	return (
@@ -18,6 +19,7 @@ const HomePage = () => {
 			<Header />
 			<HeaderAnnouncements />
 			<GamesPage />
+			<BottomNavigate />
 		</Box>
 	)
 }

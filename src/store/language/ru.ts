@@ -48,5 +48,7 @@ const ru = {
 	add_to_cart: 'Добавить в корзину',
 	buy_now: 'Купить сейчас',
 	title: 'Название',
+	add_advertisement: 'Добавить объявление',
+	home_page: 'Главная страница',
 }
 export default ru

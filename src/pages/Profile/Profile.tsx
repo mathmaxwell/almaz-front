@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import Header from '../../components/Header/Header'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
+import BottomNavigate from '../home/BottomNavigate'
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
 		backgroundColor: theme.palette.text.secondary,
@@ -135,6 +136,7 @@ const Profile = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+				<BottomNavigate />
 			</Box>
 		</>
 	)

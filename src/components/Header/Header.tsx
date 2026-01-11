@@ -13,6 +13,7 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import LanguageIcon from '@mui/icons-material/Language'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
+import HomeIcon from '@mui/icons-material/Home'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import {
 	Divider,
@@ -96,6 +97,18 @@ export default function Header() {
 						<ListItem disablePadding>
 							<ListItemButton
 								onClick={() => {
+									navigate('/')
+								}}
+							>
+								<ListItemIcon>
+									<HomeIcon />
+								</ListItemIcon>
+								<ListItemText primary={t.home_page} />
+							</ListItemButton>
+						</ListItem>
+						<ListItem disablePadding>
+							<ListItemButton
+								onClick={() => {
 									navigate('/announcements')
 								}}
 							>
@@ -107,6 +120,7 @@ export default function Header() {
 							</ListItemButton>
 						</ListItem>
 					</List>
+
 					<Divider />
 					<List>
 						<ListItem disablePadding>
