@@ -50,5 +50,26 @@ const uz = {
 	title: 'Sarlavha',
 	add_advertisement: "E'lon qo'shish",
 	home_page: 'Home page',
+	bot_id: 'Bot identifikatori',
+	place: 'Joy',
+	top: 'Yuqorida',
+	bottom: 'Pastki',
+	stop: "To'xtatish",
+	wallet: 'Hamyon',
+	payment_method: "To'lov tartibi",
+	payment_instruction:
+		"Siz to'lov summasini tanlashingiz kerak. Eng kam summa 1000 so'm. Agar siz tanlagan summa band bo'lsa, boshqa summani tanlang yoki kutib turing.",
+	payment_booking:
+		"Summani tanlaganingizdan so'ng, siz uni band qilasiz. Tanlangan summani 5 daqiqa ichida to'lashingiz kerak.",
+	payment_timeout:
+		"Agar 5 daqiqa ichida to'lovni amalga oshirmasangiz, siz tanlagan summani boshqalar band qilishi mumkin.",
+	payment_error_rules:
+		"Agar summani band qilmasdan oldin to'lov qilsangiz, yoki vaqt tugaganidan keyin to'lasangiz, yoki tanlangan summani aynan o'zini to'lamasangiz (hatto 1 so'm ko'p yoki kam farq qilsa ham), to'lov hisobga olinmaydi.",
+	card_number: 'Karta raqami',
+	add_card: "Karta qo'shish",
+	how_to_pay: "Qanday to'lash kerak",
+	no_cards_added: "Kartalar hali qo'shilmagan",
+	add_new_card: "Yangi karta qo'shish",
+	book_now: 'Band qilish',
 }
 export default uz

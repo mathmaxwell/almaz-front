@@ -15,8 +15,8 @@ import About from './pages/About/About'
 import GamePage from './pages/games/GamePage'
 import GameModal from './components/modal/GameModal'
 import OfferModal from './components/modal/OfferModal'
-import SavedGames from './pages/games/SavedGames'
 import Cart from './pages/Cart/Cart'
+import Wallet from './pages/Wallet/Wallet'
 
 function App() {
 	const { token } = useTokenStore()
@@ -40,7 +40,7 @@ function App() {
 						</>
 					}
 				/>
-				<Route path='/savedGames' element={<SavedGames />} />
+				<Route path='/wallet' element={<Wallet />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
 				<Route

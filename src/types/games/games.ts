@@ -5,6 +5,7 @@ export interface IGames {
 	howToUseUz: string
 	howToUseRu: string
 	helpImage: string
+	place: 'top' | 'bot' | 'stop'
 }
 export interface IOffer {
 	id: string
@@ -15,4 +16,5 @@ export interface IOffer {
 	price: string
 	ruDesc: string
 	uzDesc: string
+	botId: string
 }

@@ -130,7 +130,7 @@ const GamePage = () => {
 					</TableContainer>
 				</>
 			)}
-			<BottomNavigate/>
+			<BottomNavigate />
 		</>
 	)
 }

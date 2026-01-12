@@ -74,6 +74,7 @@ const Announcements = () => {
 	return (
 		<>
 			<Header />
+			
 			{isAdmin && (
 				<Box
 					sx={{
@@ -241,6 +242,7 @@ const Announcements = () => {
 					))}
 				</Box>
 			)}
+
 			<BottomNavigate />
 		</>
 	)

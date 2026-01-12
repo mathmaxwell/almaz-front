@@ -37,163 +37,179 @@ export default function Header() {
 	const { resetToken, token, resetBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	return (
-		<Box sx={{ flexGrow: 1, width: '100%' }}>
-			<AppBar position='static'>
-				<Toolbar>
-					<IconButton
-						size='large'
-						edge='start'
-						color='inherit'
-						aria-label='open drawer'
-						sx={{ mr: 2 }}
-						onClick={() => {
-							setOpen(true)
-						}}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography
-						variant='h6'
-						noWrap
-						component='div'
-						sx={{ cursor: 'pointer' }}
-						onClick={() => {
-							navigate('/')
-						}}
-					>
-						FASTPIN
-					</Typography>
-
-					<Box sx={{ flexGrow: 1 }} />
-					<Box sx={{ display: 'flex' }}>
-						<IconButton
-							onClick={() => {
-								navigate('/profile')
-							}}
-							size='large'
-							edge='end'
-							aria-haspopup='true'
-							color='inherit'
-						>
-							<AccountCircle />
-						</IconButton>
-					</Box>
-				</Toolbar>
-			</AppBar>
-			<Drawer
-				open={open}
-				onClose={() => {
-					setOpen(false)
+		<>
+			<Box
+				sx={{
+					flexGrow: 1,
+					width: '100%',
+					position: 'fixed',
+					zIndex: 99,
+					top: 0,
+					left: 0,
+					right: 0,
 				}}
 			>
-				<Box
-					sx={{ width: 250 }}
-					role='presentation'
-					onClick={() => {
+				<AppBar position='static' sx={{ height: '64px' }}>
+					<Toolbar>
+						<IconButton
+							size='large'
+							edge='start'
+							color='inherit'
+							aria-label='open drawer'
+							sx={{ mr: 2 }}
+							onClick={() => {
+								setOpen(true)
+							}}
+						>
+							<MenuIcon />
+						</IconButton>
+						<Typography
+							variant='h6'
+							noWrap
+							component='div'
+							sx={{ cursor: 'pointer' }}
+							onClick={() => {
+								navigate('/')
+							}}
+						>
+							FASTPIN
+						</Typography>
+
+						<Box sx={{ flexGrow: 1 }} />
+						<Box sx={{ display: 'flex' }}>
+							<IconButton
+								onClick={() => {
+									navigate('/profile')
+								}}
+								size='large'
+								edge='end'
+								aria-haspopup='true'
+								color='inherit'
+							>
+								<AccountCircle />
+							</IconButton>
+						</Box>
+					</Toolbar>
+				</AppBar>
+				<Drawer
+					open={open}
+					onClose={() => {
 						setOpen(false)
 					}}
 				>
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									navigate('/')
-								}}
-							>
-								<ListItemIcon>
-									<HomeIcon />
-								</ListItemIcon>
-								<ListItemText primary={t.home_page} />
-							</ListItemButton>
-						</ListItem>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									navigate('/announcements')
-								}}
-							>
-								<ListItemIcon>
-									<CampaignIcon />
-								</ListItemIcon>
-								<ListItemText primary={t.announcements} />
-								{/*elon */}
-							</ListItemButton>
-						</ListItem>
-					</List>
-
-					<Divider />
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									navigate('/about')
-								}}
-							>
-								<ListItemIcon>
-									<InfoIcon />
-								</ListItemIcon>
-								<ListItemText primary={t.about} />
-							</ListItemButton>
-						</ListItem>
-					</List>
-					<Divider />
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									theme === 'dark' ? setTheme('light') : setTheme('dark')
-								}}
-							>
-								<ListItemIcon>
-									{theme == 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-								</ListItemIcon>
-								<ListItemText
-									primary={theme == 'dark' ? t.light_mode : t.dark_theme}
-								/>
-							</ListItemButton>
-						</ListItem>
-						<ListItem disablePadding>
-							<ListItemButton
-								onClick={() => {
-									lang == 'ru' ? setLang('uz') : setLang('ru')
-								}}
-							>
-								<ListItemIcon>
-									<LanguageIcon />
-								</ListItemIcon>
-								<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
-							</ListItemButton>
-						</ListItem>
-						{isAdmin && (
+					<Box
+						sx={{ width: 250 }}
+						role='presentation'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
+						<List>
 							<ListItem disablePadding>
 								<ListItemButton
 									onClick={() => {
-										openModal()
+										navigate('/')
 									}}
 								>
 									<ListItemIcon>
-										<SportsEsportsIcon />
+										<HomeIcon />
 									</ListItemIcon>
-									<ListItemText primary={t.add_game} />
+									<ListItemText primary={t.home_page} />
 								</ListItemButton>
 							</ListItem>
-						)}
-					</List>
-				</Box>
-				<ListItem disablePadding sx={{ mt: 'auto' }}>
-					<ListItemButton
-						onClick={() => {
-							resetToken()
-							resetBalance()
-						}}
-					>
-						<ListItemIcon>
-							<LogoutIcon color='error' />
-						</ListItemIcon>
-						<ListItemText primary={t.logout_of_system} sx={{ color: 'red' }} />
-					</ListItemButton>
-				</ListItem>
-			</Drawer>
-		</Box>
+							<ListItem disablePadding>
+								<ListItemButton
+									onClick={() => {
+										navigate('/announcements')
+									}}
+								>
+									<ListItemIcon>
+										<CampaignIcon />
+									</ListItemIcon>
+									<ListItemText primary={t.announcements} />
+									{/*elon */}
+								</ListItemButton>
+							</ListItem>
+						</List>
+
+						<Divider />
+						<List>
+							<ListItem disablePadding>
+								<ListItemButton
+									onClick={() => {
+										navigate('/about')
+									}}
+								>
+									<ListItemIcon>
+										<InfoIcon />
+									</ListItemIcon>
+									<ListItemText primary={t.about} />
+								</ListItemButton>
+							</ListItem>
+						</List>
+						<Divider />
+						<List>
+							<ListItem disablePadding>
+								<ListItemButton
+									onClick={() => {
+										theme === 'dark' ? setTheme('light') : setTheme('dark')
+									}}
+								>
+									<ListItemIcon>
+										{theme == 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+									</ListItemIcon>
+									<ListItemText
+										primary={theme == 'dark' ? t.light_mode : t.dark_theme}
+									/>
+								</ListItemButton>
+							</ListItem>
+							<ListItem disablePadding>
+								<ListItemButton
+									onClick={() => {
+										lang == 'ru' ? setLang('uz') : setLang('ru')
+									}}
+								>
+									<ListItemIcon>
+										<LanguageIcon />
+									</ListItemIcon>
+									<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
+								</ListItemButton>
+							</ListItem>
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											openModal()
+										}}
+									>
+										<ListItemIcon>
+											<SportsEsportsIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.add_game} />
+									</ListItemButton>
+								</ListItem>
+							)}
+						</List>
+					</Box>
+					<ListItem disablePadding sx={{ mt: 'auto' }}>
+						<ListItemButton
+							onClick={() => {
+								resetToken()
+								resetBalance()
+							}}
+						>
+							<ListItemIcon>
+								<LogoutIcon color='error' />
+							</ListItemIcon>
+							<ListItemText
+								primary={t.logout_of_system}
+								sx={{ color: 'red' }}
+							/>
+						</ListItemButton>
+					</ListItem>
+				</Drawer>
+			</Box>
+			<Box sx={{ height: { xs: '80px' } }}></Box>
+		</>
 	)
 }

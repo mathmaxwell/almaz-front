@@ -15,6 +15,7 @@ const OfferModal = () => {
 	const { modalOpen, selectedOffer, closeModal } = useOfferStoreModal()
 	const [image, setImage] = useState<File | null>(null)
 	const [ruName, setRuName] = useState('')
+	const [botId, setBotId] = useState('')
 	const [uzName, setUzName] = useState('')
 	const [price, setPrice] = useState('')
 	const [ruDesc, setRuDesc] = useState('')
@@ -25,6 +26,7 @@ const OfferModal = () => {
 		if (selectedOffer) {
 			setImage(null)
 			setRuName(selectedOffer.ruName)
+			setBotId(selectedOffer.botId)
 			setUzName(selectedOffer.uzName)
 			setPrice(selectedOffer.price)
 			setRuDesc(selectedOffer.ruDesc)
@@ -38,6 +40,7 @@ const OfferModal = () => {
 			setPrice('')
 			setRuDesc('')
 			setUzDesc('')
+			setBotId('')
 		}
 	}, [selectedOffer, modalOpen])
 	useEffect(() => {
@@ -58,6 +61,7 @@ const OfferModal = () => {
 		data.append('ruDesc', ruDesc.trim())
 		data.append('uzDesc', uzDesc.trim())
 		data.append('price', price.trim())
+		data.append('botId', botId.trim())
 		if (image) data.append('image', image)
 		try {
 			setLoading(true)
@@ -105,7 +109,14 @@ const OfferModal = () => {
 					<Typography variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedOffer ? t.update : t.add}
 					</Typography>
-
+					<TextField
+						label={t.bot_id}
+						value={botId}
+						onChange={e => setBotId(e.target.value)}
+						fullWidth
+						variant='outlined'
+						autoFocus
+					/>
 					<TextField
 						label={t.title_ru}
 						value={ruName}

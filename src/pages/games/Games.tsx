@@ -33,14 +33,18 @@ const Games = () => {
 				<>
 					<Box
 						sx={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
+							display: 'grid',
+							gridTemplateColumns: {
+								xs: '1fr 1fr',
+								sm: '1fr 1fr 1fr',
+								md: '1fr 1fr 1fr 1fr',
+								lg: '1fr 1fr 1fr 1fr 1fr',
+							},
 							gap: 2,
 						}}
 					>
 						{data?.map(g => (
-							<Card sx={{ maxWidth: 345 }} key={g.id}>
+							<Card sx={{ maxWidth: '100%' }} key={g.id}>
 								<CardActionArea
 									onClick={() => {
 										setGame(g)
@@ -48,12 +52,12 @@ const Games = () => {
 									}}
 								>
 									<CardMedia
+										sx={{ width: '100%' }}
 										component='img'
-										height='200'
 										image={`${apiUrl}${g.image}`}
 										alt={g.id}
 									/>
-									<CardContent>
+									<CardContent sx={{ height: '100px' }}>
 										<Typography variant='h5'>{g.name}</Typography>
 									</CardContent>
 								</CardActionArea>

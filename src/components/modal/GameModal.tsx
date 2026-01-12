@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useGamesStoreModal } from '../../store/modal/useGameModal'
-import { Box, Button, Dialog, TextField, Typography } from '@mui/material'
+import {
+	Box,
+	Button,
+	Dialog,
+	FormControl,
+	InputLabel,
+	NativeSelect,
+	TextField,
+	Typography,
+} from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createGame, deleteGame, updateGame } from '../../api/games/games'
@@ -18,7 +27,7 @@ const GameModal = () => {
 	const [previewMain, setPreviewMain] = useState<string | null>(null)
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
-
+	const [place, setIsPlace] = useState<string>('top')
 	useEffect(() => {
 		if (selectedGame) {
 			setName(selectedGame.name || '')
@@ -28,6 +37,7 @@ const GameModal = () => {
 			setPreviewHelper(selectedGame.helpImage || null)
 			setImageFile(null)
 			setImageHelperFile(null)
+			setIsPlace(selectedGame.place)
 		} else {
 			setName('')
 			setHowToUseUz('')
@@ -36,6 +46,7 @@ const GameModal = () => {
 			setPreviewHelper(null)
 			setImageFile(null)
 			setImageHelperFile(null)
+			setIsPlace('bot')
 		}
 	}, [selectedGame, modalOpen])
 	useEffect(() => {
@@ -55,13 +66,12 @@ const GameModal = () => {
 
 	const onSubmit = async () => {
 		if (!name.trim()) return
-
 		const data = new FormData()
 		data.append('token', token)
 		data.append('name', name.trim())
 		data.append('howToUseUz', howToUseUz.trim())
 		data.append('howToUseRu', howToUseRu.trim())
-
+		data.append('place', place.trim())
 		if (imageFile) data.append('image', imageFile)
 		if (imageHelperFile) data.append('helpImage', imageHelperFile)
 
@@ -111,6 +121,25 @@ const GameModal = () => {
 						{selectedGame ? t.update_game : t.add_game}
 					</Typography>
 
+					<FormControl fullWidth>
+						<InputLabel variant='standard' htmlFor='uncontrolled-native'>
+							{t.place}
+						</InputLabel>
+						<NativeSelect
+							onChange={e => {
+								setIsPlace(e.target.value)
+							}}
+							defaultValue={'top'}
+							inputProps={{
+								name: 'age',
+								id: 'uncontrolled-native',
+							}}
+						>
+							<option value={'top'}>{t.top}</option>
+							<option value={'bot'}>{t.bottom}</option>
+							<option value={'stop'}>{t.stop}</option>
+						</NativeSelect>
+					</FormControl>
 					<TextField
 						label={t.name}
 						value={name}

@@ -136,6 +136,7 @@ const Profile = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+				<div style={{ height: '50px' }} />
 				<BottomNavigate />
 			</Box>
 		</>
