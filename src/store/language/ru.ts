@@ -71,5 +71,14 @@ const ru = {
 	no_cards_added: 'Карты пока не добавлены',
 	add_new_card: 'Добавить новую карту',
 	book_now: 'Забронировать',
+	finished: 'Завершено',
+	pending: 'В ожидании',
+	som: 'сум',
+	pending_payments: 'Платежи в ожидании',
+	payments: 'Платежи',
+	accept: 'Принять',
+	decline: 'Отказать',
+	confirm_accept: 'Вы уверены, что хотите принять?',
+	confirm_delete: 'Вы уверены, что хотите удалить?',
 }
 export default ru

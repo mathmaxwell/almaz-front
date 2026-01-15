@@ -71,5 +71,14 @@ const uz = {
 	no_cards_added: "Kartalar hali qo'shilmagan",
 	add_new_card: "Yangi karta qo'shish",
 	book_now: 'Band qilish',
+	finished: 'Tugatildi',
+	pending: 'Kutilmoqda',
+	som: `so'm`,
+	pending_payments: "Kutilayotgan to'lovlar",
+	payments: "To'lovlar",
+	accept: 'Qabul qilish',
+	decline: 'Rad etish',
+	confirm_accept: 'Qabul qilishga ishonchingiz komilmi?',
+	confirm_delete: "O'chirishga ishonchingiz komilmi?",
 }
 export default uz

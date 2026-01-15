@@ -15,6 +15,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
 import HomeIcon from '@mui/icons-material/Home'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import {
 	Divider,
 	Drawer,
@@ -186,6 +187,20 @@ export default function Header() {
 											<SportsEsportsIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.add_game} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/payments')
+										}}
+									>
+										<ListItemIcon>
+											<ShoppingCartCheckoutIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.payments} />
 									</ListItemButton>
 								</ListItem>
 							)}

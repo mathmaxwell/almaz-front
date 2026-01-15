@@ -24,14 +24,18 @@ import {
 	getAdmincart,
 } from '../../api/cards/cards'
 import type { ICards } from '../../types/cards/cards'
-import { getPayment } from '../../api/payment/payment'
+import { createPayment, getPayment } from '../../api/payment/payment'
+import { useNavigate } from 'react-router-dom'
+
 const Wallet = () => {
+	const navigate = useNavigate()
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const [name, setName] = useState('')
 	const [number, setNumber] = useState('')
 	const [amount, setAmount] = useState('')
+	const [loading, setIsLoading] = useState(false)
 	const {
 		data: cards = [],
 		isLoading,
@@ -232,9 +236,24 @@ const Wallet = () => {
 					fullWidth
 					variant='contained'
 					sx={{ mt: 2 }}
+					loading={loading}
 					onClick={async () => {
-						const result = await getPayment(token)
-						console.log('result', result) //shu result ga qarab, bor yoki yoqligi bilamiz, bor bo'lsa, zanyatlarini tekshiramiz
+						setIsLoading(true)
+						const result = (await getPayment(token)) ?? []
+						const hasBusy = result.some(pay => pay.price === Number(amount))
+						if (hasBusy) {
+							alert('payment is busy')
+							setIsLoading(false)
+							return
+						}
+						const newPayment = await createPayment({
+							userId: token,
+							price: Number(amount),
+						})
+						console.log('newPayment', newPayment)
+
+						navigate(`/wallet/${newPayment.id}`)
+						setIsLoading(false)
 					}}
 				>
 					{t.book_now}

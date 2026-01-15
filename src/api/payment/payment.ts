@@ -12,6 +12,24 @@ export async function getPayment(token: string) {
 		throw new Error('payment error')
 	}
 }
+export async function getPaymentByUser({
+	token,
+	userId,
+}: {
+	token: string
+	userId: string
+}) {
+	try {
+		const responce = await api.post('/payment/getPaymentByUser', {
+			token,
+			id: userId,
+		})
+		const result = responce.data as IPayment[]
+		return result
+	} catch (error) {
+		throw new Error('payment error')
+	}
+}
 export async function createPayment({
 	userId,
 	price,
@@ -20,20 +38,14 @@ export async function createPayment({
 	price: number
 }) {
 	try {
-		const now = new Date()
 		const response = await api.post('/payment/createPayment', {
 			userId,
 			price,
 			isWorking: true,
-			year: now.getFullYear(),
-			month: now.getMonth() + 1,
-			day: now.getDate(),
-			hour: now.getHours(),
-			minute: now.getMinutes(),
 		})
-		return response
+		return response.data as IPayment
 	} catch (error: any) {
-		throw error
+		return error.response.data as IPayment
 	}
 }
 export async function deletePayment({
@@ -53,13 +65,18 @@ export async function deletePayment({
 export async function updatePayment({
 	token,
 	id,
+	isWorking,
 }: {
 	token: string
 	id: string
-	isWorking: false
+	isWorking: boolean
 }) {
 	try {
-		const response = await api.post('/payment/updatePayment', { token, id })
+		const response = await api.post('/payment/updatePayment', {
+			token,
+			id,
+			isWorking,
+		})
 		return response
 	} catch (error: any) {
 		throw error
