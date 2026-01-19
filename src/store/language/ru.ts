@@ -80,5 +80,7 @@ const ru = {
 	decline: 'Отказать',
 	confirm_accept: 'Вы уверены, что хотите принять?',
 	confirm_delete: 'Вы уверены, что хотите удалить?',
+	time: 'Время',
+	created_by: 'Создано (кем)',
 }
 export default ru

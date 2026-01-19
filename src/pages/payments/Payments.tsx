@@ -88,7 +88,8 @@ const Payments = () => {
 												await updatePayment({
 													token,
 													id: row.id,
-													isWorking: true,
+													isWorking: false,
+													userId: row.userId,
 												})
 												refetch()
 											}

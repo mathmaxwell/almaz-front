@@ -13,9 +13,9 @@ const BottomNavigate = () => {
 	const navigate = useNavigate()
 	return (
 		<>
-			<Box sx={{ height: '50px' }}></Box>
+			<Box sx={{ height: '50px', zIndex: 99 }}></Box>
 			<Paper
-				sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+				sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 99 }}
 				elevation={3}
 			>
 				<BottomNavigation

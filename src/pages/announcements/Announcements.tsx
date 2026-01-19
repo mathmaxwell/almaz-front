@@ -74,7 +74,7 @@ const Announcements = () => {
 	return (
 		<>
 			<Header />
-			
+
 			{isAdmin && (
 				<Box
 					sx={{
@@ -103,7 +103,6 @@ const Announcements = () => {
 							onChange={e => setUz(e.target.value)}
 							fullWidth
 							variant='outlined'
-							autoFocus
 						/>
 						<TextField
 							label={t.title_ru}
@@ -112,7 +111,6 @@ const Announcements = () => {
 							onChange={e => setRu(e.target.value)}
 							fullWidth
 							variant='outlined'
-							autoFocus
 						/>
 					</Box>
 					<Box
@@ -132,7 +130,6 @@ const Announcements = () => {
 							onChange={e => setUzText(e.target.value)}
 							fullWidth
 							variant='outlined'
-							autoFocus
 						/>
 						<TextField
 							label={t.description_ru}
@@ -141,7 +138,6 @@ const Announcements = () => {
 							onChange={e => setRuText(e.target.value)}
 							fullWidth
 							variant='outlined'
-							autoFocus
 						/>
 					</Box>
 					<Box

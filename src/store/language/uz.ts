@@ -80,5 +80,7 @@ const uz = {
 	decline: 'Rad etish',
 	confirm_accept: 'Qabul qilishga ishonchingiz komilmi?',
 	confirm_delete: "O'chirishga ishonchingiz komilmi?",
+	time: 'Vaqt',
+	created_by: 'Tomonidan yaratilgan',
 }
 export default uz

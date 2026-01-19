@@ -28,6 +28,7 @@ const GameModal = () => {
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [place, setIsPlace] = useState<string>('top')
+
 	useEffect(() => {
 		if (selectedGame) {
 			setName(selectedGame.name || '')
@@ -46,7 +47,7 @@ const GameModal = () => {
 			setPreviewHelper(null)
 			setImageFile(null)
 			setImageHelperFile(null)
-			setIsPlace('bot')
+			setIsPlace('top')
 		}
 	}, [selectedGame, modalOpen])
 	useEffect(() => {
@@ -126,18 +127,15 @@ const GameModal = () => {
 							{t.place}
 						</InputLabel>
 						<NativeSelect
-							onChange={e => {
-								setIsPlace(e.target.value)
-							}}
-							defaultValue={'top'}
+							value={place}
+							onChange={e => setIsPlace(e.target.value)}
 							inputProps={{
-								name: 'age',
-								id: 'uncontrolled-native',
+								id: 'place-native',
 							}}
 						>
-							<option value={'top'}>{t.top}</option>
-							<option value={'bot'}>{t.bottom}</option>
-							<option value={'stop'}>{t.stop}</option>
+							<option value='top'>{t.top}</option>
+							<option value='bot'>{t.bottom}</option>
+							<option value='stop'>{t.stop}</option>
 						</NativeSelect>
 					</FormControl>
 					<TextField

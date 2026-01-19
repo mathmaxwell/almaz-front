@@ -66,16 +66,19 @@ export async function updatePayment({
 	token,
 	id,
 	isWorking,
+	userId,
 }: {
 	token: string
 	id: string
 	isWorking: boolean
+	userId: string
 }) {
 	try {
 		const response = await api.post('/payment/updatePayment', {
 			token,
 			id,
 			isWorking,
+			userId,
 		})
 		return response
 	} catch (error: any) {

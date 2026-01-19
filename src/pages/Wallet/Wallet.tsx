@@ -1,4 +1,7 @@
 import {
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
 	Box,
 	Button,
 	Card,
@@ -7,7 +10,10 @@ import {
 	TextField,
 	Tooltip,
 	Typography,
+	useMediaQuery,
+	useTheme,
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -28,6 +34,8 @@ import { createPayment, getPayment } from '../../api/payment/payment'
 import { useNavigate } from 'react-router-dom'
 
 const Wallet = () => {
+	const theme = useTheme()
+	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const navigate = useNavigate()
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
@@ -36,6 +44,7 @@ const Wallet = () => {
 	const [number, setNumber] = useState('')
 	const [amount, setAmount] = useState('')
 	const [loading, setIsLoading] = useState(false)
+
 	const {
 		data: cards = [],
 		isLoading,
@@ -75,30 +84,23 @@ const Wallet = () => {
 					gap: 2,
 				}}
 			>
-				<Typography
-					variant='h4'
-					component='h1'
-					fontWeight={600}
-					textAlign='center'
-				>
-					{t.payment_method}
-				</Typography>
-				<Card
-					variant='outlined'
-					sx={{ bgcolor: 'background.paper', borderRadius: 3 }}
-				>
-					<CardContent>
-						<Typography variant='h6' gutterBottom color='primary'>
-							{t.how_to_pay}:
-						</Typography>
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls='panel1-content'
+						id='panel1-header'
+					>
+						<Typography component='span'>{t.how_to_pay}</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
 						<ol style={{ paddingLeft: '1.2rem', margin: 0 }}>
 							<li>{t.payment_instruction}</li>
 							<li>{t.payment_booking}</li>
 							<li>{t.payment_timeout}</li>
 							<li>{t.payment_error_rules}</li>
 						</ol>
-					</CardContent>
-				</Card>
+					</AccordionDetails>
+				</Accordion>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
 					{isLoading ? (
 						<Typography>loading</Typography>
@@ -107,80 +109,88 @@ const Wallet = () => {
 							{t.no_cards_added}
 						</Typography>
 					) : (
-						cards.map(card => (
-							<Card
-								key={card.id}
-								elevation={3}
-								sx={{
-									borderRadius: 3,
-									background:
-										'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-									color: 'white',
-									position: 'relative',
-									overflow: 'hidden',
-								}}
-							>
-								<CardContent sx={{ position: 'relative', zIndex: 1 }}>
-									<Box
-										sx={{
-											display: 'flex',
-											alignItems: 'center',
-											gap: 1.5,
-											mb: 1.5,
-										}}
-									>
-										<CreditCardIcon fontSize='large' />
-										<Typography variant='h6' fontWeight={500}>
-											{card.name}
-										</Typography>
-									</Box>
-
-									<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-										<Typography
-											variant='h5'
-											fontFamily='monospace'
-											letterSpacing={1.5}
-											sx={{ userSelect: 'all' }}
+						<Box
+							sx={{
+								display: 'grid',
+								gridTemplateColumns: isDesctop ? '1fr' : '1fr 1fr',
+								gap: 2,
+							}}
+						>
+							{cards.map(card => (
+								<Card
+									key={card.id}
+									elevation={3}
+									sx={{
+										borderRadius: 3,
+										background:
+											'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+										color: 'white',
+										position: 'relative',
+										overflow: 'hidden',
+									}}
+								>
+									<CardContent sx={{ position: 'relative', zIndex: 1 }}>
+										<Box
+											sx={{
+												display: 'flex',
+												alignItems: 'center',
+												gap: 1.5,
+												mb: 1.5,
+											}}
 										>
-											{card.number}
-										</Typography>
+											<CreditCardIcon fontSize='large' />
+											<Typography variant='h6' fontWeight={500}>
+												{card.name}
+											</Typography>
+										</Box>
 
-										<Tooltip title='Скопировать номер' arrow>
+										<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+											<Typography
+												variant='h5'
+												fontFamily='monospace'
+												letterSpacing={1.5}
+												sx={{ userSelect: 'all' }}
+											>
+												{card.number}
+											</Typography>
+
+											<Tooltip title='Скопировать номер' arrow>
+												<IconButton
+													size='small'
+													sx={{
+														color: 'white',
+														bgcolor: 'rgba(255,255,255,0.15)',
+													}}
+													onClick={() => copyToClipboard(card.number)}
+												>
+													<ContentCopyIcon fontSize='small' />
+												</IconButton>
+											</Tooltip>
+										</Box>
+										{isAdmin && (
 											<IconButton
 												size='small'
 												sx={{
+													position: 'absolute',
+													top: 12,
+													right: 12,
 													color: 'white',
-													bgcolor: 'rgba(255,255,255,0.15)',
+													bgcolor: 'rgba(0,0,0,0.3)',
+													'&:hover': { bgcolor: 'rgba(255,0,0,0.6)' },
 												}}
-												onClick={() => copyToClipboard(card.number)}
+												onClick={async () => {
+													if (!confirm('Удалить карту?')) return
+													await deleteAdmincart({ token, id: card.id })
+													refetch()
+												}}
 											>
-												<ContentCopyIcon fontSize='small' />
+												<DeleteIcon fontSize='small' />
 											</IconButton>
-										</Tooltip>
-									</Box>
-									{isAdmin && (
-										<IconButton
-											size='small'
-											sx={{
-												position: 'absolute',
-												top: 12,
-												right: 12,
-												color: 'white',
-												bgcolor: 'rgba(0,0,0,0.3)',
-												'&:hover': { bgcolor: 'rgba(255,0,0,0.6)' },
-											}}
-											onClick={async () => {
-												if (!confirm('Удалить карту?')) return
-												await deleteAdmincart({ token, id: card.id })
-												refetch()
-											}}
-										>
-											<DeleteIcon fontSize='small' />
-										</IconButton>
-									)}
-								</CardContent>
-							</Card>
-						))
+										)}
+									</CardContent>
+								</Card>
+							))}
+						</Box>
 					)}
 				</Box>
 				{isAdmin && (
