@@ -10,6 +10,7 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Typography,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import type { IPayment } from '../../types/payment/payment'
@@ -17,10 +18,21 @@ import { getPaymentByUser } from '../../api/payment/payment'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
+import type { IUser } from '../../types/user/user'
+import { getUserById } from '../../api/login/login'
 
 const WaitZone = () => {
-	const { token } = useTokenStore()
+	const { token, setBalance } = useTokenStore()
 	const { t } = useTranslationStore()
+	const { data: userInfo, refetch: refetchUserInfo } = useQuery<IUser, Error>({
+		queryKey: ['userInfo', token],
+		queryFn: async () => {
+			const result = await getUserById({ userId: token })
+			setBalance(result.balance.toString())
+			return result
+		},
+		enabled: !!token,
+	})
 	const { data, isLoading, refetch } = useQuery<IPayment[], Error>({
 		queryKey: ['userPayments', token],
 		queryFn: async () =>
@@ -31,6 +43,9 @@ const WaitZone = () => {
 		<>
 			<Header />
 			{isLoading && <LoadingProgress />}
+			<Typography align='center' variant='h5'>
+				{t.balance}: {userInfo?.balance} {t.som}
+			</Typography>
 			<Box
 				sx={{
 					p: { xs: 2, sm: 3 },
@@ -44,8 +59,9 @@ const WaitZone = () => {
 					fullWidth
 					variant='contained'
 					loading={isLoading}
-					onClick={() => {
-						refetch()
+					onClick={async () => {
+						await refetch()
+						await refetchUserInfo()
 					}}
 				>
 					{t.update}

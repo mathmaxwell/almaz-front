@@ -82,5 +82,6 @@ const uz = {
 	confirm_delete: "O'chirishga ishonchingiz komilmi?",
 	time: 'Vaqt',
 	created_by: 'Tomonidan yaratilgan',
+	balance: 'Balans',
 }
 export default uz

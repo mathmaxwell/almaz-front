@@ -32,13 +32,16 @@ import {
 import type { ICards } from '../../types/cards/cards'
 import { createPayment, getPayment } from '../../api/payment/payment'
 import { useNavigate } from 'react-router-dom'
+import { getUserById } from '../../api/login/login'
+import type { IUser } from '../../types/user/user'
 
 const Wallet = () => {
 	const theme = useTheme()
+
 	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const navigate = useNavigate()
 	const { t } = useTranslationStore()
-	const { token } = useTokenStore()
+	const { token, setBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const [name, setName] = useState('')
 	const [number, setNumber] = useState('')
@@ -52,6 +55,15 @@ const Wallet = () => {
 	} = useQuery<ICards[], Error>({
 		queryKey: ['admin-cards', token],
 		queryFn: async () => (await getAdmincart(token)) ?? [],
+		enabled: !!token,
+	})
+	const { data: userInfo } = useQuery<IUser, Error>({
+		queryKey: ['userInfo', token],
+		queryFn: async () => {
+			const result = await getUserById({ userId: token })
+			setBalance(result.balance.toString())
+			return result
+		},
 		enabled: !!token,
 	})
 	const formatCardNumber = (value: string) => {
@@ -101,6 +113,9 @@ const Wallet = () => {
 						</ol>
 					</AccordionDetails>
 				</Accordion>
+				<Typography align='center' variant='h5'>
+					{t.balance}: {userInfo?.balance} {t.som}
+				</Typography>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
 					{isLoading ? (
 						<Typography>loading</Typography>

@@ -82,5 +82,6 @@ const ru = {
 	confirm_delete: 'Вы уверены, что хотите удалить?',
 	time: 'Время',
 	created_by: 'Создано (кем)',
+	balance: 'Баланс',
 }
 export default ru

@@ -15,6 +15,14 @@ export async function login({
 		throw error
 	}
 }
+export async function getUserById({ userId }: { userId: string }) {
+	try {
+		const result = await api.post('/users/getUserById', { userId })
+		return result.data as IUser
+	} catch (error) {
+		throw error
+	}
+}
 
 export async function register({
 	login,
