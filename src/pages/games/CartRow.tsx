@@ -1,4 +1,11 @@
-import { TableRow, TableCell, Button, IconButton } from '@mui/material'
+import {
+	TableRow,
+	TableCell,
+	Button,
+	IconButton,
+	useTheme,
+	useMediaQuery,
+} from '@mui/material'
 import { useCartStore } from '../../store/cart/useCartStore'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
@@ -12,6 +19,8 @@ interface Props {
 	setImg: React.Dispatch<React.SetStateAction<string>>
 }
 export const CartRow = ({ row, setOpen, setText, setImg }: Props) => {
+	const theme = useTheme()
+	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const { lang } = useTranslationStore()
 	const apiUrl = import.meta.env.VITE_API_URL
 	const count = useCartStore(state => state.getCount(row.id))
@@ -28,16 +37,37 @@ export const CartRow = ({ row, setOpen, setText, setImg }: Props) => {
 				setImg('')
 			}}
 		>
-			<TableCell>{lang === 'ru' ? row.ruName : row.uzName}</TableCell>
-			<TableCell align='center' sx={{ p: 0 }}>
-				<img
-					style={{ width: 100, height: 100, objectFit: 'contain', padding: 0 }}
-					src={`${apiUrl}${row.image}`}
-					alt=''
-				/>
+			<TableCell sx={{ px: 0.5 }} align='center'>
+				{lang === 'ru' ? row.ruName : row.uzName}
 			</TableCell>
-			<TableCell align='center'>{row.price}</TableCell>
-			<TableCell align='center'>
+			{!isDesctop && (
+				<TableCell align='center' sx={{ p: 0 }}>
+					<img
+						style={{
+							width: 100,
+							height: 100,
+							objectFit: 'contain',
+							padding: 0,
+						}}
+						src={`${apiUrl}${row.image}`}
+						alt=''
+					/>
+				</TableCell>
+			)}
+			<TableCell sx={{ px: 0 }} align='center'>
+				{row.price}
+			</TableCell>
+			<TableCell
+				align='center'
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					gap: 0,
+					p: 3,
+					px: 0,
+				}}
+			>
 				<IconButton
 					onClick={e => {
 						decrement(row.id)
@@ -58,6 +88,7 @@ export const CartRow = ({ row, setOpen, setText, setImg }: Props) => {
 			</TableCell>
 			<TableCell align='center'>
 				<Button
+					sx={{ width: '90px' }}
 					variant='contained'
 					color={count == 0 ? 'info' : stock > 0 ? 'success' : 'error'}
 					onClick={e => {

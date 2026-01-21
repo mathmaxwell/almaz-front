@@ -11,6 +11,7 @@ import {
 	TableHead,
 	TableRow,
 	Typography,
+	useMediaQuery,
 } from '@mui/material'
 import { useGamesStoreModal } from '../../store/modal/useGameModal'
 import EditIcon from '@mui/icons-material/Edit'
@@ -28,9 +29,11 @@ import { CartRow } from './CartRow'
 import BottomNavigate from '../home/BottomNavigate'
 const GamePage = () => {
 	const theme = useTheme()
+	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const { lang, t } = useTranslationStore()
 	const { game } = useGameStore()
 	const { token } = useTokenStore()
+
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { openModal } = useGamesStoreModal()
@@ -67,12 +70,6 @@ const GamePage = () => {
 				}}
 			>
 				<img
-					onClick={e => {
-						e.stopPropagation()
-						setText('')
-						setImg(`${apiUrl}${game.helpImage}`)
-						setOpen(true)
-					}}
 					src={`${apiUrl}${game.image}`}
 					alt='game name'
 					style={{ width: '50px', height: '50px', objectFit: 'contain' }}
@@ -108,11 +105,21 @@ const GamePage = () => {
 						<Table aria-label='simple table' sx={{ p: 0 }}>
 							<TableHead sx={{ p: 0 }}>
 								<TableRow>
-									<TableCell>{t.title}</TableCell>
-									<TableCell align='center'>{t.image}</TableCell>
-									<TableCell align='center'>{t.price}</TableCell>
-									<TableCell align='center'>{t.add_to_cart}</TableCell>
-									<TableCell align='center'>{t.buy_now}</TableCell>
+									<TableCell align='center' sx={{ px: 0.5 }}>
+										{t.title}
+									</TableCell>
+									{!isDesctop && (
+										<TableCell align='center'>{t.image}</TableCell>
+									)}
+									<TableCell sx={{ px: 0 }} align='center'>
+										{t.price}
+									</TableCell>
+									<TableCell sx={{ px: 0 }} align='center'>
+										{t.count}
+									</TableCell>
+									<TableCell sx={{ px: 0 }} align='center'>
+										{t.buy_now}
+									</TableCell>
 								</TableRow>
 							</TableHead>
 							<TableBody>

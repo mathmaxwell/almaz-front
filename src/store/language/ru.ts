@@ -84,5 +84,6 @@ const ru = {
 	created_by: 'Создано (кем)',
 	balance: 'Баланс',
 	type_of_card: 'Тип карты',
+	count: 'Количество',
 }
 export default ru

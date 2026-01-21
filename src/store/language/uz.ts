@@ -84,5 +84,6 @@ const uz = {
 	created_by: 'Tomonidan yaratilgan',
 	balance: 'Balans',
 	type_of_card: 'Karta turi',
+	count: 'Soni',
 }
 export default uz
