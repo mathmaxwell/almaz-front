@@ -83,5 +83,6 @@ const uz = {
 	time: 'Vaqt',
 	created_by: 'Tomonidan yaratilgan',
 	balance: 'Balans',
+	type_of_card: 'Karta turi',
 }
 export default uz

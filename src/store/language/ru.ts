@@ -83,5 +83,6 @@ const ru = {
 	time: 'Время',
 	created_by: 'Создано (кем)',
 	balance: 'Баланс',
+	type_of_card: 'Тип карты',
 }
 export default ru

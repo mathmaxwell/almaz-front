@@ -16,16 +16,19 @@ export async function createAdmincart({
 	token,
 	name,
 	number,
+	type,
 }: {
 	token: string
 	name: string
 	number: string
+	type: string
 }) {
 	try {
 		const response = await api.post('/admincart/create', {
 			token,
 			name,
 			number,
+			type,
 		})
 		return response
 	} catch (error: any) {
