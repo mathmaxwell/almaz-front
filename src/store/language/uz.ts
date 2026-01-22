@@ -85,5 +85,8 @@ const uz = {
 	balance: 'Balans',
 	type_of_card: 'Karta turi',
 	count: 'Soni',
+	payment_is_busy: "To'lov band",
+	you_already_have_an_order: 'Sizda allaqachon buyurtma bor',
+	watch_video: "Videoni ko'rish",
 }
 export default uz

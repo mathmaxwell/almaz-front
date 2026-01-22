@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware'
 
 type CartState = {
 	items: Record<string, number>
-
 	getCount: (id: string) => number
 	increment: (id: string) => void
 	decrement: (id: string) => void
@@ -58,6 +57,6 @@ export const useCartStore = create<CartState>()(
 		}),
 		{
 			name: 'cart-storage',
-		}
-	)
+		},
+	),
 )

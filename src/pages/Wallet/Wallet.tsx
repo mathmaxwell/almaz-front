@@ -15,13 +15,15 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createPayment, getPayment } from '../../api/payment/payment'
-import { useNavigate } from 'react-router-dom'
 import { getUserById } from '../../api/login/login'
 import type { IUser } from '../../types/user/user'
+import SelectType from '../../components/BankCards/SelectType'
+import { useSelectCardStore } from '../../store/cart/useSelectCardStore'
 import BankCards from '../../components/BankCards/BankCards'
 const Wallet = () => {
+	const [cardType, setCardType] = useState<undefined | string>(undefined)
 	const [loading, setIsLoading] = useState(false)
-	const navigate = useNavigate()
+	const { card } = useSelectCardStore()
 	const { t } = useTranslationStore()
 	const { token, setBalance } = useTokenStore()
 	const [amount, setAmount] = useState('')
@@ -34,7 +36,6 @@ const Wallet = () => {
 		},
 		enabled: !!token,
 	})
-
 	return (
 		<>
 			<Header />
@@ -47,6 +48,9 @@ const Wallet = () => {
 					gap: 2,
 				}}
 			>
+				<Typography align='center' variant='h4'>
+					{t.balance}: {userInfo?.balance} {t.som}
+				</Typography>
 				<Accordion>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
@@ -63,46 +67,63 @@ const Wallet = () => {
 							<li>{t.payment_error_rules}</li>
 						</ol>
 					</AccordionDetails>
+					<Button fullWidth variant='contained'>
+						{t.watch_video}
+					</Button>
 				</Accordion>
-				<Typography align='center' variant='h5'>
-					{t.balance}: {userInfo?.balance} {t.som}
-				</Typography>
-				<BankCards />
-				<TextField
-					label={t.payment_amount}
-					value={amount}
-					onChange={e => setAmount(e.target.value)}
-					type='number'
-					fullWidth
-					variant='outlined'
-					inputProps={{ min: 1000 }}
-					onWheel={e => (e.target as HTMLElement).blur()}
-					sx={{ mt: 2 }}
-				/>
-				<Button
-					fullWidth
-					variant='contained'
-					sx={{ mt: 2 }}
-					loading={loading}
-					onClick={async () => {
-						setIsLoading(true)
-						const result = (await getPayment(token)) ?? []
-						const hasBusy = result.some(pay => pay.price === Number(amount))
-						if (hasBusy) {
-							alert('payment is busy')
-							setIsLoading(false)
-							return
-						}
-						const newPayment = await createPayment({
-							userId: token,
-							price: Number(amount),
-						})
-						navigate(`/wallet/${newPayment.id}`)
-						setIsLoading(false)
-					}}
-				>
-					{t.book_now}
-				</Button>
+
+				{!cardType ? (
+					<>
+						<SelectType />
+						<TextField
+							label={t.payment_amount}
+							value={amount}
+							onChange={e => setAmount(e.target.value)}
+							type='number'
+							fullWidth
+							variant='outlined'
+							onWheel={e => (e.target as HTMLElement).blur()}
+							sx={{ mt: 2 }}
+						/>
+						<Button
+							fullWidth
+							variant='contained'
+							sx={{ mt: 2 }}
+							loading={loading}
+							disabled={Number(amount) < 1000}
+							onClick={async () => {
+								setIsLoading(true)
+								const result = (await getPayment(token)) ?? []
+								const hasBusy = result.some(pay => pay.price === Number(amount))
+								const hasOrder = result.some(
+									pay => pay.userId === token && pay.isWorking,
+								)
+								if (hasOrder) {
+									alert(t.you_already_have_an_order)
+									setIsLoading(false)
+									return
+								}
+								if (hasBusy) {
+									alert(t.payment_is_busy)
+									setIsLoading(false)
+									return
+								}
+								await createPayment({
+									userId: token,
+									price: Number(amount),
+								})
+								setCardType(card)
+								setIsLoading(false)
+							}}
+						>
+							{t.book_now}
+						</Button>
+					</>
+				) : (
+					<>
+						<BankCards cardType={cardType} />
+					</>
+				)}
 			</Box>
 			<BottomNavigate />
 		</>

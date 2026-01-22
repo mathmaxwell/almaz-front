@@ -25,7 +25,7 @@ import {
 } from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 
-const BankCards = () => {
+const BankCards = ({ cardType }: { cardType: string }) => {
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const { t } = useTranslationStore()
@@ -49,7 +49,10 @@ const BankCards = () => {
 		refetch,
 	} = useQuery<ICards[], Error>({
 		queryKey: ['admin-cards', token],
-		queryFn: async () => (await getAdmincart(token)) ?? [],
+		queryFn: async () => {
+			const cards = await getAdmincart(token)
+			return cards.filter(pay => pay.type === cardType)
+		},
 		enabled: !!token,
 	})
 	const formatCardNumber = (value: string) => {

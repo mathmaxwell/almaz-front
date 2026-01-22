@@ -85,5 +85,8 @@ const ru = {
 	balance: 'Баланс',
 	type_of_card: 'Тип карты',
 	count: 'Количество',
+	payment_is_busy: 'Платеж занят',
+	you_already_have_an_order: 'У вас уже есть заказ',
+	watch_video: 'Смотреть видео',
 }
 export default ru

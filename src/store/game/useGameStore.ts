@@ -34,7 +34,7 @@ export const useGameStore = create<GameState>()(
 								howToUseRu: '',
 								name: '',
 								place: 'bot',
-						  },
+							},
 				})),
 			clearGame: () =>
 				set({
@@ -51,6 +51,6 @@ export const useGameStore = create<GameState>()(
 		}),
 		{
 			name: 'game-storage',
-		}
-	)
+		},
+	),
 )

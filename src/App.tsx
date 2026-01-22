@@ -17,8 +17,8 @@ import GameModal from './components/modal/GameModal'
 import OfferModal from './components/modal/OfferModal'
 import Cart from './pages/Cart/Cart'
 import Wallet from './pages/Wallet/Wallet'
-import WaitZone from './pages/Wallet/WaitZone'
 import Payments from './pages/payments/Payments'
+import History from './pages/history/History'
 
 function App() {
 	const { token } = useTokenStore()
@@ -43,7 +43,6 @@ function App() {
 					}
 				/>
 				<Route path='/wallet' element={<Wallet />} />
-				<Route path='/wallet/:walletId' element={<WaitZone />} />
 				<Route path='/payments' element={<Payments />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
@@ -53,6 +52,7 @@ function App() {
 				/>
 				<Route path='/cart' element={<Cart />} />
 				<Route path='/register' element={<Register />} />
+				<Route path='/history' element={<History />} />
 				<Route path='*' element={<ErrorPage />} />
 			</Routes>
 			<GameModal />
