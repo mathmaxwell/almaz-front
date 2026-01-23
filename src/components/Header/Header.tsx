@@ -14,6 +14,7 @@ import LanguageIcon from '@mui/icons-material/Language'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
 import HomeIcon from '@mui/icons-material/Home'
+import AddCardIcon from '@mui/icons-material/AddCard'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import {
@@ -24,6 +25,7 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	useTheme,
 } from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useThemeStore } from '../../store/theme/theme'
@@ -34,7 +36,8 @@ export default function Header() {
 	const { openModal } = useGamesStoreModal()
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
-	const { setTheme, theme } = useThemeStore()
+	const { setTheme, theme: themename } = useThemeStore()
+	const theme = useTheme()
 	const { resetToken, token, resetBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	return (
@@ -48,16 +51,31 @@ export default function Header() {
 					top: 0,
 					left: 0,
 					right: 0,
+					borderRadius: '0 0 12px 12px',
 				}}
 			>
-				<AppBar position='static' sx={{ height: '64px' }}>
+				<AppBar
+					position='static'
+					sx={{
+						height: '64px',
+						borderRadius: '0 0 12px 12px',
+						backgroundColor:
+							theme.palette.mode === 'dark'
+								? 'rgba(18, 24, 34, 0.6)'
+								: 'rgba(255, 255, 255, 0.7)',
+						backdropFilter: 'blur(8px)',
+						WebkitBackdropFilter: 'blur(8px)',
+						borderBottom: `1px solid ${theme.palette.divider}`,
+						boxShadow: 'none',
+					}}
+				>
 					<Toolbar>
 						<IconButton
 							size='large'
 							edge='start'
 							color='inherit'
 							aria-label='open drawer'
-							sx={{ mr: 2 }}
+							sx={{ mr: 2, color: theme.palette.text.primary }}
 							onClick={() => {
 								setOpen(true)
 							}}
@@ -68,7 +86,7 @@ export default function Header() {
 							variant='h6'
 							noWrap
 							component='div'
-							sx={{ cursor: 'pointer' }}
+							sx={{ cursor: 'pointer', color: theme.palette.text.primary }}
 							onClick={() => {
 								navigate('/')
 							}}
@@ -85,7 +103,7 @@ export default function Header() {
 								size='large'
 								edge='end'
 								aria-haspopup='true'
-								color='inherit'
+								sx={{ color: theme.palette.text.primary }}
 							>
 								<AccountCircle />
 							</IconButton>
@@ -153,14 +171,14 @@ export default function Header() {
 							<ListItem disablePadding>
 								<ListItemButton
 									onClick={() => {
-										theme === 'dark' ? setTheme('light') : setTheme('dark')
+										themename === 'dark' ? setTheme('light') : setTheme('dark')
 									}}
 								>
 									<ListItemIcon>
-										{theme == 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+										{themename == 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
 									</ListItemIcon>
 									<ListItemText
-										primary={theme == 'dark' ? t.light_mode : t.dark_theme}
+										primary={themename == 'dark' ? t.light_mode : t.dark_theme}
 									/>
 								</ListItemButton>
 							</ListItem>
@@ -201,6 +219,20 @@ export default function Header() {
 											<ShoppingCartCheckoutIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.payments} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/add-card')
+										}}
+									>
+										<ListItemIcon>
+											<AddCardIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.add_card} />
 									</ListItemButton>
 								</ListItem>
 							)}

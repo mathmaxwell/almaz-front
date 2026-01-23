@@ -2,7 +2,6 @@ import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
 import {
 	Box,
-	Button,
 	Paper,
 	Table,
 	TableBody,
@@ -11,20 +10,20 @@ import {
 	TableHead,
 	TableRow,
 	Typography,
+	useTheme,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import type { IPayment } from '../../types/payment/payment'
-import { getPaymentByUser } from '../../api/payment/payment'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import LoadingProgress from '../../components/Loading/LoadingProgress'
 import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
-
+import { getTransactionsByUser } from '../../api/transactions/transactions'
+import type { ITransactions } from '../../types/transactions/transactions'
 const History = () => {
 	const { token, setBalance } = useTokenStore()
+	const theme = useTheme()
 	const { t } = useTranslationStore()
-	const { data: userInfo, refetch: refetchUserInfo } = useQuery<IUser, Error>({
+	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token],
 		queryFn: async () => {
 			const result = await getUserById({ userId: token })
@@ -33,61 +32,58 @@ const History = () => {
 		},
 		enabled: !!token,
 	})
-	const { data, isLoading, refetch } = useQuery<IPayment[], Error>({
+	const { data } = useQuery<ITransactions[], Error>({
 		queryKey: ['userPayments', token],
-		queryFn: async () =>
-			(await getPaymentByUser({ token, userId: token })) ?? [],
+		queryFn: async () => (await getTransactionsByUser(token)) ?? [],
 		enabled: !!token,
 	})
 	return (
 		<>
 			<Header />
-			{isLoading && <LoadingProgress />}
-			<Typography align='center' variant='h5'>
-				{t.balance}: {userInfo?.balance} {t.som}
-			</Typography>
 			<Box
 				sx={{
-					p: { xs: 2, sm: 3 },
-					mx: 'auto',
 					display: 'flex',
 					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
 					gap: 2,
 				}}
 			>
-				<Button
-					fullWidth
-					variant='contained'
-					loading={isLoading}
-					onClick={async () => {
-						await refetch()
-						await refetchUserInfo()
-					}}
-				>
-					{t.update}
-				</Button>
+				<Typography align='center' variant='h5'>
+					{t.balance}: {userInfo?.balance} {t.som}
+				</Typography>
 				<TableContainer component={Paper}>
 					<Table aria-label='simple table'>
 						<TableHead>
 							<TableRow>
-								<TableCell>{t.price}</TableCell>
-								<TableCell align='right'>{t.status}</TableCell>
+								<TableCell align='left'>{t.time}</TableCell>
+								<TableCell align='center'>{t.game_title}</TableCell>
+								<TableCell align='center'>{t.donation_name}</TableCell>
+								<TableCell align='right'>
+									{t.price} ({t.som})
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{data?.map(row => (
 								<TableRow
-									key={row.id}
+									key={row.price}
 									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 								>
-									<TableCell component='th' scope='row'>
-										{row.price} {t.som}
+									<TableCell align='left' component='th' scope='row'>
+										{row.hour.toString().padStart(2, '0')}:
+										{row.minute.toString().padStart(2, '0')}, {row.day}.
+										{row.month.toString().padStart(2, '0')}.{row.year}
 									</TableCell>
+									<TableCell align='center'>{row.gameName}</TableCell>
+									<TableCell align='center'>{row.donatName}</TableCell>
 									<TableCell
 										align='right'
-										sx={{ color: row.isWorking ? 'yellow' : 'green' }}
+										sx={{
+											color: row.price > 0 ? theme.palette.success.main : 'red',
+										}}
 									>
-										{row.isWorking ? t.pending : t.finished}
+										{row.price > 0 ? `+${row.price}` : `-${row.price}`}
 									</TableCell>
 								</TableRow>
 							))}
@@ -95,6 +91,7 @@ const History = () => {
 					</Table>
 				</TableContainer>
 			</Box>
+
 			<BottomNavigate />
 		</>
 	)

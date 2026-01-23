@@ -88,5 +88,8 @@ const uz = {
 	payment_is_busy: "To'lov band",
 	you_already_have_an_order: 'Sizda allaqachon buyurtma bor',
 	watch_video: "Videoni ko'rish",
+	selected_amount: 'Tanlangan summa',
+	day: 'Kun',
+	copy_number: 'Raqamni nusxalash',
 }
 export default uz

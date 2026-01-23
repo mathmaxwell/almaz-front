@@ -3,6 +3,7 @@ import {
 	BottomNavigationAction,
 	Box,
 	Paper,
+	useTheme,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
@@ -10,17 +11,37 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 const BottomNavigate = () => {
+	const theme = useTheme()
 	const location = useLocation()
 	const navigate = useNavigate()
 	return (
 		<>
-			<Box sx={{ height: '50px', zIndex: 99 }}></Box>
+			<Box sx={{ height: 56 }} />
 			<Paper
-				sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 99 }}
+				sx={{
+					position: 'fixed',
+					bottom: 0,
+					left: 0,
+					right: 0,
+					zIndex: 99,
+					borderRadius: '12px 12px 0 0',
+				}}
 				elevation={3}
 			>
 				<BottomNavigation
-					sx={{ width: '100%', mt: 'auto' }}
+					sx={{
+						width: '100%',
+						mt: 'auto',
+						borderRadius: '12px 12px 0 0',
+						backgroundColor:
+							theme.palette.mode === 'dark'
+								? 'rgba(18, 24, 34, 0.6)'
+								: 'rgba(255, 255, 255, 0.7)',
+						backdropFilter: 'blur(8px)',
+						WebkitBackdropFilter: 'blur(8px)',
+						borderBottom: `1px solid ${theme.palette.divider}`,
+						boxShadow: 'none',
+					}}
 					value={location.pathname}
 					onChange={(_, newValue) => navigate(newValue)}
 				>

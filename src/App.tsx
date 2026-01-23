@@ -19,6 +19,8 @@ import Cart from './pages/Cart/Cart'
 import Wallet from './pages/Wallet/Wallet'
 import Payments from './pages/payments/Payments'
 import History from './pages/history/History'
+import { VideoModal } from './components/modal/VideoModal'
+import AddCard from './pages/Cart/AddCard'
 
 function App() {
 	const { token } = useTokenStore()
@@ -43,6 +45,7 @@ function App() {
 					}
 				/>
 				<Route path='/wallet' element={<Wallet />} />
+				<Route path='add-card' element={<AddCard />} />
 				<Route path='/payments' element={<Payments />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />
@@ -56,6 +59,7 @@ function App() {
 				<Route path='*' element={<ErrorPage />} />
 			</Routes>
 			<GameModal />
+			<VideoModal />
 		</>
 	)
 }

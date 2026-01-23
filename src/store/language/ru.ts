@@ -88,5 +88,8 @@ const ru = {
 	payment_is_busy: 'Платеж занят',
 	you_already_have_an_order: 'У вас уже есть заказ',
 	watch_video: 'Смотреть видео',
+	selected_amount: 'Выбранная сумма',
+	day: 'День',
+	copy_number: 'Копировать номер',
 }
 export default ru

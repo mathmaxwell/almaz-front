@@ -4,6 +4,13 @@ import {
 	AccordionSummary,
 	Box,
 	Button,
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	TextField,
 	Typography,
 } from '@mui/material'
@@ -11,15 +18,22 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
-import { createPayment, getPayment } from '../../api/payment/payment'
+import {
+	createPayment,
+	getPayment,
+	getPaymentByUser,
+} from '../../api/payment/payment'
 import { getUserById } from '../../api/login/login'
 import type { IUser } from '../../types/user/user'
 import SelectType from '../../components/BankCards/SelectType'
 import { useSelectCardStore } from '../../store/cart/useSelectCardStore'
 import BankCards from '../../components/BankCards/BankCards'
+import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
+import infoVideo from '../../images/video/infoVideo.mp4'
+import type { IPayment } from '../../types/payment/payment'
 const Wallet = () => {
 	const [cardType, setCardType] = useState<undefined | string>(undefined)
 	const [loading, setIsLoading] = useState(false)
@@ -27,6 +41,26 @@ const Wallet = () => {
 	const { t } = useTranslationStore()
 	const { token, setBalance } = useTokenStore()
 	const [amount, setAmount] = useState('')
+	const { open } = useVideoModalStore()
+	const [cost, setCost] = useState<number | undefined>(undefined)
+	useEffect(() => {
+		const fetchPayments = async () => {
+			try {
+				const result = (await getPayment(token)) ?? []
+				const hasOrder = result.find(
+					pay => pay.userId === token && pay.isWorking,
+				)
+				if (hasOrder) {
+					setCost(hasOrder.price)
+					setCardType(card)
+				}
+			} catch (error) {
+				console.error(error)
+			}
+		}
+		fetchPayments()
+	}, [token])
+
 	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token],
 		queryFn: async () => {
@@ -36,6 +70,13 @@ const Wallet = () => {
 		},
 		enabled: !!token,
 	})
+	const { data, isLoading, refetch } = useQuery<IPayment[], Error>({
+		queryKey: ['userPayments', token],
+		queryFn: async () =>
+			(await getPaymentByUser({ token, userId: token })) ?? [],
+		enabled: !!token,
+	})
+
 	return (
 		<>
 			<Header />
@@ -48,9 +89,15 @@ const Wallet = () => {
 					gap: 2,
 				}}
 			>
-				<Typography align='center' variant='h4'>
-					{t.balance}: {userInfo?.balance} {t.som}
-				</Typography>
+				{cost ? (
+					<Typography align='center' variant='h4'>
+						{t.selected_amount}: {cost} {t.som}
+					</Typography>
+				) : (
+					<Typography align='center' variant='h4'>
+						{t.balance}: {userInfo?.balance} {t.som}
+					</Typography>
+				)}
 				<Accordion>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
@@ -67,11 +114,22 @@ const Wallet = () => {
 							<li>{t.payment_error_rules}</li>
 						</ol>
 					</AccordionDetails>
-					<Button fullWidth variant='contained'>
+					<Button
+						fullWidth
+						variant='contained'
+						onClick={() => {
+							open({
+								title: t.how_to_pay,
+								video: {
+									type: 'local',
+									src: infoVideo,
+								},
+							})
+						}}
+					>
 						{t.watch_video}
 					</Button>
 				</Accordion>
-
 				{!cardType ? (
 					<>
 						<SelectType />
@@ -112,6 +170,7 @@ const Wallet = () => {
 									userId: token,
 									price: Number(amount),
 								})
+								setCost(Number(amount))
 								setCardType(card)
 								setIsLoading(false)
 							}}
@@ -122,6 +181,44 @@ const Wallet = () => {
 				) : (
 					<>
 						<BankCards cardType={cardType} />
+						<Button
+							fullWidth
+							variant='contained'
+							loading={isLoading}
+							onClick={async () => {
+								await refetch()
+							}}
+						>
+							{t.update}
+						</Button>
+						<TableContainer component={Paper}>
+							<Table aria-label='simple table'>
+								<TableHead>
+									<TableRow>
+										<TableCell>{t.price}</TableCell>
+										<TableCell align='right'>{t.status}</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{data?.map(row => (
+										<TableRow
+											key={row.id}
+											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+										>
+											<TableCell component='th' scope='row'>
+												{row.price} {t.som}
+											</TableCell>
+											<TableCell
+												align='right'
+												sx={{ color: row.isWorking ? 'red' : 'green' }}
+											>
+												{row.isWorking ? t.pending : t.finished}
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
 					</>
 				)}
 			</Box>
