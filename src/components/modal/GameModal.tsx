@@ -121,7 +121,6 @@ const GameModal = () => {
 					<Typography variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedGame ? t.update_game : t.add_game}
 					</Typography>
-
 					<FormControl fullWidth>
 						<InputLabel variant='standard' htmlFor='uncontrolled-native'>
 							{t.place}
@@ -170,10 +169,9 @@ const GameModal = () => {
 						variant='outlined'
 					/>
 
-					{/* Основное изображение */}
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
-							Основное изображение
+							{t.main_image}
 						</Typography>
 						<Button
 							variant='outlined'
@@ -181,9 +179,7 @@ const GameModal = () => {
 							fullWidth
 							sx={{ py: 2, textTransform: 'none' }}
 						>
-							{imageFile
-								? imageFile.name
-								: t.upload_image || 'Загрузить основное изображение'}
+							{imageFile ? imageFile.name : t.upload_image}
 							<input
 								type='file'
 								hidden
@@ -195,7 +191,7 @@ const GameModal = () => {
 							<Box sx={{ textAlign: 'center', mt: 2 }}>
 								<img
 									src={previewMain}
-									alt='Основное превью'
+									alt={t.main_image}
 									style={{
 										maxWidth: '100%',
 										maxHeight: '300px',
@@ -207,10 +203,9 @@ const GameModal = () => {
 						)}
 					</Box>
 
-					{/* Вспомогательное изображение */}
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
-							Вспомогательное изображение (инструкция)
+							{t.auxiliary_image_instruction}
 						</Typography>
 						<Button
 							variant='outlined'
@@ -218,9 +213,7 @@ const GameModal = () => {
 							fullWidth
 							sx={{ py: 2, textTransform: 'none' }}
 						>
-							{imageHelperFile
-								? imageHelperFile.name
-								: 'Загрузить вспомогательное изображение'}
+							{imageHelperFile ? imageHelperFile.name : t.upload_image}
 							<input
 								type='file'
 								hidden
@@ -232,7 +225,7 @@ const GameModal = () => {
 							<Box sx={{ textAlign: 'center', mt: 2 }}>
 								<img
 									src={previewHelper}
-									alt='Вспомогательное превью'
+									alt={t.auxiliary_image_instruction}
 									style={{
 										maxWidth: '100%',
 										maxHeight: '300px',

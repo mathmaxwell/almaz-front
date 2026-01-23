@@ -91,5 +91,13 @@ const uz = {
 	selected_amount: 'Tanlangan summa',
 	day: 'Kun',
 	copy_number: 'Raqamni nusxalash',
+	full_information: "To'liq ma'lumot",
+	view_information: "Ma'lumotni ko'rish",
+	add_to_favorites: "Saralanganlarga qo'shish",
+	main_image: 'Asosiy rasm',
+	auxiliary_image_instruction: "Yordamchi rasm (ko'rsatma)",
+	video: 'Video',
+	upload_video: 'Videoni yuklash',
+	actions: 'Amallar',
 }
 export default uz

@@ -17,4 +17,5 @@ export interface IOffer {
 	ruDesc: string
 	uzDesc: string
 	botId: string
+	video: string
 }

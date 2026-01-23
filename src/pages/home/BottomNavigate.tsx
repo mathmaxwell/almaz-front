@@ -25,22 +25,19 @@ const BottomNavigate = () => {
 					right: 0,
 					zIndex: 99,
 					borderRadius: '12px 12px 0 0',
+					backgroundColor:
+						theme.palette.mode === 'dark'
+							? 'rgba(18, 24, 34, 0.6)'
+							: 'rgba(255, 255, 255, 0.7)',
+					backdropFilter: 'blur(8px)',
+					WebkitBackdropFilter: 'blur(8px)',
+					boxShadow: 'none',
 				}}
-				elevation={3}
+				elevation={0}
 			>
 				<BottomNavigation
 					sx={{
-						width: '100%',
-						mt: 'auto',
-						borderRadius: '12px 12px 0 0',
-						backgroundColor:
-							theme.palette.mode === 'dark'
-								? 'rgba(18, 24, 34, 0.6)'
-								: 'rgba(255, 255, 255, 0.7)',
-						backdropFilter: 'blur(8px)',
-						WebkitBackdropFilter: 'blur(8px)',
-						borderBottom: `1px solid ${theme.palette.divider}`,
-						boxShadow: 'none',
+						backgroundColor: 'transparent',
 					}}
 					value={location.pathname}
 					onChange={(_, newValue) => navigate(newValue)}

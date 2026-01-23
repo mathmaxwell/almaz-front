@@ -2,14 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { getGames } from '../../api/games/games'
 import type { IGames } from '../../types/games/games'
-import {
-	Box,
-	Card,
-	CardActionArea,
-	CardContent,
-	CardMedia,
-	Typography,
-} from '@mui/material'
+import { Box, Card, CardActionArea, CardMedia } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../../store/game/useGameStore'
 const Games = () => {
@@ -89,14 +82,16 @@ const Games = () => {
 											}}
 										>
 											<CardMedia
-												sx={{ width: '100%' }}
+												sx={{
+													width: '100%',
+													height: 200,
+													objectFit: 'cover',
+													objectPosition: 'center',
+												}}
 												component='img'
 												image={`${apiUrl}${g.image}`}
 												alt={g.id}
 											/>
-											<CardContent sx={{ height: '100px' }}>
-												<Typography variant='h5'>{g.name}</Typography>
-											</CardContent>
 										</CardActionArea>
 									</Card>
 								)

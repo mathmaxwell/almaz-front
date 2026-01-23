@@ -3,7 +3,6 @@ import HeaderAnnouncements from '../../components/announcements/HeaderAnnounceme
 import Header from '../../components/Header/Header'
 import GamesPage from '../games/Games'
 import BottomNavigate from './BottomNavigate'
-
 const HomePage = () => {
 	return (
 		<Box

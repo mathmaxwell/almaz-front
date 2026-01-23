@@ -91,5 +91,13 @@ const ru = {
 	selected_amount: 'Выбранная сумма',
 	day: 'День',
 	copy_number: 'Копировать номер',
+	full_information: 'Полная информация',
+	view_information: 'Смотреть информацию',
+	add_to_favorites: 'В избранное',
+	main_image: 'Основное изображение',
+	auxiliary_image_instruction: 'Вспомогательное изображение (инструкция)',
+	video: 'Видео',
+	upload_video: 'Загрузить видео',
+	actions: 'Действия',
 }
 export default ru

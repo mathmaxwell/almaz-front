@@ -33,7 +33,6 @@ const GamePage = () => {
 	const { lang, t } = useTranslationStore()
 	const { game } = useGameStore()
 	const { token } = useTokenStore()
-
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { openModal } = useGamesStoreModal()
@@ -112,14 +111,20 @@ const GamePage = () => {
 										<TableCell align='center'>{t.image}</TableCell>
 									)}
 									<TableCell sx={{ px: 0 }} align='center'>
-										{t.price}
+										{t.price}({t.som})
 									</TableCell>
 									<TableCell sx={{ px: 0 }} align='center'>
-										{t.count}
+										{t.add_to_favorites}
 									</TableCell>
+
 									<TableCell sx={{ px: 0 }} align='center'>
 										{t.buy_now}
 									</TableCell>
+									{isAdmin && (
+										<TableCell sx={{ px: 0 }} align='center'>
+											{t.actions}
+										</TableCell>
+									)}
 								</TableRow>
 							</TableHead>
 							<TableBody>

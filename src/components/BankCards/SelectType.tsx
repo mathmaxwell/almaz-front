@@ -2,7 +2,6 @@ import { Box } from '@mui/material'
 import humo from '../../images/cards/humo.png'
 import uzcard from '../../images/cards/uzcard.png'
 import { useSelectCardStore } from '../../store/cart/useSelectCardStore'
-
 const SelectType = () => {
 	const { card, setCard } = useSelectCardStore()
 	return (

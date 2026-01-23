@@ -6,25 +6,35 @@ import LoadingProgress from '../Loading/LoadingProgress'
 import { useOfferStoreModal } from '../../store/modal/useOfferModal'
 import { createOffer, deleteOffer, updateOffer } from '../../api/games/offer'
 import { useParams } from 'react-router-dom'
+
 const OfferModal = () => {
 	const { t } = useTranslationStore()
 	const { gameId } = useParams()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	if (!isAdmin) return null
+
 	const { modalOpen, selectedOffer, closeModal } = useOfferStoreModal()
+
 	const [image, setImage] = useState<File | null>(null)
+	const [video, setVideo] = useState<File | null>(null)
+
 	const [ruName, setRuName] = useState('')
 	const [botId, setBotId] = useState('')
 	const [uzName, setUzName] = useState('')
 	const [price, setPrice] = useState('')
 	const [ruDesc, setRuDesc] = useState('')
 	const [uzDesc, setUzDesc] = useState('')
+
 	const [previewImage, setPreviewImage] = useState<string | null>(null)
+	const [previewVideo, setPreviewVideo] = useState<string | null>(null)
+
 	const [loading, setLoading] = useState(false)
+
 	useEffect(() => {
 		if (selectedOffer) {
 			setImage(null)
+			setVideo(null)
 			setRuName(selectedOffer.ruName)
 			setBotId(selectedOffer.botId)
 			setUzName(selectedOffer.uzName)
@@ -32,9 +42,12 @@ const OfferModal = () => {
 			setRuDesc(selectedOffer.ruDesc)
 			setUzDesc(selectedOffer.uzDesc)
 			setPreviewImage(selectedOffer.image)
+			setPreviewVideo(selectedOffer.video || null)
 		} else {
 			setImage(null)
+			setVideo(null)
 			setPreviewImage(null)
+			setPreviewVideo(null)
 			setRuName('')
 			setUzName('')
 			setPrice('')
@@ -43,6 +56,7 @@ const OfferModal = () => {
 			setBotId('')
 		}
 	}, [selectedOffer, modalOpen])
+
 	useEffect(() => {
 		if (image) {
 			const url = URL.createObjectURL(image)
@@ -50,6 +64,14 @@ const OfferModal = () => {
 			return () => URL.revokeObjectURL(url)
 		}
 	}, [image])
+
+	useEffect(() => {
+		if (video) {
+			const url = URL.createObjectURL(video)
+			setPreviewVideo(url)
+			return () => URL.revokeObjectURL(url)
+		}
+	}, [video])
 
 	if (!modalOpen) return null
 
@@ -62,7 +84,10 @@ const OfferModal = () => {
 		data.append('uzDesc', uzDesc.trim())
 		data.append('price', price.trim())
 		data.append('botId', botId.trim())
+
 		if (image) data.append('image', image)
+		if (video) data.append('video', video)
+
 		try {
 			setLoading(true)
 			if (selectedOffer) {
@@ -109,6 +134,7 @@ const OfferModal = () => {
 					<Typography variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedOffer ? t.update : t.add}
 					</Typography>
+
 					<TextField
 						label={t.bot_id}
 						value={botId}
@@ -117,45 +143,45 @@ const OfferModal = () => {
 						variant='outlined'
 						autoFocus
 					/>
+
 					<TextField
 						label={t.title_ru}
 						value={ruName}
 						onChange={e => setRuName(e.target.value)}
 						fullWidth
 						variant='outlined'
-						autoFocus
 					/>
+
 					<TextField
 						label={t.title_uz}
 						value={uzName}
 						onChange={e => setUzName(e.target.value)}
 						fullWidth
 						variant='outlined'
-						autoFocus
 					/>
+
 					<TextField
 						label={t.description_ru}
 						value={ruDesc}
 						onChange={e => setRuDesc(e.target.value)}
 						fullWidth
 						variant='outlined'
-						autoFocus
 					/>
+
 					<TextField
 						label={t.description_uz}
 						value={uzDesc}
 						onChange={e => setUzDesc(e.target.value)}
 						fullWidth
 						variant='outlined'
-						autoFocus
 					/>
+
 					<TextField
 						label={t.price}
 						value={price}
 						onChange={e => setPrice(e.target.value)}
 						fullWidth
 						variant='outlined'
-						autoFocus
 					/>
 
 					<Box>
@@ -180,7 +206,42 @@ const OfferModal = () => {
 							<Box sx={{ textAlign: 'center', mt: 2 }}>
 								<img
 									src={previewImage}
-									alt='Основное превью'
+									alt='Превью изображения'
+									style={{
+										maxWidth: '100%',
+										maxHeight: '300px',
+										borderRadius: '12px',
+										boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+									}}
+								/>
+							</Box>
+						)}
+					</Box>
+
+					<Box>
+						<Typography variant='subtitle1' gutterBottom>
+							{t.video}
+						</Typography>
+						<Button
+							variant='outlined'
+							component='label'
+							fullWidth
+							sx={{ py: 2, textTransform: 'none' }}
+						>
+							{video ? video.name : t.upload_video}
+							<input
+								type='file'
+								hidden
+								accept='video/*'
+								onChange={e => setVideo(e.target.files?.[0] || null)}
+							/>
+						</Button>
+
+						{previewVideo && (
+							<Box sx={{ textAlign: 'center', mt: 2 }}>
+								<video
+									src={previewVideo}
+									controls
 									style={{
 										maxWidth: '100%',
 										maxHeight: '300px',

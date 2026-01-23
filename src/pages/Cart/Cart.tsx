@@ -5,7 +5,6 @@ const Cart = () => {
 	return (
 		<>
 			<Header />
-
 			<BottomNavigate />
 		</>
 	)

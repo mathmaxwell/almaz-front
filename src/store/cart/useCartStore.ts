@@ -9,11 +9,10 @@ type CartState = {
 	reset: (id: string) => void
 }
 
-export const useCartStore = create<CartState>()(
+export const useSavedGamesStore = create<CartState>()(
 	persist(
 		(set, get) => ({
 			items: {},
-
 			getCount: id => {
 				return get().items[id] ?? 0
 			},
@@ -56,7 +55,7 @@ export const useCartStore = create<CartState>()(
 			},
 		}),
 		{
-			name: 'cart-storage',
+			name: 'saved-games',
 		},
 	),
 )

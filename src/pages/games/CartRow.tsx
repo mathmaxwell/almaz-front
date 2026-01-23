@@ -1,17 +1,20 @@
 import {
 	TableRow,
 	TableCell,
-	Button,
-	IconButton,
 	useTheme,
 	useMediaQuery,
+	IconButton,
 } from '@mui/material'
-import { useCartStore } from '../../store/cart/useCartStore'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
-import { useTokenStore } from '../../store/token/useTokenStore'
+import StarIcon from '@mui/icons-material/Star'
+import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import type { IOffer } from '../../types/games/games'
+import { useSavedGamesStore } from '../../store/cart/useCartStore'
+import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
+import { useOfferStoreModal } from '../../store/modal/useOfferModal'
+import { useTokenStore } from '../../store/token/useTokenStore'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import CreateIcon from '@mui/icons-material/Create'
 interface Props {
 	row: IOffer
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,29 +22,43 @@ interface Props {
 	setImg: React.Dispatch<React.SetStateAction<string>>
 }
 export const CartRow = ({ row, setOpen, setText, setImg }: Props) => {
+	const { token } = useTokenStore()
+	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
+	const { openModal } = useOfferStoreModal()
 	const theme = useTheme()
+	const { open } = useVideoModalStore()
 	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const { lang } = useTranslationStore()
+	const { increment, decrement, getCount } = useSavedGamesStore()
+	const selected = getCount(row.id)
 	const apiUrl = import.meta.env.VITE_API_URL
-	const count = useCartStore(state => state.getCount(row.id))
-	const increment = useCartStore(state => state.increment)
-	const decrement = useCartStore(state => state.decrement)
-	const { balance } = useTokenStore()
-	const stock = Number(balance) - Number(count) * Number(row.price)
 	return (
 		<TableRow
 			sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 			onClick={() => {
-				setOpen(true)
-				setText(lang == 'ru' ? row.ruDesc : row.uzDesc)
-				setImg('')
+				open({
+					title: lang == 'ru' ? row.ruDesc : row.uzDesc,
+					video: {
+						type: 'backend',
+						url: `${apiUrl}${row.video}`,
+					},
+				})
 			}}
 		>
 			<TableCell sx={{ px: 0.5 }} align='center'>
 				{lang === 'ru' ? row.ruName : row.uzName}
 			</TableCell>
 			{!isDesctop && (
-				<TableCell align='center' sx={{ p: 0 }}>
+				<TableCell
+					align='center'
+					sx={{ p: 0 }}
+					onClick={e => {
+						e.stopPropagation()
+						setOpen(true)
+						setText(lang == 'ru' ? row.ruDesc : row.uzDesc)
+						setImg(`${apiUrl}${row.image}`)
+					}}
+				>
 					<img
 						style={{
 							width: 100,
@@ -57,47 +74,50 @@ export const CartRow = ({ row, setOpen, setText, setImg }: Props) => {
 			<TableCell sx={{ px: 0 }} align='center'>
 				{row.price}
 			</TableCell>
-			<TableCell
-				align='center'
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					gap: 0,
-					p: 3,
-					px: 0,
-				}}
-			>
-				<IconButton
-					onClick={e => {
-						decrement(row.id)
-						e.stopPropagation()
-					}}
-				>
-					<RemoveCircleIcon color='error' fontSize='large' />
-				</IconButton>
-				{count}
-				<IconButton
-					onClick={e => {
-						increment(row.id)
-						e.stopPropagation()
-					}}
-				>
-					<AddCircleIcon color='success' fontSize='large' />
-				</IconButton>
-			</TableCell>
+
 			<TableCell align='center'>
-				<Button
-					sx={{ width: '90px' }}
-					variant='contained'
-					color={count == 0 ? 'info' : stock > 0 ? 'success' : 'error'}
+				<IconButton
 					onClick={e => {
 						e.stopPropagation()
+						if (selected > 0) {
+							decrement(row.id)
+						} else {
+							increment(row.id)
+						}
 					}}
 				>
-					{stock}
-				</Button>
+					{selected > 0 ? (
+						<StarIcon color='warning' />
+					) : (
+						<StarBorderIcon color='warning' />
+					)}
+				</IconButton>
 			</TableCell>
+
+			<TableCell align='center'>
+				<IconButton>
+					<AttachMoneyIcon
+						color='warning'
+						onClick={e => {
+							e.stopPropagation()
+							alert('funksiya')
+						}}
+					/>
+				</IconButton>
+			</TableCell>
+			{isAdmin && (
+				<TableCell align='center'>
+					<IconButton>
+						<CreateIcon
+							color='primary'
+							onClick={e => {
+								e.stopPropagation()
+								openModal(row)
+							}}
+						/>
+					</IconButton>
+				</TableCell>
+			)}
 		</TableRow>
 	)
 }

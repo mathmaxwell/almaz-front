@@ -1,9 +1,8 @@
 import type { ITransactions } from '../../types/transactions/transactions'
 import api from '../api'
-
 export async function getTransactionsByUser(userId: string) {
 	try {
-		const responce = await api.post('/transactions/get', {
+		const responce = await api.post('/transactions/transactionsGet', {
 			userId,
 		})
 		const result = responce.data as ITransactions[]
@@ -26,7 +25,7 @@ export async function createTransactions({
 	createdBy: string
 }) {
 	try {
-		const response = await api.post('/transactions/create', {
+		const response = await api.post('/transactions/transactionsCreate', {
 			userId,
 			price,
 			gameName,
@@ -40,7 +39,7 @@ export async function createTransactions({
 }
 export async function deleteTransactions({ id }: { id: string }) {
 	try {
-		const response = await api.post('/transactions/delete', { id })
+		const response = await api.post('/transactions/transactionsDelete', { id })
 		return response
 	} catch (error: any) {
 		throw error
