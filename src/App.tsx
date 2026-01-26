@@ -29,11 +29,12 @@ function App() {
 		if (!token) {
 			navigate('/register')
 		}
-	})
+	}, [])
 	return (
 		<>
 			<Routes>
 				<Route path='/' element={<HomePage />} />
+				<Route path='/register' element={<Register />} />
 				<Route path='/profile' element={<Profile />} />
 				<Route
 					path='/:gameName/:gameId'
@@ -54,7 +55,7 @@ function App() {
 					element={<Announcements />}
 				/>
 				<Route path='/cart' element={<Cart />} />
-				<Route path='/register' element={<Register />} />
+
 				<Route path='/history' element={<History />} />
 				<Route path='*' element={<ErrorPage />} />
 			</Routes>
