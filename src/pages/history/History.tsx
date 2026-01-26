@@ -19,14 +19,17 @@ import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
 import { getTransactionsByUser } from '../../api/transactions/transactions'
 import type { ITransactions } from '../../types/transactions/transactions'
+import { useParams } from 'react-router-dom'
 const History = () => {
 	const { token, setBalance } = useTokenStore()
+	const { userId } = useParams()
+
 	const theme = useTheme()
 	const { t } = useTranslationStore()
 	const { data: userInfo } = useQuery<IUser, Error>({
-		queryKey: ['userInfo', token],
+		queryKey: ['userInfo', token, userId],
 		queryFn: async () => {
-			const result = await getUserById({ userId: token })
+			const result = await getUserById({ userId: userId ? userId : token })
 			setBalance(result.balance.toString())
 			return result
 		},
@@ -34,7 +37,8 @@ const History = () => {
 	})
 	const { data } = useQuery<ITransactions[], Error>({
 		queryKey: ['userPayments', token],
-		queryFn: async () => (await getTransactionsByUser(token)) ?? [],
+		queryFn: async () =>
+			(await getTransactionsByUser(userId ? userId : token)) ?? [],
 		enabled: !!token,
 	})
 	return (
@@ -65,9 +69,9 @@ const History = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{data?.map(row => (
+							{data?.map((row, index) => (
 								<TableRow
-									key={row.price}
+									key={index}
 									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 								>
 									<TableCell align='left' component='th' scope='row'>

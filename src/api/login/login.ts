@@ -1,4 +1,4 @@
-import type { IUser } from '../../types/user/user'
+import type { IGetUser, IUser } from '../../types/user/user'
 import api from '../api'
 
 export async function login({
@@ -24,6 +24,32 @@ export async function getUserById({ userId }: { userId: string }) {
 	}
 }
 
+export async function getUsers({
+	page,
+	count,
+	login,
+	Token,
+	StartBalance,
+}: {
+	page: number
+	count: number
+	login: string | undefined
+	Token: string | undefined
+	StartBalance: number | undefined
+}) {
+	try {
+		const result = await api.post('/users/getUsers', {
+			page,
+			count,
+			login,
+			Token,
+			StartBalance,
+		})
+		return result.data as IGetUser
+	} catch (error) {
+		throw error
+	}
+}
 export async function register({
 	login,
 	password,

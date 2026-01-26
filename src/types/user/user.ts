@@ -4,3 +4,10 @@ export interface IUser {
 	token: string
 	balance: number
 }
+export interface IGetUser {
+	count: number
+	page: number
+	pages: number
+	total: number
+	users: IUser[]
+}

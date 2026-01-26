@@ -19,6 +19,24 @@ export async function getOffer({
 		throw new Error('games error')
 	}
 }
+export async function getOfferById({
+	token,
+	id,
+}: {
+	token: string
+	id: string
+}) {
+	try {
+		const responce = await api.post('/offers/getOffersById', {
+			token,
+			id,
+		})
+		const result = responce.data as IOffer
+		return result
+	} catch (error) {
+		throw new Error('games error')
+	}
+}
 export async function createOffer(formData: any) {
 	try {
 		const response = await api.post('/offers/create', formData, {

@@ -21,6 +21,7 @@ import Payments from './pages/payments/Payments'
 import History from './pages/history/History'
 import { VideoModal } from './components/modal/VideoModal'
 import AddCard from './pages/Cart/AddCard'
+import Users from './pages/users/Users'
 
 function App() {
 	const { token } = useTokenStore()
@@ -35,6 +36,8 @@ function App() {
 			<Routes>
 				<Route path='/' element={<HomePage />} />
 				<Route path='/register' element={<Register />} />
+				<Route path='/users' element={<Users />} />
+				<Route path='/users/:userId' element={<History />} />
 				<Route path='/profile' element={<Profile />} />
 				<Route
 					path='/:gameName/:gameId'

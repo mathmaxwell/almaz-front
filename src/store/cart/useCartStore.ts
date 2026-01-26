@@ -2,10 +2,9 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type CartState = {
-	items: Record<string, number>
+	items: Record<string, 1>
 	getCount: (id: string) => number
-	increment: (id: string) => void
-	decrement: (id: string) => void
+	toggle: (id: string) => void
 	reset: (id: string) => void
 }
 
@@ -13,33 +12,24 @@ export const useSavedGamesStore = create<CartState>()(
 	persist(
 		(set, get) => ({
 			items: {},
+
 			getCount: id => {
 				return get().items[id] ?? 0
 			},
 
-			increment: id => {
+			// 🔥 либо добавить (1), либо удалить
+			toggle: id => {
 				set(state => {
-					const current = state.items[id] ?? 0
-					if (current >= 10) return state
-
-					return {
-						items: {
-							...state.items,
-							[id]: current + 1,
-						},
+					if (state.items[id]) {
+						const newItems = { ...state.items }
+						delete newItems[id]
+						return { items: newItems }
 					}
-				})
-			},
-
-			decrement: id => {
-				set(state => {
-					const current = state.items[id] ?? 0
-					if (current <= 0) return state
 
 					return {
 						items: {
 							...state.items,
-							[id]: current - 1,
+							[id]: 1,
 						},
 					}
 				})
@@ -49,7 +39,6 @@ export const useSavedGamesStore = create<CartState>()(
 				set(state => {
 					const newItems = { ...state.items }
 					delete newItems[id]
-
 					return { items: newItems }
 				})
 			},

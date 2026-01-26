@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
+import GroupIcon from '@mui/icons-material/Group'
 import {
 	Divider,
 	Drawer,
@@ -194,6 +195,21 @@ export default function Header() {
 									<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
 								</ListItemButton>
 							</ListItem>
+							{isAdmin && <Divider />}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/users')
+										}}
+									>
+										<ListItemIcon>
+											<GroupIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.users} />
+									</ListItemButton>
+								</ListItem>
+							)}
 							{isAdmin && (
 								<ListItem disablePadding>
 									<ListItemButton
