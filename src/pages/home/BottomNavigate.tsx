@@ -24,11 +24,11 @@ const BottomNavigate = () => {
 					left: 0,
 					right: 0,
 					zIndex: 99,
-					borderRadius: '12px 12px 0 0',
+					borderRadius: '300px',
 					backgroundColor:
 						theme.palette.mode === 'dark'
-							? 'rgba(18, 24, 34, 0.6)'
-							: 'rgba(255, 255, 255, 0.7)',
+							? 'rgba(0, 0, 0, 0.2)'
+							: 'rgba(0, 0, 0, 0.1)',
 					backdropFilter: 'blur(8px)',
 					WebkitBackdropFilter: 'blur(8px)',
 					boxShadow: 'none',

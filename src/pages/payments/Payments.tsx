@@ -21,9 +21,11 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	useTheme,
 } from '@mui/material'
 
 const Payments = () => {
+	const theme = useTheme()
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
 	const { data, isLoading, refetch } = useQuery<IPayment[], Error>({
@@ -33,7 +35,13 @@ const Payments = () => {
 	})
 
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Box
 				sx={{
@@ -116,7 +124,7 @@ const Payments = () => {
 				</TableContainer>
 			</Box>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

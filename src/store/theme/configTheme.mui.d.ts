@@ -19,6 +19,7 @@ declare module '@mui/material/styles' {
 			neonGreen?: string
 			gradientStart?: string
 			gradientEnd?: string
+			
 		}
 	}
 }

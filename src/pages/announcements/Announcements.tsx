@@ -16,12 +16,14 @@ import {
 	CardMedia,
 	TextField,
 	Typography,
+	useTheme,
 } from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useEffect, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import BottomNavigate from '../home/BottomNavigate'
 const Announcements = () => {
+	const theme = useTheme()
 	const { lang, t } = useTranslationStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
@@ -72,7 +74,13 @@ const Announcements = () => {
 	}, [imageFile])
 
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 
 			{isAdmin && (
@@ -240,7 +248,7 @@ const Announcements = () => {
 			)}
 
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

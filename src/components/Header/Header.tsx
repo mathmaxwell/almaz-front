@@ -59,11 +59,11 @@ export default function Header() {
 					position='static'
 					sx={{
 						height: '64px',
-						borderRadius: '0 0 12px 12px',
+						borderRadius: '0 0 30px 30px',
 						backgroundColor:
 							theme.palette.mode === 'dark'
-								? 'rgba(18, 24, 34, 0.6)'
-								: 'rgba(255, 255, 255, 0.7)',
+								? 'rgba(0, 0, 0, 0.2)'
+								: 'rgba(0, 0, 0, 0.1)',
 						backdropFilter: 'blur(8px)',
 						WebkitBackdropFilter: 'blur(8px)',
 						borderBottom: `1px solid ${theme.palette.divider}`,
@@ -118,7 +118,13 @@ export default function Header() {
 					}}
 				>
 					<Box
-						sx={{ width: 250 }}
+						sx={{
+							width: 250,
+							background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+							height: '100vh',
+							display: 'flex',
+							flexDirection: 'column',
+						}}
 						role='presentation'
 						onClick={() => {
 							setOpen(false)
@@ -151,7 +157,6 @@ export default function Header() {
 								</ListItemButton>
 							</ListItem>
 						</List>
-
 						<Divider />
 						<List>
 							<ListItem disablePadding>
@@ -253,23 +258,24 @@ export default function Header() {
 								</ListItem>
 							)}
 						</List>
+						<ListItem disablePadding sx={{ mt: 'auto' }}>
+							<ListItemButton
+								onClick={() => {
+									resetToken()
+									resetBalance()
+									navigate('/register')
+								}}
+							>
+								<ListItemIcon>
+									<LogoutIcon color='error' />
+								</ListItemIcon>
+								<ListItemText
+									primary={t.logout_of_system}
+									sx={{ color: 'red' }}
+								/>
+							</ListItemButton>
+						</ListItem>
 					</Box>
-					<ListItem disablePadding sx={{ mt: 'auto' }}>
-						<ListItemButton
-							onClick={() => {
-								resetToken()
-								resetBalance()
-							}}
-						>
-							<ListItemIcon>
-								<LogoutIcon color='error' />
-							</ListItemIcon>
-							<ListItemText
-								primary={t.logout_of_system}
-								sx={{ color: 'red' }}
-							/>
-						</ListItemButton>
-					</ListItem>
 				</Drawer>
 			</Box>
 			<Box sx={{ height: { xs: '80px' } }}></Box>

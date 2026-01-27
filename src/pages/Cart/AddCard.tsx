@@ -5,6 +5,7 @@ import {
 	CardContent,
 	TextField,
 	Typography,
+	useTheme,
 } from '@mui/material'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import Header from '../../components/Header/Header'
@@ -16,6 +17,7 @@ import { createAdmincart } from '../../api/cards/cards'
 import BankCards from '../../components/BankCards/BankCards'
 
 const AddCard = () => {
+	const theme = useTheme()
 	const { token } = useTokenStore()
 	const { t } = useTranslationStore()
 	const [name, setName] = useState('')
@@ -38,7 +40,13 @@ const AddCard = () => {
 		setNumber(formatCardNumber(e.target.value))
 	}
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
 				<BankCards cardType='all' />
@@ -86,7 +94,7 @@ const AddCard = () => {
 				</Card>
 			</Box>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

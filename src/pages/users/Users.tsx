@@ -16,6 +16,7 @@ import {
 	Typography,
 	CircularProgress,
 	Alert,
+	useTheme,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -30,6 +31,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutline'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createTransactions } from '../../api/transactions/transactions'
 const Users = () => {
+	const theme = useTheme()
 	const { token } = useTokenStore()
 	const { t } = useTranslationStore()
 	const navigate = useNavigate()
@@ -86,7 +88,19 @@ const Users = () => {
 	}
 	const hasFilters = filterLogin || filterToken || filterBalanceMin
 	return (
-		<>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'start',
+				gap: 2,
+				width: '100%',
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Typography
 				variant='h5'
@@ -291,7 +305,7 @@ const Users = () => {
 			</Paper>
 
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

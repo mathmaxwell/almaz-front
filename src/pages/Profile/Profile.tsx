@@ -5,6 +5,7 @@ import type { IUser } from '../../types/user/user'
 import BottomNavigate from '../home/BottomNavigate'
 import { getUserById } from '../../api/login/login'
 import {
+	Box,
 	Paper,
 	Table,
 	TableBody,
@@ -42,7 +43,19 @@ const Profile = () => {
 	})
 	const information = calculateTransactions(data)
 	return (
-		<>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'start',
+				gap: 2,
+				width: '100%',
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Typography variant='h4' textAlign={'center'}>
 				{userInfo?.login}
@@ -88,7 +101,7 @@ const Profile = () => {
 				</Table>
 			</TableContainer>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

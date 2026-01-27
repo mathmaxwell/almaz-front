@@ -31,7 +31,6 @@ const Games = () => {
 						sx={{
 							display: 'flex',
 							width: '100vw',
-							overflowX: 'auto',
 							gap: 2,
 						}}
 					>
@@ -40,6 +39,7 @@ const Games = () => {
 								return (
 									<Box
 										key={g.id}
+										sx={{ my: 2 }}
 										onClick={() => {
 											setGame(g)
 											navigate(`/${g.name}/${g.id}`)

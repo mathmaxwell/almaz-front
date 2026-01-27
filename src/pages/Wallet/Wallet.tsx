@@ -13,6 +13,7 @@ import {
 	TableRow,
 	TextField,
 	Typography,
+	useTheme,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Header from '../../components/Header/Header'
@@ -35,6 +36,7 @@ import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import infoVideo from '../../images/video/infoVideo.mp4'
 import type { IPayment } from '../../types/payment/payment'
 const Wallet = () => {
+	const theme = useTheme()
 	const [cardType, setCardType] = useState<undefined | string>(undefined)
 	const [loading, setIsLoading] = useState(false)
 	const { card } = useSelectCardStore()
@@ -78,7 +80,13 @@ const Wallet = () => {
 	})
 
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Box
 				sx={{
@@ -223,7 +231,7 @@ const Wallet = () => {
 				)}
 			</Box>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

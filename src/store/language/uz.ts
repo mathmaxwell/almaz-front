@@ -120,6 +120,6 @@ const uz = {
 		"Foydalanuvchiga qo'shmoqchi (ayirmoqchi) bo'lgan summani kiriting",
 	change_amount_confirmation: "Haqiqatan ham summani o'zgartirmoqchimisiz?",
 	invalid_amount: 'Summa xato kiritilgan',
-	
+	empty: "Bo'sh",
 }
 export default uz

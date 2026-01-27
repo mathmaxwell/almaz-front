@@ -120,5 +120,6 @@ const ru = {
 		'Напишите сумму, которую вы хотите добавить (удалить) пользователю',
 	change_amount_confirmation: 'Вы точно хотите изменить сумму на',
 	invalid_amount: 'Сумма введена неверно',
+	empty: 'Пусто',
 }
 export default ru

@@ -53,12 +53,14 @@ const Register = () => {
 		<Box
 			sx={{
 				width: '100vw',
-				height: '100vh',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
 				backgroundColor: theme.palette.background.default,
 				p: isMobile ? 2 : 0,
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
 			}}
 		>
 			<Box

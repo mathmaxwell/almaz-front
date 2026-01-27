@@ -19,6 +19,7 @@ import { useTheme } from '@mui/material/styles'
 import CreateIcon from '@mui/icons-material/Create'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useState } from 'react'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import GameInfo from '../../components/modal/GameInfo'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { useOfferStoreModal } from '../../store/modal/useOfferModal'
@@ -27,7 +28,24 @@ import { useQuery } from '@tanstack/react-query'
 import { getOffer } from '../../api/games/offer'
 import BottomNavigate from '../home/BottomNavigate'
 import { useSavedGamesStore } from '../../store/cart/useCartStore'
-import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
+const statusConfig = {
+	top: {
+		label: 'TOP',
+		bg: 'linear-gradient(135deg, #ff9800, #ff5722)',
+		color: '#fff',
+	},
+	sale: {
+		label: 'SALE',
+		bg: 'linear-gradient(135deg, #e53935, #b71c1c)',
+		color: '#fff',
+	},
+	vip: {
+		label: 'VIP',
+		bg: 'linear-gradient(135deg, #8e24aa, #5e35b1)',
+		color: '#fff',
+	},
+}
+
 const GamePage = () => {
 	const theme = useTheme()
 	const { toggle, reset, getCount } = useSavedGamesStore()
@@ -40,7 +58,6 @@ const GamePage = () => {
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { openModal } = useGamesStoreModal()
 	const [open, setOpen] = useState(false)
-	const { open: openVideo } = useVideoModalStore()
 	const { openModal: offerCreate } = useOfferStoreModal()
 	const { data, isLoading } = useQuery<IOffer[], Error>({
 		queryKey: ['offer', token],
@@ -54,7 +71,13 @@ const GamePage = () => {
 	const [img, setImg] = useState('')
 	const [video, setVideo] = useState('')
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<GameInfo
 				setOpen={setOpen}
@@ -76,8 +99,9 @@ const GamePage = () => {
 					justifyContent: 'start',
 					gap: 2,
 					p: 2,
-					backgroundColor: theme.palette.background.paper,
+					background: `linear-gradient(45deg, ${theme.palette.custom.gradientStart} 30%, ${theme.palette.custom.gradientEnd} 90%)`,
 					mb: 2,
+					borderRadius: '30px',
 				}}
 			>
 				<img
@@ -133,8 +157,8 @@ const GamePage = () => {
 										display: 'flex',
 										flexDirection: 'column',
 										justifyContent: 'space-between',
-										pb: 1,
 										position: 'relative',
+										background: theme.palette.background.paper,
 									}}
 								>
 									<IconButton
@@ -159,6 +183,25 @@ const GamePage = () => {
 									>
 										<FavoriteIcon color={selected ? 'error' : 'action'} />
 									</IconButton>
+									{offer.status && (
+										<Box
+											sx={{
+												position: 'absolute',
+												top: 12,
+												left: 12,
+												px: 1.5,
+												py: 0.5,
+												borderRadius: 1,
+												fontWeight: 700,
+												fontSize: 12,
+												background: statusConfig[offer.status].bg,
+												color: statusConfig[offer.status].color,
+												zIndex: 2,
+											}}
+										>
+											{statusConfig[offer.status].label}
+										</Box>
+									)}
 									<CardMedia
 										onClick={e => {
 											e.stopPropagation()
@@ -173,17 +216,7 @@ const GamePage = () => {
 										alt={offer.ruName}
 										sx={{ objectFit: 'cover' }}
 									/>
-									<CardContent
-										onClick={() => {
-											openVideo({
-												title: lang == 'ru' ? offer.ruDesc : offer.uzDesc,
-												video: {
-													type: 'backend',
-													url: `${apiUrl}${offer.video}`,
-												},
-											})
-										}}
-									>
+									<CardContent>
 										<Box
 											sx={{
 												display: 'flex',
@@ -214,12 +247,19 @@ const GamePage = () => {
 									>
 										<Button
 											fullWidth
+											sx={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+												gap: 1,
+											}}
 											onClick={e => {
 												e.stopPropagation()
 												alert('funksiya')
 											}}
 											variant='outlined'
 										>
+											<ShoppingCartIcon />
 											{t.buy}
 										</Button>
 										{isAdmin && (
@@ -241,7 +281,7 @@ const GamePage = () => {
 				</>
 			)}
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

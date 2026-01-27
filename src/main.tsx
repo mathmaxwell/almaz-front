@@ -50,9 +50,9 @@ function Main() {
 					neonPurple: isDark ? '#BB00FF' : '#7C4DFF',
 					neonOrange: isDark ? '#FF6B00' : '#FF5722',
 					neonCyan: isDark ? '#00F5FF' : '#00E5FF',
-					neonGreen: isDark ? '#39FF14' : '#00E676',
-					gradientStart: isDark ? '#00D4FF' : '#3B82F6',
-					gradientEnd: isDark ? '#FF00AA' : '#EC4899',
+					gradientStart: isDark ? '#0f0c29' : '#8e9ee0',
+					neonGreen: isDark ? '#302b63' : '#9496a2',
+					gradientEnd: isDark ? '#24243e' : '#bcc2d5',
 				},
 				text: {
 					primary: isDark ? '#E0F7FF' : '#0F172A',

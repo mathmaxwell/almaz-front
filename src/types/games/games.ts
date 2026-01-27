@@ -10,6 +10,7 @@ export interface IGames {
 }
 export interface IOffer {
 	id: string
+	status: '' | 'sale' | 'top' | 'vip'
 	gameId: string
 	image: string
 	uzName: string
@@ -18,5 +19,4 @@ export interface IOffer {
 	ruDesc: string
 	uzDesc: string
 	botId: string
-	video: string
 }

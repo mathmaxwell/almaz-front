@@ -18,7 +18,6 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@mui/material'
-import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 const Cart = () => {
 	const { token } = useTokenStore()
@@ -26,7 +25,6 @@ const Cart = () => {
 	const { items, getCount, toggle, reset } = useSavedGamesStore()
 	const { t, lang } = useTranslationStore()
 	const theme = useTheme()
-	const { open: openVideo } = useVideoModalStore()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const [offers, setOffers] = useState<IOffer[]>([])
@@ -42,7 +40,13 @@ const Cart = () => {
 	}, [entries.length])
 
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			{offers.length == 0 && (
 				<Typography textAlign={'center'} variant='h5'>
@@ -106,17 +110,7 @@ const Cart = () => {
 								alt={offer.ruName}
 								sx={{ objectFit: 'cover' }}
 							/>
-							<CardContent
-								onClick={() => {
-									openVideo({
-										title: lang == 'ru' ? offer.ruDesc : offer.uzDesc,
-										video: {
-											type: 'backend',
-											url: `${apiUrl}${offer.video}`,
-										},
-									})
-								}}
-							>
+							<CardContent>
 								<Box
 									sx={{
 										display: 'flex',
@@ -158,7 +152,7 @@ const Cart = () => {
 				})}
 			</Box>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 

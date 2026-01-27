@@ -42,7 +42,13 @@ const About = () => {
 	]
 
 	return (
-		<>
+		<Box
+			sx={{
+				height: '100vh',
+				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+				overflowY: 'auto',
+			}}
+		>
 			<Header />
 			<Box sx={{ px: { xs: 2, sm: 4 }, py: 4 }}>
 				<Typography variant='h4' textAlign='center' fontWeight='bold'>
@@ -111,7 +117,7 @@ const About = () => {
 				</ImageList>
 			</Box>
 			<BottomNavigate />
-		</>
+		</Box>
 	)
 }
 
