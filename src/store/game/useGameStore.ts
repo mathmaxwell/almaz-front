@@ -20,6 +20,7 @@ export const useGameStore = create<GameState>()(
 				howToUseRu: '',
 				name: '',
 				place: 'bot',
+				video: '',
 			},
 			setGame: game => set({ game }),
 			updateGame: game =>
@@ -34,6 +35,7 @@ export const useGameStore = create<GameState>()(
 								howToUseRu: '',
 								name: '',
 								place: 'bot',
+								video: '',
 							},
 				})),
 			clearGame: () =>
@@ -46,6 +48,7 @@ export const useGameStore = create<GameState>()(
 						howToUseRu: '',
 						name: '',
 						place: 'bot',
+						video: '',
 					},
 				}),
 		}),
