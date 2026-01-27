@@ -6,7 +6,6 @@ import {
 	useTheme,
 } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 import ShopIcon from '@mui/icons-material/Shop'
@@ -48,7 +47,7 @@ const BottomNavigate = () => {
 						value='/wallet'
 						icon={<AccountBalanceWalletIcon />}
 					/>
-					<BottomNavigationAction value='/cart' icon={<ShoppingCartIcon />} />
+					{/* <BottomNavigationAction value='/cart' icon={<ShoppingCartIcon />} /> */}
 					<BottomNavigationAction value='/shop' icon={<ShopIcon />} />
 					<BottomNavigationAction value='/history' icon={<ScheduleIcon />} />
 				</BottomNavigation>
