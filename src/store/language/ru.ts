@@ -113,5 +113,12 @@ const ru = {
 	rows_per_page: 'Строк на странице',
 	from: 'из',
 	more: 'Больше',
+	update_balance: 'Обновить баланс',
+	delete_user_confirmation:
+		'Вы действительно хотите удалить пользователя? После этого все его данные будут удалены',
+	enter_amount_to_add_or_remove:
+		'Напишите сумму, которую вы хотите добавить (удалить) пользователю',
+	change_amount_confirmation: 'Вы точно хотите изменить сумму на',
+	invalid_amount: 'Сумма введена неверно',
 }
 export default ru

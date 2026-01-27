@@ -1,5 +1,6 @@
 export interface IGames {
 	id: string
+	video: string
 	name: string
 	image: string
 	howToUseUz: string

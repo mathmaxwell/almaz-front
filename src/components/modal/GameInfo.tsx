@@ -1,16 +1,22 @@
-import { Box, Dialog, Typography } from '@mui/material'
+import { Box, Button, Dialog, Typography } from '@mui/material'
+import { useTranslationStore } from '../../store/language/useTranslationStore'
+import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 
 const GameInfo = ({
 	open,
 	setOpen,
 	text,
 	img,
+	url,
 }: {
 	open: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	text: string
 	img: string
+	url: string
 }) => {
+	const { t } = useTranslationStore()
+	const { open: openVideo } = useVideoModalStore()
 	return (
 		<>
 			<Dialog
@@ -48,6 +54,15 @@ const GameInfo = ({
 							objectFit: 'contain',
 						}}
 					/>
+					<Button
+						fullWidth
+						variant='contained'
+						onClick={() => {
+							openVideo({ video: { type: 'backend', url: url }, title: '' })
+						}}
+					>
+						{t.watch_video}
+					</Button>
 				</Box>
 			</Dialog>
 		</>

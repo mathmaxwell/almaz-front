@@ -52,14 +52,22 @@ const GamePage = () => {
 	})
 	const [text, setText] = useState('')
 	const [img, setImg] = useState('')
+	const [video, setVideo] = useState('')
 	return (
 		<>
 			<Header />
-			<GameInfo setOpen={setOpen} open={open} text={text} img={img} />
+			<GameInfo
+				setOpen={setOpen}
+				open={open}
+				text={text}
+				img={img}
+				url={video}
+			/>
 			<Box
 				onClick={() => {
 					setText(lang == 'ru' ? game.howToUseRu : game.howToUseRu)
 					setImg(`${apiUrl}${game.helpImage}`)
+					setVideo(`${apiUrl}${game.video}`)
 					setOpen(true)
 				}}
 				sx={{
@@ -157,6 +165,7 @@ const GamePage = () => {
 											setOpen(true)
 											setText(lang == 'ru' ? offer.ruDesc : offer.uzDesc)
 											setImg(`${apiUrl}${offer.image}`)
+											setVideo(`${apiUrl}${game.video}`)
 										}}
 										component='img'
 										height={isMobile ? '200px' : isDesctop ? '230px' : '260px'}

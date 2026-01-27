@@ -9,6 +9,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ScheduleIcon from '@mui/icons-material/Schedule'
+import ShopIcon from '@mui/icons-material/Shop'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 const BottomNavigate = () => {
 	const theme = useTheme()
@@ -48,6 +49,7 @@ const BottomNavigate = () => {
 						icon={<AccountBalanceWalletIcon />}
 					/>
 					<BottomNavigationAction value='/cart' icon={<ShoppingCartIcon />} />
+					<BottomNavigationAction value='/shop' icon={<ShopIcon />} />
 					<BottomNavigationAction value='/history' icon={<ScheduleIcon />} />
 				</BottomNavigation>
 			</Paper>

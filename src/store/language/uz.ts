@@ -113,5 +113,13 @@ const uz = {
 	rows_per_page: 'Sahifadagi qatorlar soni',
 	from: 'dan',
 	more: "Ko'proq",
+	update_balance: 'Balansni yangilash',
+	delete_user_confirmation:
+		"Foydalanuvchini o'chirib tashlamoqchimisiz? Shundan so'ng uning barcha ma'lumotlari o'chiriladi",
+	enter_amount_to_add_or_remove:
+		"Foydalanuvchiga qo'shmoqchi (ayirmoqchi) bo'lgan summani kiriting",
+	change_amount_confirmation: "Haqiqatan ham summani o'zgartirmoqchimisiz?",
+	invalid_amount: 'Summa xato kiritilgan',
+	
 }
 export default uz

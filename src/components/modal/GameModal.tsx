@@ -14,7 +14,6 @@ import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createGame, deleteGame, updateGame } from '../../api/games/games'
 import LoadingProgress from '../Loading/LoadingProgress'
-
 const GameModal = () => {
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
@@ -24,8 +23,12 @@ const GameModal = () => {
 	const [howToUseRu, setHowToUseRu] = useState('')
 	const [imageFile, setImageFile] = useState<File | null>(null)
 	const [imageHelperFile, setImageHelperFile] = useState<File | null>(null)
+	const [videoFile, setVideoFile] = useState<File | null>(null) // ← новое поле
+
 	const [previewMain, setPreviewMain] = useState<string | null>(null)
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
+	const [previewVideo, setPreviewVideo] = useState<string | null>(null) // ← новое превью
+
 	const [loading, setLoading] = useState(false)
 	const [place, setIsPlace] = useState<string>('top')
 
@@ -36,8 +39,10 @@ const GameModal = () => {
 			setHowToUseRu(selectedGame.howToUseRu || '')
 			setPreviewMain(selectedGame.image || null)
 			setPreviewHelper(selectedGame.helpImage || null)
+			setPreviewVideo(selectedGame.video || null) // предполагаем, что бэк отдаёт video как url
 			setImageFile(null)
 			setImageHelperFile(null)
+			setVideoFile(null)
 			setIsPlace(selectedGame.place)
 		} else {
 			setName('')
@@ -45,11 +50,14 @@ const GameModal = () => {
 			setHowToUseRu('')
 			setPreviewMain(null)
 			setPreviewHelper(null)
+			setPreviewVideo(null)
 			setImageFile(null)
 			setImageHelperFile(null)
+			setVideoFile(null)
 			setIsPlace('top')
 		}
 	}, [selectedGame, modalOpen])
+
 	useEffect(() => {
 		if (imageFile) {
 			const url = URL.createObjectURL(imageFile)
@@ -57,6 +65,7 @@ const GameModal = () => {
 			return () => URL.revokeObjectURL(url)
 		}
 	}, [imageFile])
+
 	useEffect(() => {
 		if (imageHelperFile) {
 			const url = URL.createObjectURL(imageHelperFile)
@@ -65,16 +74,27 @@ const GameModal = () => {
 		}
 	}, [imageHelperFile])
 
+	useEffect(() => {
+		if (videoFile) {
+			const url = URL.createObjectURL(videoFile)
+			setPreviewVideo(url)
+			return () => URL.revokeObjectURL(url)
+		}
+	}, [videoFile])
+
 	const onSubmit = async () => {
 		if (!name.trim()) return
+
 		const data = new FormData()
 		data.append('token', token)
 		data.append('name', name.trim())
 		data.append('howToUseUz', howToUseUz.trim())
 		data.append('howToUseRu', howToUseRu.trim())
 		data.append('place', place.trim())
+
 		if (imageFile) data.append('image', imageFile)
 		if (imageHelperFile) data.append('helpImage', imageHelperFile)
+		if (videoFile) data.append('video', videoFile) // ← добавляем видео в FormData
 
 		try {
 			setLoading(true)
@@ -121,6 +141,7 @@ const GameModal = () => {
 					<Typography variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedGame ? t.update_game : t.add_game}
 					</Typography>
+
 					<FormControl fullWidth>
 						<InputLabel variant='standard' htmlFor='uncontrolled-native'>
 							{t.place}
@@ -128,15 +149,14 @@ const GameModal = () => {
 						<NativeSelect
 							value={place}
 							onChange={e => setIsPlace(e.target.value)}
-							inputProps={{
-								id: 'place-native',
-							}}
+							inputProps={{ id: 'place-native' }}
 						>
 							<option value='top'>{t.top}</option>
 							<option value='bot'>{t.bottom}</option>
 							<option value='stop'>{t.stop}</option>
 						</NativeSelect>
 					</FormControl>
+
 					<TextField
 						label={t.name}
 						value={name}
@@ -169,6 +189,7 @@ const GameModal = () => {
 						variant='outlined'
 					/>
 
+					{/* Основное изображение */}
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
 							{t.main_image}
@@ -203,6 +224,7 @@ const GameModal = () => {
 						)}
 					</Box>
 
+					{/* Вспомогательное изображение */}
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
 							{t.auxiliary_image_instruction}
@@ -226,6 +248,42 @@ const GameModal = () => {
 								<img
 									src={previewHelper}
 									alt={t.auxiliary_image_instruction}
+									style={{
+										maxWidth: '100%',
+										maxHeight: '300px',
+										borderRadius: '12px',
+										boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+									}}
+								/>
+							</Box>
+						)}
+					</Box>
+
+					{/* Новое поле — видео */}
+					<Box>
+						<Typography variant='subtitle1' gutterBottom>
+							Видео (опционально)
+						</Typography>
+						<Button
+							variant='outlined'
+							component='label'
+							fullWidth
+							sx={{ py: 2, textTransform: 'none' }}
+						>
+							{videoFile ? videoFile.name : 'Загрузить видео'}
+							<input
+								type='file'
+								hidden
+								accept='video/*'
+								onChange={e => setVideoFile(e.target.files?.[0] || null)}
+							/>
+						</Button>
+
+						{previewVideo && (
+							<Box sx={{ textAlign: 'center', mt: 2 }}>
+								<video
+									src={previewVideo}
+									controls
 									style={{
 										maxWidth: '100%',
 										maxHeight: '300px',

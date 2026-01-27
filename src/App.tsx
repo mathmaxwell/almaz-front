@@ -22,6 +22,7 @@ import History from './pages/history/History'
 import { VideoModal } from './components/modal/VideoModal'
 import AddCard from './pages/Cart/AddCard'
 import Users from './pages/users/Users'
+import Shop from './pages/Shop/Shop'
 
 function App() {
 	const { token } = useTokenStore()
@@ -37,17 +38,10 @@ function App() {
 				<Route path='/' element={<HomePage />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/users' element={<Users />} />
+				<Route path='/shop' element={<Shop />} />
 				<Route path='/users/:userId' element={<History />} />
 				<Route path='/profile' element={<Profile />} />
-				<Route
-					path='/:gameName/:gameId'
-					element={
-						<>
-							<GamePage />
-							<OfferModal />
-						</>
-					}
-				/>
+
 				<Route path='/wallet' element={<Wallet />} />
 				<Route path='add-card' element={<AddCard />} />
 				<Route path='/payments' element={<Payments />} />
@@ -58,8 +52,16 @@ function App() {
 					element={<Announcements />}
 				/>
 				<Route path='/cart' element={<Cart />} />
-
 				<Route path='/history' element={<History />} />
+				<Route
+					path='/:gameName/:gameId'
+					element={
+						<>
+							<GamePage />
+							<OfferModal />
+						</>
+					}
+				/>
 				<Route path='*' element={<ErrorPage />} />
 			</Routes>
 			<GameModal />
