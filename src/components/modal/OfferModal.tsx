@@ -31,11 +31,8 @@ const OfferModal = () => {
 	const [price, setPrice] = useState('')
 	const [ruDesc, setRuDesc] = useState('')
 	const [uzDesc, setUzDesc] = useState('')
-
 	const [previewImage, setPreviewImage] = useState<string | null>(null)
-
 	const [loading, setLoading] = useState(false)
-
 	useEffect(() => {
 		if (selectedOffer) {
 			setStatus(selectedOffer.status)
@@ -145,7 +142,7 @@ const OfferModal = () => {
 							onChange={e => setStatus(e.target.value)}
 							inputProps={{ id: 'place-native' }}
 						>
-							<option value=''>{t.empty}</option>
+							<option value='-'>{t.empty}</option>
 							<option value='sale'>sale</option>
 							<option value='top'>top</option>
 							<option value='vip'>vip</option>

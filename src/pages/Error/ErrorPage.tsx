@@ -24,6 +24,7 @@ const ErrorPage = () => {
 						fontWeight: 'bold',
 						color: 'primary.main',
 						mb: 2,
+						fontFamily: 'Bitcount',
 					}}
 				>
 					{t.error404Title}
@@ -33,6 +34,7 @@ const ErrorPage = () => {
 					sx={{
 						color: 'text.secondary',
 						maxWidth: 600,
+						fontFamily: 'Bitcount',
 					}}
 				>
 					{t.error404Message}

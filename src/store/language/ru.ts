@@ -121,5 +121,10 @@ const ru = {
 	change_amount_confirmation: 'Вы точно хотите изменить сумму на',
 	invalid_amount: 'Сумма введена неверно',
 	empty: 'Пусто',
+	instructions: 'Инструкции',
+	filled_by: 'Кем заполнен',
+	support_notice: 'Если вы что-то не понимаете, сообщите в техподдержку',
+	server_id: 'ID сервера',
+	player_id: 'ID игрока',
 }
 export default ru

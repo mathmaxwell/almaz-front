@@ -87,7 +87,11 @@ export default function Header() {
 							variant='h6'
 							noWrap
 							component='div'
-							sx={{ cursor: 'pointer', color: theme.palette.text.primary }}
+							sx={{
+								cursor: 'pointer',
+								color: theme.palette.text.primary,
+								fontFamily: 'Bitcount',
+							}}
 							onClick={() => {
 								navigate('/')
 							}}

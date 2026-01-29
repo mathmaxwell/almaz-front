@@ -22,6 +22,7 @@ import History from './pages/history/History'
 import { VideoModal } from './components/modal/VideoModal'
 import AddCard from './pages/Cart/AddCard'
 import Users from './pages/users/Users'
+import BuyModal from './components/modal/BuyModal'
 
 function App() {
 	const { token } = useTokenStore()
@@ -63,6 +64,7 @@ function App() {
 			</Routes>
 			<GameModal />
 			<VideoModal />
+			<BuyModal />
 		</>
 	)
 }

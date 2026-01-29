@@ -62,7 +62,13 @@ const Payments = () => {
 				>
 					{t.update}
 				</Button>
-				<TableContainer component={Paper}>
+				<TableContainer
+					component={Paper}
+					sx={{
+						background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+					}}
+				>
 					<Table aria-label='simple table'>
 						<TableHead>
 							<TableRow>
@@ -73,9 +79,9 @@ const Payments = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{data?.map(row => (
+							{data?.map((row, index) => (
 								<TableRow
-									key={row.id}
+									key={index}
 									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 								>
 									<TableCell component='th' scope='row'>

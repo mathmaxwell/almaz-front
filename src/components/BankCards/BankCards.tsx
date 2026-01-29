@@ -16,6 +16,7 @@ import {
 	useTheme,
 } from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
+import LoadingProgress from '../Loading/LoadingProgress'
 
 const BankCards = ({ cardType }: { cardType: string }) => {
 	const { token } = useTokenStore()
@@ -44,11 +45,14 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 	return (
 		<Box sx={{ width: '100%' }}>
 			{isLoading ? (
-				<Typography color='text.secondary' textAlign='center' py={4}>
-					loading
-				</Typography>
+				<LoadingProgress />
 			) : cards.length === 0 ? (
-				<Typography color='text.secondary' textAlign='center' py={6}>
+				<Typography
+					sx={{ fontFamily: 'Bitcount' }}
+					color='text.secondary'
+					textAlign='center'
+					py={6}
+				>
 					{t.no_cards_added}
 				</Typography>
 			) : (
@@ -62,9 +66,9 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 						scrollSnapType: 'x mandatory',
 					}}
 				>
-					{cards.map(card => (
+					{cards.map((card, index) => (
 						<Card
-							key={card.id}
+							key={index}
 							elevation={3}
 							sx={{
 								borderRadius: 4,
@@ -97,7 +101,11 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 									}}
 								>
 									<CreditCardIcon fontSize='large' />
-									<Typography variant={isMobile ? 'h6' : 'h5'} fontWeight={500}>
+									<Typography
+										sx={{ fontFamily: 'Bitcount' }}
+										variant={isMobile ? 'h6' : 'h5'}
+										fontWeight={500}
+									>
 										{card.name}
 									</Typography>
 									{isAdmin && (
@@ -122,8 +130,7 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 								<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 									<Typography
 										variant={isMobile ? 'h6' : 'h5'}
-										fontFamily='monospace'
-										sx={{ userSelect: 'all' }}
+										sx={{ userSelect: 'all', fontFamily: 'Bitcount' }}
 										noWrap
 									>
 										{card.number}

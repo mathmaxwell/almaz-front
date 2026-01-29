@@ -3,61 +3,36 @@ import { useTokenStore } from '../../store/token/useTokenStore'
 import {
 	Box,
 	Button,
-	Card,
-	CardActions,
-	CardContent,
-	CardMedia,
 	IconButton,
 	Typography,
 	useMediaQuery,
 } from '@mui/material'
-import FavoriteIcon from '@mui/icons-material/Favorite'
 import { useGamesStoreModal } from '../../store/modal/useGameModal'
 import EditIcon from '@mui/icons-material/Edit'
 import { useGameStore } from '../../store/game/useGameStore'
 import { useTheme } from '@mui/material/styles'
-import CreateIcon from '@mui/icons-material/Create'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import { useState } from 'react'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import GameInfo from '../../components/modal/GameInfo'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import { useOfferStoreModal } from '../../store/modal/useOfferModal'
 import type { IOffer } from '../../types/games/games'
 import { useQuery } from '@tanstack/react-query'
 import { getOffer } from '../../api/games/offer'
 import BottomNavigate from '../home/BottomNavigate'
-import { useSavedGamesStore } from '../../store/cart/useCartStore'
-const statusConfig = {
-	top: {
-		label: 'TOP',
-		bg: 'linear-gradient(135deg, #ff9800, #ff5722)',
-		color: '#fff',
-	},
-	sale: {
-		label: 'SALE',
-		bg: 'linear-gradient(135deg, #e53935, #b71c1c)',
-		color: '#fff',
-	},
-	vip: {
-		label: 'VIP',
-		bg: 'linear-gradient(135deg, #8e24aa, #5e35b1)',
-		color: '#fff',
-	},
-}
-
+import { useState } from 'react'
+import Instructions from '../../components/game/Instructions'
+import GameCard from '../../components/game/GameCard'
+import GameCardSkeleton from './GameCardSkeleton'
 const GamePage = () => {
 	const theme = useTheme()
-	const { toggle, reset, getCount } = useSavedGamesStore()
+	const [active, setActive] = useState<'buy' | 'instructions'>('buy')
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
-	const { lang, t } = useTranslationStore()
+	const { t } = useTranslationStore()
 	const { game } = useGameStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { openModal } = useGamesStoreModal()
-	const [open, setOpen] = useState(false)
 	const { openModal: offerCreate } = useOfferStoreModal()
 	const { data, isLoading } = useQuery<IOffer[], Error>({
 		queryKey: ['offer', token],
@@ -67,9 +42,6 @@ const GamePage = () => {
 		},
 		enabled: !!token,
 	})
-	const [text, setText] = useState('')
-	const [img, setImg] = useState('')
-	const [video, setVideo] = useState('')
 	return (
 		<Box
 			sx={{
@@ -79,37 +51,32 @@ const GamePage = () => {
 			}}
 		>
 			<Header />
-			<GameInfo
-				setOpen={setOpen}
-				open={open}
-				text={text}
-				img={img}
-				url={video}
-			/>
 			<Box
-				onClick={() => {
-					setText(lang == 'ru' ? game.howToUseRu : game.howToUseRu)
-					setImg(`${apiUrl}${game.helpImage}`)
-					setVideo(`${apiUrl}${game.video}`)
-					setOpen(true)
-				}}
 				sx={{
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'start',
 					gap: 2,
 					p: 2,
-					background: `linear-gradient(45deg, ${theme.palette.custom.gradientStart} 30%, ${theme.palette.custom.gradientEnd} 90%)`,
+					background: `linear-gradient(0deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientStart} 100%)`,
 					mb: 2,
 					borderRadius: '30px',
+					boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
 				}}
 			>
 				<img
 					src={`${apiUrl}${game.image}`}
 					alt='game name'
-					style={{ width: '50px', height: '50px', objectFit: 'contain' }}
+					style={{
+						width: '75px',
+						height: '75px',
+						objectFit: 'contain',
+						borderRadius: '50%',
+					}}
 				/>
-				<Typography variant='h4'>{game.name}</Typography>
+				<Typography sx={{ fontFamily: 'Bitcount' }} variant='h4'>
+					{game.name}
+				</Typography>
 				{isAdmin && (
 					<IconButton
 						sx={{ ml: 'auto' }}
@@ -132,152 +99,70 @@ const GamePage = () => {
 					</IconButton>
 				)}
 			</Box>
+			<Box
+				sx={{
+					width: '100%',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					my: 2,
+				}}
+			>
+				<Button
+					onClick={() => {
+						setActive('buy')
+					}}
+					fullWidth
+					variant={active == 'buy' ? 'contained' : 'outlined'}
+					sx={{
+						p: '10px',
+						borderRadius: '20px 0 0 20px',
+						boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+					}}
+				>
+					{t.buy}
+				</Button>
+				<Button
+					onClick={() => {
+						setActive('instructions')
+					}}
+					fullWidth
+					variant={active == 'instructions' ? 'contained' : 'outlined'}
+					sx={{
+						p: '10px',
+						borderRadius: '0 20px 20px 0',
+						boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+					}}
+				>
+					{t.instructions}
+				</Button>
+			</Box>
 			{isLoading ? (
-				<>loading</>
+				<>
+					<GameCardSkeleton />
+				</>
 			) : (
 				<>
-					<Box
-						sx={{
-							width: '100%',
-							display: 'grid',
-							gap: 2,
-							gridTemplateColumns: isMobile
-								? '1fr 1fr'
-								: isDesctop
-									? '1fr 1fr 1fr'
-									: '1fr 1fr 1fr 1fr',
-						}}
-					>
-						{data?.map(offer => {
-							const selected = getCount(offer.id)
-							return (
-								<Card
-									key={offer.id}
-									sx={{
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'space-between',
-										position: 'relative',
-										background: theme.palette.background.paper,
-									}}
-								>
-									<IconButton
-										sx={{
-											position: 'absolute',
-											top: 10,
-											right: 10,
-											backgroundColor: selected
-												? 'rgba(255, 255, 255, 0.85)'
-												: 'rgba(0, 0, 0, 0.45)',
-											backdropFilter: 'blur(6px)',
-											WebkitBackdropFilter: 'blur(6px)',
-										}}
-										onClick={e => {
-											e.stopPropagation()
-											if (selected > 0) {
-												reset(offer.id)
-											} else {
-												toggle(offer.id)
-											}
-										}}
-									>
-										<FavoriteIcon color={selected ? 'error' : 'action'} />
-									</IconButton>
-									{offer.status && (
-										<Box
-											sx={{
-												position: 'absolute',
-												top: 12,
-												left: 12,
-												px: 1.5,
-												py: 0.5,
-												borderRadius: 1,
-												fontWeight: 700,
-												fontSize: 12,
-												background: statusConfig[offer.status].bg,
-												color: statusConfig[offer.status].color,
-												zIndex: 2,
-											}}
-										>
-											{statusConfig[offer.status].label}
-										</Box>
-									)}
-									<CardMedia
-										onClick={e => {
-											e.stopPropagation()
-											setOpen(true)
-											setText(lang == 'ru' ? offer.ruDesc : offer.uzDesc)
-											setImg(`${apiUrl}${offer.image}`)
-											setVideo(`${apiUrl}${game.video}`)
-										}}
-										component='img'
-										height={isMobile ? '200px' : isDesctop ? '230px' : '260px'}
-										image={`${apiUrl}${offer.image}`}
-										alt={offer.ruName}
-										sx={{ objectFit: 'cover' }}
-									/>
-									<CardContent>
-										<Box
-											sx={{
-												display: 'flex',
-												flexDirection: isDesctop ? 'column' : 'row',
-												alignItems: isDesctop ? 'start' : 'center',
-												justifyContent: 'space-between',
-												gap: 1,
-												width: '100%',
-											}}
-										>
-											<Typography variant={isMobile ? 'h6' : 'h5'}>
-												{lang == 'ru' ? offer.ruName : offer.uzName}
-											</Typography>
-											<Typography
-												variant='body2'
-												sx={{ color: 'text.secondary' }}
-											>
-												{offer.price} {t.som}
-											</Typography>
-										</Box>
-									</CardContent>
-									<CardActions
-										disableSpacing
-										sx={{
-											display: 'flex',
-											flexDirection: isMobile ? 'column' : 'row',
-										}}
-									>
-										<Button
-											fullWidth
-											sx={{
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												gap: 1,
-											}}
-											onClick={e => {
-												e.stopPropagation()
-												alert('funksiya')
-											}}
-											variant='outlined'
-										>
-											<ShoppingCartIcon />
-											{t.buy}
-										</Button>
-										{isAdmin && (
-											<IconButton>
-												<CreateIcon
-													color='primary'
-													onClick={e => {
-														e.stopPropagation()
-														offerCreate(offer)
-													}}
-												/>
-											</IconButton>
-										)}
-									</CardActions>
-								</Card>
-							)
-						})}
-					</Box>
+					{active == 'buy' ? (
+						<Box
+							sx={{
+								width: '100%',
+								display: 'grid',
+								gap: 2,
+								gridTemplateColumns: isMobile
+									? '1fr 1fr'
+									: isDesctop
+										? '1fr 1fr 1fr'
+										: '1fr 1fr 1fr 1fr',
+							}}
+						>
+							{data?.map((offer, index) => {
+								return <GameCard key={index} offer={offer} />
+							})}
+						</Box>
+					) : (
+						<Instructions />
+					)}
 				</>
 			)}
 			<BottomNavigate />

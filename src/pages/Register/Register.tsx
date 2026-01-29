@@ -84,6 +84,7 @@ const Register = () => {
 						color: theme.palette.primary.main,
 						textAlign: 'center',
 						fontWeight: 600,
+						fontFamily: 'Bitcount',
 					}}
 				>
 					FASTPIN

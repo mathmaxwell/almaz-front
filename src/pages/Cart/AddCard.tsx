@@ -50,11 +50,27 @@ const AddCard = () => {
 			<Header />
 			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
 				<BankCards cardType='all' />
-				<Card variant='outlined' sx={{ borderRadius: 3, p: 1 }}>
+				<Card
+					variant='outlined'
+					sx={{
+						borderRadius: 3,
+						p: 1,
+						background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+					}}
+				>
 					<CardContent
-						sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2,
+						}}
 					>
-						<Typography variant='h6' color='primary'>
+						<Typography
+							sx={{ fontFamily: 'Bitcount' }}
+							variant='h6'
+							color='primary'
+						>
 							{t.add_new_card}
 						</Typography>
 						<TextField

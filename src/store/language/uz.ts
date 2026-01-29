@@ -121,5 +121,11 @@ const uz = {
 	change_amount_confirmation: "Haqiqatan ham summani o'zgartirmoqchimisiz?",
 	invalid_amount: 'Summa xato kiritilgan',
 	empty: "Bo'sh",
+	instructions: "Ko'rsatmalar",
+	filled_by: 'Kim tomonidan',
+	support_notice:
+		"Agar biror narsaga tushunmasangiz, qo'llab-quvvatlash xizmatiga (support) xabar bering",
+	server_id: 'Server ID',
+	player_id: 'Oyinchi ID',
 }
 export default uz

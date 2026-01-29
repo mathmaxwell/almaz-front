@@ -5,6 +5,7 @@ import type { IGames } from '../../types/games/games'
 import { Box, Card, CardMedia, useMediaQuery, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useGameStore } from '../../store/game/useGameStore'
+import GameSkeleton from './GameSkeleton'
 const Games = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -24,41 +25,51 @@ const Games = () => {
 	return (
 		<>
 			{isLoading ? (
-				<>loading</>
+				<>
+					<GameSkeleton />
+				</>
 			) : (
 				<>
 					<Box
 						sx={{
 							display: 'flex',
-							width: '100vw',
+							alignItems: 'center',
+							justifyContent: 'start',
 							gap: 2,
+							width: '100%',
+							overflowX: 'auto',
 						}}
 					>
-						{data?.map(g => {
-							if (g.place === 'top') {
-								return (
-									<Box
-										key={g.id}
-										sx={{ my: 2 }}
-										onClick={() => {
-											setGame(g)
-											navigate(`/${g.name}/${g.id}`)
+						{data
+							?.filter(g => g.place === 'top')
+							.map((g, index) => (
+								<Box
+									key={index}
+									sx={{
+										my: 2,
+										width: 100,
+										height: 100,
+										borderRadius: 20,
+										cursor: 'pointer',
+										flexShrink: 0,
+									}}
+									onClick={() => {
+										setGame(g)
+										navigate(`/${g.name}/${g.id}`)
+									}}
+								>
+									<img
+										src={`${apiUrl}${g.image}`}
+										alt={g.name}
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											borderRadius: 20,
 										}}
-									>
-										<img
-											src={`${apiUrl}${g.image}`}
-											style={{
-												width: '100px',
-												height: '100px',
-												objectFit: 'cover',
-												borderRadius: 20,
-											}}
-											alt={g.name}
-										/>
-									</Box>
-								)
-							}
-						})}
+									/>
+								</Box>
+							))}
 					</Box>
 					<Box
 						sx={{
@@ -72,8 +83,9 @@ const Games = () => {
 									: '1fr 1fr 1fr 1fr',
 						}}
 					>
-						{data?.map(g => {
-							if (g.place === 'bot') {
+						{data
+							?.filter(g => g.place == 'bot')
+							.map((g, index) => {
 								return (
 									<Card
 										sx={{
@@ -81,9 +93,10 @@ const Games = () => {
 											flexDirection: 'column',
 											justifyContent: 'space-between',
 											position: 'relative',
-											borderRadius: 4,
+											borderRadius: 8,
+											boxShadow: '8px 8px 40px rgba(0,0,0,9)',
 										}}
-										key={g.id}
+										key={index}
 									>
 										<CardMedia
 											onClick={() => {
@@ -104,8 +117,7 @@ const Games = () => {
 										/>
 									</Card>
 								)
-							}
-						})}
+							})}
 					</Box>
 				</>
 			)}

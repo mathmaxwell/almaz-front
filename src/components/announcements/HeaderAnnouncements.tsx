@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { getAnnouncements } from '../../api/Announcements/Announcements'
 import type { IAnnouncements } from '../../types/Announcements/Announcements'
-import LoadingProgress from '../Loading/LoadingProgress'
 
 const HeaderAnnouncements = () => {
 	const { lang } = useTranslationStore()
@@ -28,18 +27,13 @@ const HeaderAnnouncements = () => {
 	}, [slides.length])
 	if (isLoading) {
 		return (
-			<Box
-				sx={{
-					width: '100%',
-					height: { xs: 180, sm: 260, md: 340 },
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					bgcolor: 'background.paper',
-				}}
-			>
-				<LoadingProgress />
-			</Box>
+			<Skeleton
+				variant='rectangular'
+				animation='wave'
+				width={'100%'}
+				height={180}
+				style={{ margin: '20px 0' }}
+			/>
 		)
 	}
 	if (slides.length === 0) return null
@@ -53,7 +47,7 @@ const HeaderAnnouncements = () => {
 					position: 'relative',
 					overflow: 'hidden',
 					borderRadius: { xs: 0, md: 2 },
-					boxShadow: { md: '0 8px 24px rgba(0,0,0,0.15)' },
+					boxShadow: '0 8px 24px rgba(1,1,1,0.2)',
 					bgcolor: 'background.paper',
 				}}
 			>
@@ -109,6 +103,7 @@ const HeaderAnnouncements = () => {
 							WebkitBoxOrient: 'vertical',
 							overflow: 'hidden',
 							display: '-webkit-box',
+							fontFamily: 'Bitcount',
 						}}
 					>
 						{lang === 'ru' ? current.ru : current.uz}

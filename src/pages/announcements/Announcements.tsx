@@ -22,6 +22,7 @@ import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useEffect, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import BottomNavigate from '../home/BottomNavigate'
+import AnnouncementsSkeleton from './AnnouncementsSkeleton'
 const Announcements = () => {
 	const theme = useTheme()
 	const { lang, t } = useTranslationStore()
@@ -189,7 +190,9 @@ const Announcements = () => {
 				</Box>
 			)}
 			{isLoading ? (
-				<>Loading</>
+				<>
+					<AnnouncementsSkeleton />
+				</>
 			) : (
 				<Box
 					sx={{
@@ -199,8 +202,15 @@ const Announcements = () => {
 						gap: 2,
 					}}
 				>
-					{slides?.map(slider => (
-						<Card key={slider.id}>
+					{slides?.map((slider, index) => (
+						<Card
+							key={index}
+							sx={{
+								borderRadius: '20px',
+								boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+								background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+							}}
+						>
 							<CardActionArea>
 								<CardMedia
 									component='img'
@@ -216,12 +226,20 @@ const Announcements = () => {
 									}}
 								>
 									<Box>
-										<Typography gutterBottom variant='h5' component='div'>
+										<Typography
+											sx={{ fontFamily: 'Bitcount' }}
+											gutterBottom
+											variant='h5'
+											component='div'
+										>
 											{lang == 'ru' ? slider.ru : slider.uz}
 										</Typography>
 										<Typography
-											variant='body2'
-											sx={{ color: 'text.secondary' }}
+											variant='body1'
+											sx={{
+												color: 'text.secondary',
+												fontFamily: 'Bitcount',
+											}}
 										>
 											{lang == 'ru' ? slider.ruText : slider.uzText}
 										</Typography>

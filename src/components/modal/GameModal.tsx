@@ -23,11 +23,11 @@ const GameModal = () => {
 	const [howToUseRu, setHowToUseRu] = useState('')
 	const [imageFile, setImageFile] = useState<File | null>(null)
 	const [imageHelperFile, setImageHelperFile] = useState<File | null>(null)
-	const [videoFile, setVideoFile] = useState<File | null>(null) // ← новое поле
+	const [videoFile, setVideoFile] = useState<File | null>(null)
 
 	const [previewMain, setPreviewMain] = useState<string | null>(null)
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
-	const [previewVideo, setPreviewVideo] = useState<string | null>(null) // ← новое превью
+	const [previewVideo, setPreviewVideo] = useState<string | null>(null)
 
 	const [loading, setLoading] = useState(false)
 	const [place, setIsPlace] = useState<string>('top')
@@ -39,7 +39,7 @@ const GameModal = () => {
 			setHowToUseRu(selectedGame.howToUseRu || '')
 			setPreviewMain(selectedGame.image || null)
 			setPreviewHelper(selectedGame.helpImage || null)
-			setPreviewVideo(selectedGame.video || null) // предполагаем, что бэк отдаёт video как url
+			setPreviewVideo(selectedGame.video || null)
 			setImageFile(null)
 			setImageHelperFile(null)
 			setVideoFile(null)
@@ -138,7 +138,7 @@ const GameModal = () => {
 						gap: 3,
 					}}
 				>
-					<Typography variant='h5' textAlign='center' fontWeight='bold'>
+					<Typography  variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedGame ? t.update_game : t.add_game}
 					</Typography>
 
@@ -262,7 +262,7 @@ const GameModal = () => {
 					{/* Новое поле — видео */}
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
-							Видео (опционально)
+							{t.video}
 						</Typography>
 						<Button
 							variant='outlined'

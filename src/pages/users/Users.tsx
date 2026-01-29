@@ -30,6 +30,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutline'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createTransactions } from '../../api/transactions/transactions'
+import { updateNumberFormat } from '../../func/number'
 const Users = () => {
 	const theme = useTheme()
 	const { token } = useTokenStore()
@@ -72,7 +73,6 @@ const Users = () => {
 			}
 		},
 	})
-
 	const rows = data?.users ?? []
 	const totalCount = data?.total ?? 0
 	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage)
@@ -105,7 +105,7 @@ const Users = () => {
 			<Typography
 				variant='h5'
 				textAlign='center'
-				sx={{ fontWeight: 600, my: 2 }}
+				sx={{ fontWeight: 600, my: 2, fontFamily: 'Bitcount' }}
 			>
 				{t.users}
 			</Typography>
@@ -177,13 +177,20 @@ const Users = () => {
 					</IconButton>
 				)}
 			</Box>
-			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
+			<Paper
+				sx={{
+					width: '100%',
+					overflow: 'hidden',
+					background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+				}}
+			>
 				<TableContainer>
 					<Table>
 						<TableHead>
 							<TableRow>
 								<TableCell align='center' sx={{ fontWeight: 700 }}>
-									{t.login}
+									Login
 								</TableCell>
 								<TableCell align='center' sx={{ fontWeight: 700 }}>
 									{t.password}
@@ -220,17 +227,17 @@ const Users = () => {
 									</TableCell>
 								</TableRow>
 							) : (
-								rows.map(row => (
+								rows.map((row, index) => (
 									<TableRow
 										hover
-										key={row.token || row.login}
+										key={index}
 										onClick={() => navigate(`/users/${row.token}`)}
 									>
 										<TableCell align='center'>{row.login ?? '—'}</TableCell>
 										<TableCell align='center'>{row.password ?? '—'}</TableCell>
 										<TableCell align='center'>
 											{row.balance != null
-												? row.balance.toLocaleString() + ` ${t.som}`
+												? updateNumberFormat(row.balance) + ` ${t.som}`
 												: '—'}
 										</TableCell>
 

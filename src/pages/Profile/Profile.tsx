@@ -22,6 +22,8 @@ import {
 	type ITransactions,
 } from '../../types/transactions/transactions'
 import { getTransactionsByUser } from '../../api/transactions/transactions'
+import { updateNumberFormat } from '../../func/number'
+import LoadingProgress from '../../components/Loading/LoadingProgress'
 
 const Profile = () => {
 	const theme = useTheme()
@@ -36,7 +38,7 @@ const Profile = () => {
 		},
 		enabled: !!token,
 	})
-	const { data } = useQuery<ITransactions[], Error>({
+	const { data, isLoading } = useQuery<ITransactions[], Error>({
 		queryKey: ['userPayments', token],
 		queryFn: async () => (await getTransactionsByUser(token)) ?? [],
 		enabled: !!token,
@@ -56,18 +58,47 @@ const Profile = () => {
 				overflowY: 'auto',
 			}}
 		>
+			{isLoading && (
+				<>
+					<LoadingProgress />
+				</>
+			)}
 			<Header />
-			<Typography variant='h4' textAlign={'center'}>
-				{userInfo?.login}
-			</Typography>
-			<Typography align='center' variant='h5' sx={{ my: 2 }}>
-				{t.balance}: {userInfo?.balance} {t.som}
-			</Typography>
-			<TableContainer component={Paper}>
-				<Table aria-label='simple table'>
+			<Box
+				sx={{
+					my: 2,
+					background: `linear-gradient(0deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+					boxShadow: '0 0px 24px rgba(0,0,0,0.3)',
+					width: '100%',
+					p: 2,
+					borderRadius: 12,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}
+			>
+				<Typography
+					sx={{ fontFamily: 'Bitcount' }}
+					variant='h4'
+					textAlign={'center'}
+				>
+					{userInfo?.login}
+				</Typography>
+				<Typography sx={{ fontFamily: 'Bitcount' }} align='center' variant='h5'>
+					{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
+				</Typography>
+			</Box>
+			<TableContainer
+				component={Paper}
+				sx={{
+					background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+				}}
+			>
+				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>{t.game_title}</TableCell>
+							<TableCell align='center'>{t.game_title}</TableCell>
 							<TableCell align='center'>{t.donation_name}</TableCell>
 							<TableCell align='center'>{t.count}</TableCell>
 							<TableCell align='center'>{t.price}</TableCell>
@@ -80,19 +111,18 @@ const Profile = () => {
 									key={index}
 									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 								>
-									<TableCell component='th' scope='row'>
+									<TableCell align='center' component='th' scope='row'>
 										{info.gameName}
 									</TableCell>
 									<TableCell align='center'>{info.donatName}</TableCell>
 									<TableCell align='center'>{info.count}</TableCell>
 									<TableCell
 										sx={{
-											color:
-												info.price > 0 ? theme.palette.success.main : 'red',
+											fontSize: '24px',
 										}}
 										align='center'
 									>
-										{info.price}
+										{updateNumberFormat(info.price)}
 									</TableCell>
 								</TableRow>
 							)

@@ -20,10 +20,11 @@ import { getUserById } from '../../api/login/login'
 import { getTransactionsByUser } from '../../api/transactions/transactions'
 import type { ITransactions } from '../../types/transactions/transactions'
 import { useParams } from 'react-router-dom'
+import LoadingProgress from '../../components/Loading/LoadingProgress'
+import { updateNumberFormat } from '../../func/number'
 const History = () => {
 	const { token, setBalance } = useTokenStore()
 	const { userId } = useParams()
-
 	const theme = useTheme()
 	const { t } = useTranslationStore()
 	const { data: userInfo } = useQuery<IUser, Error>({
@@ -35,8 +36,8 @@ const History = () => {
 		},
 		enabled: !!token,
 	})
-	const { data } = useQuery<ITransactions[], Error>({
-		queryKey: ['userPayments', token],
+	const { data, isLoading: loadingPayment } = useQuery<ITransactions[], Error>({
+		queryKey: ['userPayments', token, userId],
 		queryFn: async () =>
 			(await getTransactionsByUser(userId ? userId : token)) ?? [],
 		enabled: !!token,
@@ -50,6 +51,7 @@ const History = () => {
 			}}
 		>
 			<Header />
+			{loadingPayment && <LoadingProgress />}
 			<Box
 				sx={{
 					display: 'flex',
@@ -59,16 +61,25 @@ const History = () => {
 					gap: 2,
 				}}
 			>
-				<Typography align='center' variant='h5'>
-					{t.balance}: {userInfo?.balance} {t.som}
+				<Typography sx={{ fontFamily: 'Bitcount' }} align='center' variant='h5'>
+					{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
 				</Typography>
-				<TableContainer component={Paper}>
+				<TableContainer
+					component={Paper}
+					sx={{
+						background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+					}}
+				>
 					<Table aria-label='simple table'>
 						<TableHead>
 							<TableRow>
 								<TableCell align='left'>{t.time}</TableCell>
 								<TableCell align='center'>{t.game_title}</TableCell>
-								<TableCell align='center'>{t.donation_name}</TableCell>
+								<TableCell align='center'>
+									{userId ? t.filled_by : t.donation_name}
+								</TableCell>
+
 								<TableCell align='right'>
 									{t.price} ({t.som})
 								</TableCell>
@@ -86,14 +97,17 @@ const History = () => {
 										{row.month.toString().padStart(2, '0')}.{row.year}
 									</TableCell>
 									<TableCell align='center'>{row.gameName}</TableCell>
-									<TableCell align='center'>{row.donatName}</TableCell>
+									<TableCell align='center'>
+										{userId ? row.createdBy : row.donatName}
+									</TableCell>
 									<TableCell
-										align='right'
 										sx={{
-											color: row.price > 0 ? theme.palette.success.main : 'red',
+											fontSize: '24px',
 										}}
+										align='center'
 									>
-										{row.price > 0 ? `+${row.price}` : `-${row.price}`}
+										{row.price > 0 ? '+' : '-'}
+										{updateNumberFormat(row.price)}
 									</TableCell>
 								</TableRow>
 							))}

@@ -26,6 +26,7 @@ const SelectType = () => {
 					justifyContent: 'center',
 					bgcolor: 'white',
 					border: card === 'humo' ? '5px solid red' : '',
+					boxShadow: card !== 'humo' ? '0 4px 12px rgba(0,0,0,1)' : '',
 				}}
 			>
 				<img
@@ -52,6 +53,7 @@ const SelectType = () => {
 					justifyContent: 'center',
 					bgcolor: 'white',
 					border: card === 'uzcard' ? '5px solid red' : '',
+					boxShadow: card !== 'uzcard' ? '0 4px 12px rgba(0,0,0,1)' : '',
 				}}
 			>
 				<img

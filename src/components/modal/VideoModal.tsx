@@ -13,9 +13,7 @@ export const VideoModal = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
-
 	if (!isOpen || !video) return null
-
 	return (
 		<Modal
 			open={isOpen}
@@ -63,6 +61,7 @@ export const VideoModal = () => {
 						sx={{
 							flex: 1,
 							pr: 2,
+							fontFamily: 'Bitcount',
 						}}
 					>
 						{title || 'Видео'}
@@ -84,8 +83,6 @@ export const VideoModal = () => {
 					sx={{
 						position: 'relative',
 						width: '100%',
-						height: 0,
-						paddingTop: '56.25%',
 						bgcolor: 'black',
 						overflow: 'hidden',
 					}}
@@ -96,12 +93,11 @@ export const VideoModal = () => {
 						autoPlay={false}
 						playsInline
 						style={{
-							position: 'absolute',
-							top: 0,
-							left: 0,
 							width: '100%',
-							height: '100%',
-							objectFit: 'contain',
+							height: 'auto',
+							maxHeight: '80vh',
+							display: 'block',
+							background: '#000',
 						}}
 					/>
 				</Box>

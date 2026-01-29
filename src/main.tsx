@@ -70,10 +70,19 @@ function Main() {
 				},
 			},
 			typography: {
-				fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-				h1: { fontWeight: 800 },
-				h2: { fontWeight: 700 },
-				button: { fontWeight: 600 },
+				fontFamily: '"Roboto", "Inter", "Arial", sans-serif',
+				h1: {
+					fontWeight: 800,
+					fontFamily: '"Playwrite IN Guides", cursive',
+				},
+				h2: {
+					fontWeight: 700,
+					fontFamily: '"Playwrite IN Guides", cursive',
+				},
+
+				button: {
+					fontWeight: 600,
+				},
 			},
 			components: {
 				MuiButton: {

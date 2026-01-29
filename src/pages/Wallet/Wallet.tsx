@@ -35,6 +35,7 @@ import BankCards from '../../components/BankCards/BankCards'
 import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import infoVideo from '../../images/video/infoVideo.mp4'
 import type { IPayment } from '../../types/payment/payment'
+import { updateNumberFormat } from '../../func/number'
 const Wallet = () => {
 	const theme = useTheme()
 	const [cardType, setCardType] = useState<undefined | string>(undefined)
@@ -98,23 +99,38 @@ const Wallet = () => {
 				}}
 			>
 				{cost ? (
-					<Typography align='center' variant='h4'>
+					<Typography
+						sx={{ fontFamily: 'Bitcount' }}
+						align='center'
+						variant='h4'
+					>
 						{t.selected_amount}: {cost} {t.som}
 					</Typography>
 				) : (
-					<Typography align='center' variant='h4'>
-						{t.balance}: {userInfo?.balance} {t.som}
+					<Typography
+						sx={{ fontFamily: 'Bitcount' }}
+						align='center'
+						variant='h4'
+					>
+						{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
 					</Typography>
 				)}
-				<Accordion>
+				<Accordion
+					sx={{
+						background: `linear-gradient(0deg, ${theme.palette.custom.gradientEnd} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+					}}
+				>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls='panel1-content'
 						id='panel1-header'
 					>
-						<Typography component='span'>{t.how_to_pay}</Typography>
+						<Typography sx={{ fontFamily: 'Bitcount' }} component='span'>
+							{t.how_to_pay}
+						</Typography>
 					</AccordionSummary>
-					<AccordionDetails>
+					<AccordionDetails sx={{ fontFamily: 'Bitcount' }}>
 						<ol style={{ paddingLeft: '1.2rem', margin: 0 }}>
 							<li>{t.payment_instruction}</li>
 							<li>{t.payment_booking}</li>
@@ -125,6 +141,7 @@ const Wallet = () => {
 					<Button
 						fullWidth
 						variant='contained'
+						sx={{ bgcolor: theme.palette.error.main }}
 						onClick={() => {
 							open({
 								title: t.how_to_pay,
@@ -154,7 +171,7 @@ const Wallet = () => {
 						<Button
 							fullWidth
 							variant='contained'
-							sx={{ mt: 2 }}
+							sx={{ mt: 2, boxShadow: '0 4px 12px rgba(0,0,0,1)' }}
 							loading={loading}
 							disabled={Number(amount) < 1000}
 							onClick={async () => {
@@ -199,7 +216,13 @@ const Wallet = () => {
 						>
 							{t.update}
 						</Button>
-						<TableContainer component={Paper}>
+						<TableContainer
+							component={Paper}
+							sx={{
+								background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+								boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+							}}
+						>
 							<Table aria-label='simple table'>
 								<TableHead>
 									<TableRow>
@@ -208,9 +231,9 @@ const Wallet = () => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{data?.map(row => (
+									{data?.map((row, index) => (
 										<TableRow
-											key={row.id}
+											key={index}
 											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 										>
 											<TableCell component='th' scope='row'>
