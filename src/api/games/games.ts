@@ -12,6 +12,24 @@ export async function getGames(token: string) {
 		throw new Error('games error')
 	}
 }
+export async function getGameById({
+	token,
+	id,
+}: {
+	token: string
+	id: string
+}) {
+	try {
+		const responce = await api.post('/games/getGameById', {
+			token,
+			id,
+		})
+		const result = responce.data as IGames
+		return result
+	} catch (error) {
+		throw new Error('games error')
+	}
+}
 export async function createGame(formData: any) {
 	try {
 		const response = await api.post('/games/create', formData, {

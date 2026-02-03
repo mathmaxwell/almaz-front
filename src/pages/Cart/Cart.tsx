@@ -22,14 +22,19 @@ const Cart = () => {
 	useEffect(() => {
 		const fetchGames = async () => {
 			setLoading(true)
-			const results = await Promise.all(
-				entries.map(([id, _]) => getOfferById({ token, id })),
-			)
-			setOffers(results)
-			setLoading(false)
+			try {
+				const results = []
+				for (const [id] of entries) {
+					const offer = await getOfferById({ token, id })
+					if (offer) results.push(offer)
+				}
+				setOffers(results)
+			} finally {
+				setLoading(false)
+			}
 		}
 		fetchGames()
-	}, [entries.length])
+	}, [token])
 
 	return (
 		<Box
@@ -66,7 +71,7 @@ const Cart = () => {
 							: '1fr 1fr 1fr 1fr',
 				}}
 			>
-				{offers?.map((offer,index) => {
+				{offers?.map((offer, index) => {
 					return <GameCard key={index} offer={offer} />
 				})}
 			</Box>

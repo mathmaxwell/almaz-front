@@ -27,16 +27,20 @@ export async function getOfferById({
 	id: string
 }) {
 	try {
-		const responce = await api.post('/offers/getOffersById', {
+		const response = await api.post('/offers/getOffersById', {
 			token,
 			id,
 		})
-		const result = responce.data as IOffer
-		return result
-	} catch (error) {
-		throw new Error('games error')
+		return response.data as IOffer
+	} catch (error: any) {
+		if (error?.response?.status === 404) {
+			return null // ← нормально, просто нет оффера
+		}
+
+		throw error // ← реальные ошибки пробрасываем
 	}
 }
+
 export async function createOffer(formData: any) {
 	try {
 		const response = await api.post('/offers/create', formData, {

@@ -19,7 +19,11 @@ import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import { useNavigate } from 'react-router-dom'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import { updateNumberFormat } from '../../func/number'
+import { onlyUserId } from '../../game/gamesConfig'
+import { createBuy } from '../../api/buy/buy'
+import { useTokenStore } from '../../store/token/useTokenStore'
 const BuyModal = () => {
+	const { token } = useTokenStore()
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { open, closeModal, offer } = useBuyModalStore()
 	const navigate = useNavigate()
@@ -29,6 +33,7 @@ const BuyModal = () => {
 	const { game } = useGameStore()
 	const { open: openVideo } = useVideoModalStore()
 	const isRu = lang === 'ru'
+	const withOutServerId = onlyUserId.some(e => e == game.name)
 	return (
 		<Dialog
 			open={open}
@@ -59,6 +64,7 @@ const BuyModal = () => {
 			>
 				<Typography
 					variant='h5'
+					component='span'
 					fontWeight={800}
 					sx={{
 						fontFamily: '"Bitcount", system-ui, sans-serif',
@@ -155,24 +161,26 @@ const BuyModal = () => {
 
 				<Divider sx={{ my: 2.5, borderColor: 'rgba(0, 255, 136, 0.18)' }} />
 
-				<TextField
-					label={t.server_id}
-					fullWidth
-					variant='outlined'
-					value={serverId}
-					onChange={e => setServerId(e.target.value)}
-					sx={{ mb: 2.5 }}
-					InputProps={{
-						sx: {
-							borderRadius: '12px',
-							background: 'rgba(255,255,255,0.04)',
-							'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
-							'&:hover fieldset': { borderColor: '#00ff88' },
-							'&.Mui-focused fieldset': { borderColor: '#00ff88' },
-						},
-					}}
-					InputLabelProps={{ sx: { color: '#aaa' } }}
-				/>
+				{!withOutServerId && (
+					<TextField
+						label={t.server_id}
+						fullWidth
+						variant='outlined'
+						value={serverId}
+						onChange={e => setServerId(e.target.value)}
+						sx={{ mb: 2.5 }}
+						InputProps={{
+							sx: {
+								borderRadius: '12px',
+								background: 'rgba(255,255,255,0.04)',
+								'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
+								'&:hover fieldset': { borderColor: '#00ff88' },
+								'&.Mui-focused fieldset': { borderColor: '#00ff88' },
+							},
+						}}
+						InputLabelProps={{ sx: { color: '#aaa' } }}
+					/>
+				)}
 
 				<TextField
 					label={t.player_id}
@@ -197,7 +205,21 @@ const BuyModal = () => {
 					variant='contained'
 					fullWidth
 					size='large'
-					disabled={!playerId.trim() || !serverId.trim()}
+					onClick={async () => {
+						const result = await createBuy({
+							token,
+							gameId: game.id,
+							playerId,
+							serverId,
+							botId: offer?.botId!,
+						})
+						console.log('result', result)
+					}}
+					disabled={
+						withOutServerId
+							? !playerId.trim()
+							: !playerId.trim() || !serverId.trim()
+					}
 					sx={{
 						py: 1.8,
 						borderRadius: '14px',

@@ -48,10 +48,10 @@ const Games = () => {
 									sx={{
 										my: 2,
 										width: 100,
-										height: 100,
 										borderRadius: 20,
 										cursor: 'pointer',
 										flexShrink: 0,
+										aspectRatio: '1 / 1',
 									}}
 									onClick={() => {
 										setGame(g)
@@ -89,10 +89,6 @@ const Games = () => {
 								return (
 									<Card
 										sx={{
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'space-between',
-											position: 'relative',
 											borderRadius: 8,
 											boxShadow: '8px 8px 40px rgba(0,0,0,9)',
 										}}
@@ -107,13 +103,14 @@ const Games = () => {
 												width: '100%',
 												objectFit: 'cover',
 												objectPosition: 'center',
+												aspectRatio: '1 / 1',
 											}}
 											component='img'
 											image={`${apiUrl}${g.image}`}
 											alt={g.id}
-											height={
-												isMobile ? '200px' : isDesctop ? '230px' : '260px'
-											}
+											// height={
+											// 	isMobile ? '200px' : isDesctop ? '230px' : '260px'
+											// }
 										/>
 									</Card>
 								)

@@ -138,7 +138,7 @@ const GameModal = () => {
 						gap: 3,
 					}}
 				>
-					<Typography  variant='h5' textAlign='center' fontWeight='bold'>
+					<Typography variant='h5' textAlign='center' fontWeight='bold'>
 						{selectedGame ? t.update_game : t.add_game}
 					</Typography>
 
@@ -264,33 +264,47 @@ const GameModal = () => {
 						<Typography variant='subtitle1' gutterBottom>
 							{t.video}
 						</Typography>
+
 						<Button
 							variant='outlined'
 							component='label'
 							fullWidth
 							sx={{ py: 2, textTransform: 'none' }}
 						>
-							{videoFile ? videoFile.name : 'Загрузить видео'}
+							{videoFile ? videoFile.name : 'Загрузить видео или WebP'}
 							<input
 								type='file'
 								hidden
-								accept='video/*'
+								accept='video/*,image/webp'
 								onChange={e => setVideoFile(e.target.files?.[0] || null)}
 							/>
 						</Button>
 
-						{previewVideo && (
+						{previewVideo && videoFile && (
 							<Box sx={{ textAlign: 'center', mt: 2 }}>
-								<video
-									src={previewVideo}
-									controls
-									style={{
-										maxWidth: '100%',
-										maxHeight: '300px',
-										borderRadius: '12px',
-										boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-									}}
-								/>
+								{videoFile.type.startsWith('video/') ? (
+									<video
+										src={previewVideo}
+										controls
+										style={{
+											maxWidth: '100%',
+											maxHeight: '300px',
+											borderRadius: '12px',
+											boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+										}}
+									/>
+								) : (
+									<img
+										src={previewVideo}
+										alt='preview'
+										style={{
+											maxWidth: '100%',
+											maxHeight: '300px',
+											borderRadius: '12px',
+											boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+										}}
+									/>
+								)}
 							</Box>
 						)}
 					</Box>

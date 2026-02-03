@@ -13,7 +13,12 @@ export const VideoModal = () => {
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 	const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
+
 	if (!isOpen || !video) return null
+	const src = video.type === 'backend' ? video.url : video.src
+	const isVideo = src.endsWith('.mp4') || src.endsWith('.webm')
+	const isImage = src.endsWith('.webp')
+
 	return (
 		<Modal
 			open={isOpen}
@@ -87,19 +92,32 @@ export const VideoModal = () => {
 						overflow: 'hidden',
 					}}
 				>
-					<video
-						src={video.type === 'backend' ? video.url : video.src}
-						controls
-						autoPlay={false}
-						playsInline
-						style={{
-							width: '100%',
-							height: 'auto',
-							maxHeight: '80vh',
-							display: 'block',
-							background: '#000',
-						}}
-					/>
+					{isVideo && (
+						<video
+							src={src}
+							controls
+							playsInline
+							style={{
+								width: '100%',
+								maxHeight: '80vh',
+								display: 'block',
+								background: '#000',
+							}}
+						/>
+					)}
+
+					{isImage && (
+						<img
+							src={src}
+							alt=''
+							style={{
+								width: '100%',
+								maxHeight: '80vh',
+								display: 'block',
+								background: '#000',
+							}}
+						/>
+					)}
 				</Box>
 			</Box>
 		</Modal>

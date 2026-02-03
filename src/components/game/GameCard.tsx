@@ -20,8 +20,11 @@ import EditIcon from '@mui/icons-material/Edit'
 import { updateNumberFormat } from '../../func/number'
 import GameStatus from './GameStatus'
 import { useBuyModalStore } from '../../store/modal/useBuyModalStore'
+import { useGameStore } from '../../store/game/useGameStore'
+import { getGameById } from '../../api/games/games'
 const GameCard = ({ offer }: { offer: IOffer }) => {
 	const theme = useTheme()
+	const { setGame } = useGameStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
 	const { t, lang } = useTranslationStore()
@@ -111,8 +114,10 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 							gap: 1,
 							boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
 						}}
-						onClick={e => {
+						onClick={async e => {
 							e.stopPropagation()
+							const result = await getGameById({ token, id: offer.gameId })
+							setGame(result)
 							openModalToBuy(offer)
 						}}
 						color={offer.status !== '-' ? 'warning' : 'info'}
