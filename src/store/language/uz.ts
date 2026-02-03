@@ -127,5 +127,28 @@ const uz = {
 		"Agar biror narsaga tushunmasangiz, qo'llab-quvvatlash xizmatiga (support) xabar bering",
 	server_id: 'Server ID',
 	player_id: 'Oyinchi ID',
+	promo_code: 'Promokod',
+	enter_promo_code: 'Promokodni kiriting',
+	discount_must_be_greater_than_zero: "Chegirma 0 dan katta bo'lishi kerak",
+	percentage_discount_cannot_exceed_100:
+		"Foizli chegirma 100% dan ko'p bo'lishi mumkin emas",
+	invalid_end_date: "Tugash sanasi noto'g'ri",
+	promo_code_created_successfully: 'Promokod muvaffaqiyatli yaratildi!',
+	error_creating_promo_code: 'Promokod yaratishda xatolik yuz berdi',
+	create_promo_code: 'Promokod yaratish',
+	discount: 'Chegirma',
+	discount_type: 'Chegirma turi',
+	fixed_amount: 'Fiksatsiyalangan summa',
+	percentage: 'Foiz',
+	max_discount_amount_percent_only: 'Maksimal chegirma summasi (faqat % uchun)',
+	not_applicable: "Qo'llanilmaydi",
+	discount_limit_in_money: "Pul ko'rinishidagi chegirma cheklovi",
+	min_order_amount: 'Minimal buyurtma summasi',
+	end_date_optional: 'Tugash sanasi',
+	total_usage_limit: 'Umumiy foydalanish soni',
+	usage_limit_per_user: 'Bitta foydalanuvchi uchun foydalanish soni',
+	loading: 'Yuklanmoqda',
+	create_promo_code_action: 'Promokod yaratish',
+	
 }
 export default uz

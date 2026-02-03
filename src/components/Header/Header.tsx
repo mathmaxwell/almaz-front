@@ -18,6 +18,7 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import GroupIcon from '@mui/icons-material/Group'
+import PercentIcon from '@mui/icons-material/Percent'
 import {
 	Divider,
 	Drawer,
@@ -258,6 +259,20 @@ export default function Header() {
 											<AddCardIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.add_card} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/promocode')
+										}}
+									>
+										<ListItemIcon>
+											<PercentIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.promo_code} />
 									</ListItemButton>
 								</ListItem>
 							)}
