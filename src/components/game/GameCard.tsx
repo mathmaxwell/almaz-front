@@ -30,7 +30,6 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 	const { t, lang } = useTranslationStore()
 	const apiUrl = import.meta.env.VITE_API_URL
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 	const { getCount, toggle, reset } = useSavedGamesStore()
 	const selected = getCount(offer.id)
 	const { openModal: openModalToBuy } = useBuyModalStore()
@@ -77,22 +76,29 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 				</IconButton>
 				<CardMedia
 					component='img'
-					height={isMobile ? '200px' : isDesctop ? '230px' : '260px'}
 					image={`${apiUrl}${offer.image}`}
 					alt={offer.ruName}
-					sx={{ objectFit: 'cover' }}
+					sx={{
+						aspectRatio: '1 / 1',
+						width: '100%',
+						objectFit: 'cover',
+						objectPosition: 'center',
+					}}
 				/>
 				<CardContent>
 					<Typography
-						sx={{ fontFamily: 'Bitcount' }}
+						sx={{ fontFamily: 'Bitcount', color: theme.palette.common.black }}
 						align='center'
-						variant={isMobile ? 'h6' : 'h5'}
+						variant={isMobile ? 'h5' : 'h4'}
 					>
 						{lang == 'ru' ? offer.ruName : offer.uzName}
 					</Typography>
 					<Typography
-						sx={{ fontFamily: 'Bitcount' }}
-						variant='h6'
+						sx={{
+							fontFamily: 'Bitcount',
+							color: theme.palette.common.black,
+						}}
+						variant={isMobile ? 'h6' : 'h5'}
 						align='center'
 					>
 						{updateNumberFormat(offer.price)} {t.som}
