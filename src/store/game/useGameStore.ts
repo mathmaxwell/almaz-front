@@ -21,6 +21,7 @@ export const useGameStore = create<GameState>()(
 				name: '',
 				place: 'bot',
 				video: '',
+				description: 'two',
 			},
 			setGame: game => set({ game }),
 			updateGame: game =>
@@ -36,6 +37,7 @@ export const useGameStore = create<GameState>()(
 								name: '',
 								place: 'bot',
 								video: '',
+								description: 'two',
 							},
 				})),
 			clearGame: () =>
@@ -49,6 +51,7 @@ export const useGameStore = create<GameState>()(
 						name: '',
 						place: 'bot',
 						video: '',
+						description: 'two',
 					},
 				}),
 		}),
