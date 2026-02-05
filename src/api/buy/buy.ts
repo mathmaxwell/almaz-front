@@ -7,12 +7,14 @@ export async function createBuy({
 	playerId,
 	serverId,
 	botId,
+	offerId,
 }: {
 	token: string
 	gameId: string
 	playerId: string
 	serverId: string
 	botId: string
+	offerId: string
 }) {
 	try {
 		const responce = await api.post('/buy/create', {
@@ -21,6 +23,7 @@ export async function createBuy({
 			playerId,
 			serverId,
 			botId,
+			offerId,
 		})
 		const result = responce.data as IBuy
 		return result

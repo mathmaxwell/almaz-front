@@ -7,6 +7,7 @@ export interface IGames {
 	howToUseRu: string
 	helpImage: string
 	place: 'top' | 'bot' | 'stop'
+	description: 'one' | 'two'
 }
 export interface IOffer {
 	id: string

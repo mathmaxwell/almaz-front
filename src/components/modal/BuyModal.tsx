@@ -19,7 +19,6 @@ import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import { useNavigate } from 'react-router-dom'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import { updateNumberFormat } from '../../func/number'
-import { onlyUserId } from '../../game/gamesConfig'
 import { createBuy } from '../../api/buy/buy'
 import { useTokenStore } from '../../store/token/useTokenStore'
 const BuyModal = () => {
@@ -33,7 +32,7 @@ const BuyModal = () => {
 	const { game } = useGameStore()
 	const { open: openVideo } = useVideoModalStore()
 	const isRu = lang === 'ru'
-	const withOutServerId = onlyUserId.some(e => e == game.name)
+	const withOutServerId = game.description !== 'two'
 	return (
 		<Dialog
 			open={open}
@@ -212,6 +211,7 @@ const BuyModal = () => {
 							playerId,
 							serverId,
 							botId: offer?.botId!,
+							offerId: offer?.id!,
 						})
 						console.log('result', result)
 					}}

@@ -148,5 +148,9 @@ const ru = {
 	usage_limit_per_user: 'Использований на одного пользователя',
 	loading: 'Загрузка',
 	create_promo_code_action: 'Создать промокод',
+	number_of_fields: 'Количество полей',
+	one_field: 'Одно поле',
+	two_fields: 'Два поля',
+	top_up: 'Пополнение',
 }
 export default ru

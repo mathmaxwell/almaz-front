@@ -149,6 +149,9 @@ const uz = {
 	usage_limit_per_user: 'Bitta foydalanuvchi uchun foydalanish soni',
 	loading: 'Yuklanmoqda',
 	create_promo_code_action: 'Promokod yaratish',
-	
+	number_of_fields: 'Maydonlar soni',
+	one_field: 'Bitta maydon',
+	two_fields: 'ikkita maydon',
+	top_up: "Hisobni to'ldirish",
 }
 export default uz

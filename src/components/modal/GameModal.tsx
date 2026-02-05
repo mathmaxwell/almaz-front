@@ -24,17 +24,16 @@ const GameModal = () => {
 	const [imageFile, setImageFile] = useState<File | null>(null)
 	const [imageHelperFile, setImageHelperFile] = useState<File | null>(null)
 	const [videoFile, setVideoFile] = useState<File | null>(null)
-
+	const [fieldsCount, setFieldsCount] = useState<'one' | 'two'>('one')
 	const [previewMain, setPreviewMain] = useState<string | null>(null)
 	const [previewHelper, setPreviewHelper] = useState<string | null>(null)
 	const [previewVideo, setPreviewVideo] = useState<string | null>(null)
-
 	const [loading, setLoading] = useState(false)
 	const [place, setIsPlace] = useState<string>('top')
-
 	useEffect(() => {
 		if (selectedGame) {
 			setName(selectedGame.name || '')
+			setFieldsCount(selectedGame.description || 'one')
 			setHowToUseUz(selectedGame.howToUseUz || '')
 			setHowToUseRu(selectedGame.howToUseRu || '')
 			setPreviewMain(selectedGame.image || null)
@@ -47,6 +46,7 @@ const GameModal = () => {
 		} else {
 			setName('')
 			setHowToUseUz('')
+			setFieldsCount('one')
 			setHowToUseRu('')
 			setPreviewMain(null)
 			setPreviewHelper(null)
@@ -84,14 +84,13 @@ const GameModal = () => {
 
 	const onSubmit = async () => {
 		if (!name.trim()) return
-
 		const data = new FormData()
 		data.append('token', token)
 		data.append('name', name.trim())
 		data.append('howToUseUz', howToUseUz.trim())
 		data.append('howToUseRu', howToUseRu.trim())
 		data.append('place', place.trim())
-
+		data.append('description', fieldsCount)
 		if (imageFile) data.append('image', imageFile)
 		if (imageHelperFile) data.append('helpImage', imageHelperFile)
 		if (videoFile) data.append('video', videoFile) // ← добавляем видео в FormData
@@ -156,6 +155,13 @@ const GameModal = () => {
 							<option value='stop'>{t.stop}</option>
 						</NativeSelect>
 					</FormControl>
+					<NativeSelect
+						value={fieldsCount}
+						onChange={e => setFieldsCount(e.target.value as 'one' | 'two')}
+					>
+						<option value='one'>{t.one_field}</option>
+						<option value='two'>{t.two_fields}</option>
+					</NativeSelect>
 
 					<TextField
 						label={t.name}
