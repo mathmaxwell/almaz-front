@@ -13,3 +13,12 @@ export interface IBuy {
 	serverId: string
 	playerId: string
 }
+export interface IStatus {
+	status:
+		| 'Completed'
+		| 'In progress'
+		| 'Pending'
+		| 'Partial'
+		| 'Canceled'
+		| 'Refunded'
+}

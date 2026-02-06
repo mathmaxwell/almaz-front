@@ -24,6 +24,7 @@ import AddCard from './pages/Cart/AddCard'
 import Users from './pages/users/Users'
 import BuyModal from './components/modal/BuyModal'
 import PromoCode from './pages/promocode/PromoCode'
+import Status from './pages/Status/Status'
 
 function App() {
 	const { token } = useTokenStore()
@@ -40,6 +41,7 @@ function App() {
 				<Route path='/promocode' element={<PromoCode />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/users' element={<Users />} />
+				<Route path='/status/:gameId/:order' element={<Status />} />
 				<Route path='/users/:userId' element={<History />} />
 				<Route path='/profile' element={<Profile />} />
 				<Route path='/wallet' element={<Wallet />} />

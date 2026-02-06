@@ -213,7 +213,8 @@ const BuyModal = () => {
 							botId: offer?.botId!,
 							offerId: offer?.id!,
 						})
-						console.log('result', result)
+						navigate(`/status/${game.id}/${result.order}`)
+						closeModal()
 					}}
 					disabled={
 						withOutServerId
