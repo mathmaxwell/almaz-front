@@ -136,6 +136,7 @@ const Wallet = () => {
 							<li>{t.payment_booking}</li>
 							<li>{t.payment_timeout}</li>
 							<li>{t.payment_error_rules}</li>
+							<li>{t.remember}</li>
 						</ol>
 					</AccordionDetails>
 					<Button

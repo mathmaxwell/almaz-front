@@ -58,13 +58,15 @@ const uz = {
 	wallet: 'Hamyon',
 	payment_method: "To'lov tartibi",
 	payment_instruction:
-		"Siz to'lov summasini tanlashingiz kerak. Eng kam summa 1000 so'm. Agar siz tanlagan summa band bo'lsa, boshqa summani tanlang yoki kutib turing.",
+		"Siz to'lov summasini bilishingiz kerak. Eng kam summa 1000 so'm. Agar siz tanlagan summa band bo'lsa, boshqa summani kiriting yoki kutib turing.",
 	payment_booking:
-		"Summani tanlaganingizdan so'ng, siz uni band qilasiz. Tanlangan summani 5 daqiqa ichida to'lashingiz kerak.",
+		"Summani tanlaganingizdan so'ng, siz uni band qilgan hisoblanasiz. Tanlangan summani 5 daqiqada to'lashingiz kerak.",
 	payment_timeout:
-		"Agar 5 daqiqa ichida to'lovni amalga oshirmasangiz, siz tanlagan summani boshqalar band qilishi mumkin.",
+		"Agar 5 daqiqa ichida to'lovni amalga oshirmasangiz, siz tanlagan summani boshqa bir mijoz band qilishi mumkin.",
 	payment_error_rules:
-		"Agar summani band qilmasdan oldin to'lov qilsangiz, yoki vaqt tugaganidan keyin to'lasangiz, yoki tanlangan summani aynan o'zini to'lamasangiz (hatto 1 so'm ko'p yoki kam farq qilsa ham), to'lov hisobga olinmaydi.",
+		'Siz Band qilgan summani Har bir  raqamigacha Tolovni amalga oshiring. Misol uchun: Siz 5000 soʻm miqdorda Tolov qilmoqchisiz, lekin bu summa band bolsa 5001 soʻm miqdorni tolashni bosing va Sayt korsatgan Kartaga 5000 soʻm emas Balki 5001 soʻm miqdordagi summani Tolovini amalga oshiring.',
+	remember: `Yodda tuting: Siz Hammasi togʻri bajarsangiz, Tolov tez tasdiqlanadi
+Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	card_number: 'Karta raqami',
 	add_card: "Karta qo'shish",
 	how_to_pay: "Qanday to'lash kerak",
