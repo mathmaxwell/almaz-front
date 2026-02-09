@@ -29,9 +29,9 @@ const About = () => {
 		},
 		{
 			title: 'Instagram',
-			subtitle: '@your_instagram', // Заменить на реальный аккаунт
+			subtitle: '@Fastpin.uz', // Заменить на реальный аккаунт
 			image: instagram,
-			link: 'https://instagram.com/your_instagram', // Заменить
+			link: 'https://www.instagram.com/fastpin.uz?igsh=MWpvNjNyODNveWg1OQ==', // Заменить
 		},
 		{
 			title: 'Администратор',
