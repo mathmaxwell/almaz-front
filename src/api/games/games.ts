@@ -1,11 +1,9 @@
 import type { IGames } from '../../types/games/games'
 import api from '../api'
 
-export async function getGames(token: string) {
+export async function getGames() {
 	try {
-		const responce = await api.post('/games/getGames', {
-			token,
-		})
+		const responce = await api.post('/games/getGames', {})
 		const result = responce.data as IGames[]
 		return result
 	} catch (error) {

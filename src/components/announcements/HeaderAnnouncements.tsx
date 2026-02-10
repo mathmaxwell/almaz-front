@@ -3,18 +3,15 @@ import { Box, Skeleton, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import { useTokenStore } from '../../store/token/useTokenStore'
 import { getAnnouncements } from '../../api/Announcements/Announcements'
 import type { IAnnouncements } from '../../types/Announcements/Announcements'
 
 const HeaderAnnouncements = () => {
 	const { lang } = useTranslationStore()
-	const { token } = useTokenStore()
 	const navigate = useNavigate()
 	const { data: slides = [], isLoading } = useQuery<IAnnouncements[], Error>({
-		queryKey: ['slides', token],
-		queryFn: () => getAnnouncements({ token }).then(res => res ?? []),
-		enabled: !!token,
+		queryKey: ['slides'],
+		queryFn: () => getAnnouncements().then(res => res ?? []),
 	})
 	const apiUrl = import.meta.env.VITE_API_URL
 	const [activeIndex, setActiveIndex] = useState(0)

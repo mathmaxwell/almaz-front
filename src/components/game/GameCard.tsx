@@ -22,8 +22,10 @@ import GameStatus from './GameStatus'
 import { useBuyModalStore } from '../../store/modal/useBuyModalStore'
 import { useGameStore } from '../../store/game/useGameStore'
 import { getGameById } from '../../api/games/games'
+import { useNavigate } from 'react-router-dom'
 const GameCard = ({ offer }: { offer: IOffer }) => {
 	const theme = useTheme()
+	const navigate = useNavigate()
 	const { setGame } = useGameStore()
 	const { token } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
@@ -122,15 +124,19 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 						}}
 						onClick={async e => {
 							e.stopPropagation()
-							const result = await getGameById({ token, id: offer.gameId })
-							setGame(result)
-							openModalToBuy(offer)
+							if (token) {
+								const result = await getGameById({ token, id: offer.gameId })
+								setGame(result)
+								openModalToBuy(offer)
+							} else {
+								navigate('/register')
+							}
 						}}
 						color={offer.status !== '-' ? 'warning' : 'info'}
 						variant='contained'
 					>
-						<ShoppingCartIcon />
-						{t.buy}
+						{token && <ShoppingCartIcon />}
+						{token ? t.buy : t.register}
 					</Button>
 					{isAdmin && (
 						<EditIcon

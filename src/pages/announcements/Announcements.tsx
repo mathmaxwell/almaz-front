@@ -36,10 +36,9 @@ const Announcements = () => {
 	} = useQuery<IAnnouncements[], Error>({
 		queryKey: ['slides', token],
 		queryFn: async () => {
-			const result = await getAnnouncements({ token })
+			const result = await getAnnouncements()
 			return result ?? []
 		},
-		enabled: !!token,
 	})
 	const [loading, setLoading] = useState(false)
 	const [imageFile, setImageFile] = useState<File | null>(null)

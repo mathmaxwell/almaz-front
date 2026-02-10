@@ -154,5 +154,7 @@ const ru = {
 	one_field: 'Одно поле',
 	two_fields: 'Два поля',
 	top_up: 'Пополнение',
+	must_register:
+		'Для использования этой услуги вам необходимо зарегистрироваться',
 }
 export default ru

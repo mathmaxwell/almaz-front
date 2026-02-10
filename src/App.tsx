@@ -3,12 +3,10 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ErrorPage from './pages/Error/ErrorPage'
 import Register from './pages/Register/Register'
-import { useTokenStore } from './store/token/useTokenStore'
 import HomePage from './pages/home/HomePage'
-import { useEffect } from 'react'
 import Announcements from './pages/announcements/Announcements'
 import Profile from './pages/Profile/Profile'
 import About from './pages/About/About'
@@ -27,13 +25,6 @@ import PromoCode from './pages/promocode/PromoCode'
 import Status from './pages/Status/Status'
 
 function App() {
-	const { token } = useTokenStore()
-	const navigate = useNavigate()
-	useEffect(() => {
-		if (!token) {
-			navigate('/register')
-		}
-	}, [])
 	return (
 		<>
 			<Routes>

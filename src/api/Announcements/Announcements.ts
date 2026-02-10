@@ -1,11 +1,9 @@
 import type { IAnnouncements } from '../../types/Announcements/Announcements'
 import api from '../api'
 
-export async function getAnnouncements({ token }: { token: string }) {
+export async function getAnnouncements() {
 	try {
-		const responce = await api.post('/announcements/getAnnouncements', {
-			token,
-		})
+		const responce = await api.post('/announcements/getAnnouncements', {})
 		const result = responce.data as IAnnouncements[]
 		return result
 	} catch (error) {

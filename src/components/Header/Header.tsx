@@ -101,19 +101,21 @@ export default function Header() {
 						</Typography>
 
 						<Box sx={{ flexGrow: 1 }} />
-						<Box sx={{ display: 'flex' }}>
-							<IconButton
-								onClick={() => {
-									navigate('/profile')
-								}}
-								size='large'
-								edge='end'
-								aria-haspopup='true'
-								sx={{ color: theme.palette.text.primary }}
-							>
-								<AccountCircle />
-							</IconButton>
-						</Box>
+						{token && (
+							<Box sx={{ display: 'flex' }}>
+								<IconButton
+									onClick={() => {
+										navigate('/profile')
+									}}
+									size='large'
+									edge='end'
+									aria-haspopup='true'
+									sx={{ color: theme.palette.text.primary }}
+								>
+									<AccountCircle />
+								</IconButton>
+							</Box>
+						)}
 					</Toolbar>
 				</AppBar>
 				<Drawer
@@ -280,17 +282,21 @@ export default function Header() {
 						<ListItem disablePadding sx={{ mt: 'auto' }}>
 							<ListItemButton
 								onClick={() => {
-									resetToken()
-									resetBalance()
-									navigate('/register')
+									if (token) {
+										resetToken()
+										resetBalance()
+										navigate('/register')
+									} else {
+										navigate('/register')
+									}
 								}}
 							>
 								<ListItemIcon>
-									<LogoutIcon color='error' />
+									<LogoutIcon color={token ? 'error' : 'info'} />
 								</ListItemIcon>
 								<ListItemText
-									primary={t.logout_of_system}
-									sx={{ color: 'red' }}
+									primary={token ? t.logout_of_system : t.register}
+									sx={{ color: token ? 'red' : '#1976D2' }}
 								/>
 							</ListItemButton>
 						</ListItem>

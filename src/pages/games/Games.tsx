@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useTokenStore } from '../../store/token/useTokenStore'
 import { getGames } from '../../api/games/games'
 import type { IGames } from '../../types/games/games'
 import { Box, Card, CardMedia, useMediaQuery, useTheme } from '@mui/material'
@@ -13,14 +12,13 @@ const Games = () => {
 	const { setGame } = useGameStore()
 	const navigate = useNavigate()
 	const apiUrl = import.meta.env.VITE_API_URL
-	const { token } = useTokenStore()
+
 	const { data, isLoading } = useQuery<IGames[], Error>({
-		queryKey: ['games', token],
+		queryKey: ['games'],
 		queryFn: async () => {
-			const result = await getGames(token)
+			const result = await getGames()
 			return result ?? []
 		},
-		enabled: !!token,
 	})
 	return (
 		<>

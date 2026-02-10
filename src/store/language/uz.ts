@@ -155,5 +155,7 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	one_field: 'Bitta maydon',
 	two_fields: 'ikkita maydon',
 	top_up: "Hisobni to'ldirish",
+	must_register:
+		"Ushbu xizmatdan foydalanish uchun siz ro'yxatdan o'tishingiz lozim",
 }
 export default uz
