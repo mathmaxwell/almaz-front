@@ -19,6 +19,7 @@ const Cart = () => {
 	const [offers, setOffers] = useState<IOffer[]>([])
 	const entries = Object.entries(items)
 	const [loading, setLoading] = useState(false)
+
 	useEffect(() => {
 		const fetchGames = async () => {
 			setLoading(true)

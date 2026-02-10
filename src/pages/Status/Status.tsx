@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { orderStatus } from '../../api/buy/buy'
 import type { IStatus } from '../../types/buy/buy'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
+import { getGames } from '../../api/games/games'
 
 const Status = () => {
 	const { gameId, order } = useParams()
@@ -14,7 +15,15 @@ const Status = () => {
 	const { data, refetch } = useQuery<IStatus>({
 		queryKey: ['order', gameId, order],
 		queryFn: async () => {
-			const result = await orderStatus({ order: order!, gameId: gameId! })
+			const games = await getGames()
+			const game = games.find(g => g.id === gameId || g.name === gameId)
+			if (!game) {
+				throw new Error('Game not found')
+			}
+			const result = await orderStatus({
+				order: order!,
+				gameId: game.id,
+			})
 			return result ?? []
 		},
 		enabled: !!order,

@@ -20,7 +20,7 @@ import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
 import { getTransactionsByUser } from '../../api/transactions/transactions'
 import type { ITransactions } from '../../types/transactions/transactions'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
 import { updateNumberFormat } from '../../func/number'
 import { useState } from 'react'
@@ -29,6 +29,7 @@ const History = () => {
 	const { userId } = useParams()
 	const theme = useTheme()
 	const { t } = useTranslationStore()
+	const navigate = useNavigate()
 	const [active, setActive] = useState<'buy' | 'instructions'>('buy')
 	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token, userId],
@@ -139,6 +140,10 @@ const History = () => {
 									<TableRow
 										key={index}
 										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+										onClick={() => {
+											active == 'instructions' &&
+												navigate(`/status/${row.gameName}/${row.order}`)
+										}}
 									>
 										<TableCell align='center' component='th' scope='row'>
 											{row.hour.toString().padStart(2, '0')}:

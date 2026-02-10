@@ -21,6 +21,9 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import { updateNumberFormat } from '../../func/number'
 import { createBuy } from '../../api/buy/buy'
 import { useTokenStore } from '../../store/token/useTokenStore'
+import { useQuery } from '@tanstack/react-query'
+import type { IUser } from '../../types/user/user'
+import { getUserById } from '../../api/login/login'
 const BuyModal = () => {
 	const { token } = useTokenStore()
 	const apiUrl = import.meta.env.VITE_API_URL
@@ -33,6 +36,14 @@ const BuyModal = () => {
 	const { open: openVideo } = useVideoModalStore()
 	const isRu = lang === 'ru'
 	const withOutServerId = game.description !== 'two'
+	const { data: userInfo } = useQuery<IUser, Error>({
+		queryKey: ['userInfo', token],
+		queryFn: async () => {
+			const result = await getUserById({ userId: token })
+			return result
+		},
+		enabled: !!token,
+	})
 	return (
 		<Dialog
 			open={open}
@@ -111,7 +122,10 @@ const BuyModal = () => {
 						textShadow: '0 0 20px rgba(0, 255, 170, 0.6)',
 					}}
 				>
-					{updateNumberFormat(offer?.price || '')} {t.som}
+					{userInfo?.userRole === 'superUser'
+						? updateNumberFormat(offer?.superPrice || '')
+						: updateNumberFormat(offer?.price || '')}
+					{t.som}
 				</Typography>
 
 				<Box

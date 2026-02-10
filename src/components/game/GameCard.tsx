@@ -23,6 +23,7 @@ import { useBuyModalStore } from '../../store/modal/useBuyModalStore'
 import { useGameStore } from '../../store/game/useGameStore'
 import { getGameById } from '../../api/games/games'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 const GameCard = ({ offer }: { offer: IOffer }) => {
 	const theme = useTheme()
 	const navigate = useNavigate()
@@ -36,6 +37,7 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 	const selected = getCount(offer.id)
 	const { openModal: openModalToBuy } = useBuyModalStore()
 	const { openModal } = useOfferStoreModal()
+	const [loading, setLoading] = useState(false)
 	return (
 		<>
 			<Card
@@ -115,6 +117,7 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 				>
 					<Button
 						fullWidth
+						loading={loading}
 						sx={{
 							display: 'flex',
 							alignItems: 'center',
@@ -123,6 +126,7 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 							boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
 						}}
 						onClick={async e => {
+							setLoading(true)
 							e.stopPropagation()
 							if (token) {
 								const result = await getGameById({ token, id: offer.gameId })
@@ -131,6 +135,7 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 							} else {
 								navigate('/register')
 							}
+							setLoading(false)
 						}}
 						color={offer.status !== '-' ? 'warning' : 'info'}
 						variant='contained'

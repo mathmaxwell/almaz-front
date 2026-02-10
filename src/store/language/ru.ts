@@ -156,5 +156,11 @@ const ru = {
 	top_up: 'Пополнение',
 	must_register:
 		'Для использования этой услуги вам необходимо зарегистрироваться',
+	user_price: 'Цена для пользователей',
+	selected_people_price: 'Цена для выбранных людей',
+	super_users: 'Суперпользователи',
+	show_password: 'Показать пароль',
+	change_as_superuser: 'Вы хотите изменить это как superUser?',
+	change_as_regular_user: 'Вы хотите изменить это как простой user?',
 }
 export default ru

@@ -17,20 +17,22 @@ import {
 	CircularProgress,
 	Alert,
 	useTheme,
+	Button,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import ClearIcon from '@mui/icons-material/Clear'
 import { useQuery } from '@tanstack/react-query'
 import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import { deleteUser, getUsers } from '../../api/login/login'
+import { deleteUser, getUsers, updateUser } from '../../api/login/login'
 import { useNavigate } from 'react-router-dom'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutline'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { createTransactions } from '../../api/transactions/transactions'
 import { updateNumberFormat } from '../../func/number'
+import StarIcon from '@mui/icons-material/Star'
+import StarOutlineIcon from '@mui/icons-material/StarOutline'
 const Users = () => {
 	const theme = useTheme()
 	const { token } = useTokenStore()
@@ -40,6 +42,8 @@ const Users = () => {
 	const [rowsPerPage, setRowsPerPage] = useState(15)
 	const [filterLogin, setFilterLogin] = useState('')
 	const [filterToken, setFilterToken] = useState('')
+	const [userType, setUserType] = useState('')
+	const [showPassword, setShowPassword] = useState<boolean>(false)
 	const [filterBalanceMin, setFilterBalanceMin] = useState('')
 	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: [
@@ -49,6 +53,7 @@ const Users = () => {
 			filterLogin,
 			filterToken,
 			filterBalanceMin,
+			userType,
 		],
 		queryFn: async () => {
 			const params = {
@@ -59,6 +64,7 @@ const Users = () => {
 				startBalance: filterBalanceMin.trim()
 					? Number(filterBalanceMin)
 					: undefined,
+				userType: userType,
 			}
 			const response = await getUsers({
 				page: params.page,
@@ -66,6 +72,7 @@ const Users = () => {
 				login: params.login,
 				Token: params.token,
 				StartBalance: params.startBalance,
+				userRole: params.userType,
 			})
 			return {
 				users: response.users ?? [],
@@ -80,12 +87,7 @@ const Users = () => {
 		setRowsPerPage(parseInt(event.target.value, 10))
 		setPage(0)
 	}
-	const clearFilters = () => {
-		setFilterLogin('')
-		setFilterToken('')
-		setFilterBalanceMin('')
-		setPage(0)
-	}
+
 	const hasFilters = filterLogin || filterToken || filterBalanceMin
 	return (
 		<Box
@@ -105,7 +107,7 @@ const Users = () => {
 			<Typography
 				variant='h5'
 				textAlign='center'
-				sx={{ fontWeight: 600, my: 2, fontFamily: 'Bitcount' }}
+				sx={{ fontWeight: 600, fontFamily: 'Bitcount', mt: 2 }}
 			>
 				{t.users}
 			</Typography>
@@ -114,8 +116,8 @@ const Users = () => {
 					display: 'flex',
 					gap: 2,
 					flexWrap: 'wrap',
-					mb: 3,
 					alignItems: 'flex-end',
+					p: 2,
 				}}
 			>
 				<TextField
@@ -126,7 +128,7 @@ const Users = () => {
 						setFilterLogin(e.target.value)
 						setPage(0)
 					}}
-					sx={{ minWidth: 180 }}
+					fullWidth
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position='start'>
@@ -143,7 +145,7 @@ const Users = () => {
 						setFilterToken(e.target.value)
 						setPage(0)
 					}}
-					sx={{ minWidth: 180 }}
+					fullWidth
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position='start'>
@@ -154,6 +156,7 @@ const Users = () => {
 				/>
 				<TextField
 					label={t.balance_from}
+					fullWidth
 					size='small'
 					type='number'
 					value={filterBalanceMin}
@@ -161,20 +164,28 @@ const Users = () => {
 						setFilterBalanceMin(e.target.value)
 						setPage(0)
 					}}
-					sx={{ minWidth: 140 }}
 					InputProps={{
 						startAdornment: <InputAdornment position='start'>≥</InputAdornment>,
 					}}
 				/>
-				{hasFilters && (
-					<IconButton
-						onClick={clearFilters}
-						color='error'
-						title={t.reset_filters}
-					>
-						<ClearIcon />
-					</IconButton>
-				)}
+				<Button
+					variant={userType ? 'outlined' : 'contained'}
+					fullWidth
+					onClick={() => {
+						userType ? setUserType('') : setUserType('superUser')
+					}}
+				>
+					{t.super_users}
+				</Button>
+				<Button
+					fullWidth
+					variant={showPassword ? 'outlined' : 'contained'}
+					onClick={() => {
+						setShowPassword(prev => !prev)
+					}}
+				>
+					{t.show_password}
+				</Button>
 			</Box>
 			<Paper
 				sx={{
@@ -182,6 +193,8 @@ const Users = () => {
 					overflow: 'hidden',
 					background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+					height: '100%',
+					overflowY: 'scroll',
 				}}
 			>
 				<TableContainer>
@@ -191,9 +204,11 @@ const Users = () => {
 								<TableCell align='center' sx={{ fontWeight: 700 }}>
 									Login
 								</TableCell>
-								<TableCell align='center' sx={{ fontWeight: 700 }}>
-									{t.password}
-								</TableCell>
+								{showPassword && (
+									<TableCell align='center' sx={{ fontWeight: 700 }}>
+										{t.password}
+									</TableCell>
+								)}
 								<TableCell align='center' sx={{ fontWeight: 700 }}>
 									{t.balance}
 								</TableCell>
@@ -233,14 +248,60 @@ const Users = () => {
 										onClick={() => navigate(`/users/${row.token}`)}
 									>
 										<TableCell align='center'>{row.login ?? '—'}</TableCell>
-										<TableCell align='center'>{row.password ?? '—'}</TableCell>
+										{showPassword && (
+											<TableCell align='center'>
+												{row.password ?? '—'}
+											</TableCell>
+										)}
 										<TableCell align='center'>
 											{row.balance != null
 												? updateNumberFormat(row.balance) + ` ${t.som}`
 												: '—'}
 										</TableCell>
 
-										<TableCell align='center'>
+										<TableCell
+											align='center'
+											sx={{
+												display: 'flex',
+												gap: 0.5,
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+										>
+											<IconButton
+												onClick={async e => {
+													e.stopPropagation()
+
+													const isSuper = row.userRole === 'superUser'
+													const conf = confirm(
+														isSuper
+															? t.change_as_regular_user
+															: t.change_as_superuser,
+													)
+
+													if (!conf) return
+
+													await updateUser({
+														token,
+														userId: row.token,
+														userRole: isSuper ? 'user' : 'superUser', // ✅ FIX
+													})
+
+													refetch()
+												}}
+												size='small'
+												color={
+													row.userRole === 'superUser' ? 'warning' : 'warning'
+												}
+												title={t.delete}
+											>
+												{row.userRole === 'superUser' ? (
+													<StarIcon />
+												) : (
+													<StarOutlineIcon color='info' />
+												)}
+											</IconButton>
+
 											<IconButton
 												size='small'
 												color='default'

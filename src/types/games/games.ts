@@ -17,6 +17,7 @@ export interface IOffer {
 	uzName: string
 	ruName: string
 	price: string
+	superPrice: string
 	ruDesc: string
 	uzDesc: string
 	botId: string

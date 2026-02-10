@@ -3,6 +3,7 @@ export interface IUser {
 	password: string
 	token: string
 	balance: number
+	userRole: string
 }
 export interface IGetUser {
 	count: number

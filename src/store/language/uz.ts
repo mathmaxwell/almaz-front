@@ -157,5 +157,12 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	top_up: "Hisobni to'ldirish",
 	must_register:
 		"Ushbu xizmatdan foydalanish uchun siz ro'yxatdan o'tishingiz lozim",
+	user_price: 'Foydalanuvchilar uchun narx',
+	selected_people_price: 'Tanlangan kishilar uchun narx',
+	super_users: 'Super foydalanuvchilar',
+	show_password: "Parolni ko'rsatish",
+	change_as_superuser: "Uni super foydalanuvchi sifatida o'zgartirmoqchimisiz?",
+	change_as_regular_user:
+		"Uni oddiy foydalanuvchi sifatida o'zgartirmoqchimisiz?",
 }
 export default uz

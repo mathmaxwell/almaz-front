@@ -48,6 +48,19 @@ const Register = () => {
 			alert(error?.response?.data || error.message || 'Unknown error')
 		}
 	}
+	const MIN_LOGIN = 5
+	const MIN_PASSWORD = 6
+
+	const isLoginError = form.login.length > 0 && form.login.length < MIN_LOGIN
+
+	const isPasswordError =
+		form.password.length > 0 && form.password.length < MIN_PASSWORD
+	const isDisabled =
+		isLoading ||
+		!form.login ||
+		!form.password ||
+		isLoginError ||
+		isPasswordError
 
 	return (
 		<Box
@@ -95,6 +108,7 @@ const Register = () => {
 					variant='outlined'
 					placeholder='Login'
 					value={form.login}
+					inputProps={{ minLength: MIN_LOGIN }}
 					onChange={e => setForm({ ...form, login: e.target.value })}
 					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
 					size={isMobile ? 'small' : 'medium'}
@@ -109,6 +123,7 @@ const Register = () => {
 					onChange={e => setForm({ ...form, password: e.target.value })}
 					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
 					size={isMobile ? 'small' : 'medium'}
+					inputProps={{ minLength: MIN_PASSWORD }}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position='end'>
@@ -129,7 +144,7 @@ const Register = () => {
 					size='large'
 					fullWidth
 					loading={isLoading}
-					disabled={!form.login || !form.password}
+					disabled={isDisabled}
 					onClick={() => handleSubmit(form)}
 					color='info'
 					sx={{

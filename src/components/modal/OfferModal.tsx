@@ -15,7 +15,6 @@ import LoadingProgress from '../Loading/LoadingProgress'
 import { useOfferStoreModal } from '../../store/modal/useOfferModal'
 import { createOffer, deleteOffer, updateOffer } from '../../api/games/offer'
 import { useParams } from 'react-router-dom'
-
 const OfferModal = () => {
 	const { t } = useTranslationStore()
 	const { gameId } = useParams()
@@ -29,6 +28,7 @@ const OfferModal = () => {
 	const [botId, setBotId] = useState('')
 	const [uzName, setUzName] = useState('')
 	const [price, setPrice] = useState('')
+	const [superPrice, setSuperPrice] = useState('')
 	const [ruDesc, setRuDesc] = useState('')
 	const [uzDesc, setUzDesc] = useState('')
 	const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -41,6 +41,7 @@ const OfferModal = () => {
 			setBotId(selectedOffer.botId)
 			setUzName(selectedOffer.uzName)
 			setPrice(selectedOffer.price)
+			setSuperPrice(selectedOffer.superPrice)
 			setRuDesc(selectedOffer.ruDesc)
 			setUzDesc(selectedOffer.uzDesc)
 			setPreviewImage(selectedOffer.image)
@@ -51,6 +52,7 @@ const OfferModal = () => {
 			setRuName('')
 			setUzName('')
 			setPrice('')
+			setSuperPrice('')
 			setRuDesc('')
 			setUzDesc('')
 			setBotId('')
@@ -63,9 +65,7 @@ const OfferModal = () => {
 			return () => URL.revokeObjectURL(url)
 		}
 	}, [image])
-
 	if (!modalOpen) return null
-
 	const onSubmit = async () => {
 		const data = new FormData()
 		data.append('token', token)
@@ -75,6 +75,7 @@ const OfferModal = () => {
 		data.append('ruDesc', ruDesc.trim())
 		data.append('uzDesc', uzDesc.trim())
 		data.append('price', price.trim())
+		data.append('superPrice', superPrice.trim())
 		data.append('botId', botId.trim())
 
 		if (image) data.append('image', image)
@@ -180,13 +181,19 @@ const OfferModal = () => {
 					/>
 
 					<TextField
-						label={t.price}
+						label={t.user_price}
 						value={price}
 						onChange={e => setPrice(e.target.value)}
 						fullWidth
 						variant='outlined'
 					/>
-
+					<TextField
+						label={t.selected_people_price}
+						value={superPrice}
+						onChange={e => setSuperPrice(e.target.value)}
+						fullWidth
+						variant='outlined'
+					/>
 					<Box>
 						<Typography variant='subtitle1' gutterBottom>
 							{t.image}
@@ -243,7 +250,6 @@ const OfferModal = () => {
 							variant='contained'
 							color='primary'
 							onClick={onSubmit}
-							disabled={!price.trim()}
 							fullWidth
 						>
 							{t.save}

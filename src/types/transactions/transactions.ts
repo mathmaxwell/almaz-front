@@ -10,6 +10,7 @@ export interface ITransactions {
 	gameName: string
 	donatName: string
 	createdBy: string
+	order: string
 }
 export interface ICalculate {
 	gameName: string
