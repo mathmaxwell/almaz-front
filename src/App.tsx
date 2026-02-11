@@ -23,6 +23,7 @@ import Users from './pages/users/Users'
 import BuyModal from './components/modal/BuyModal'
 import PromoCode from './pages/promocode/PromoCode'
 import Status from './pages/Status/Status'
+import SuperUsers from './pages/SuperUsers/SuperUsers'
 
 function App() {
 	return (
@@ -37,6 +38,7 @@ function App() {
 				<Route path='/profile' element={<Profile />} />
 				<Route path='/wallet' element={<Wallet />} />
 				<Route path='add-card' element={<AddCard />} />
+				<Route path='/superusers' element={<SuperUsers />} />
 				<Route path='/payments' element={<Payments />} />
 				<Route path='/about' element={<About />} />
 				<Route path='/announcements' element={<Announcements />} />

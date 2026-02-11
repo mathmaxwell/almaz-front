@@ -164,5 +164,11 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	change_as_superuser: "Uni super foydalanuvchi sifatida o'zgartirmoqchimisiz?",
 	change_as_regular_user:
 		"Uni oddiy foydalanuvchi sifatida o'zgartirmoqchimisiz?",
+	select_game: "O'yinni tanlang",
+	try_on: "tekshirib ko'rish",
+	game_name: "O'yin nomi",
+	price_for_all: 'Hamma uchun narx',
+	superuser_price: 'Super foydalanuvchi uchun narx',
+	dollar_rate: 'Dollar kursi',
 }
 export default uz

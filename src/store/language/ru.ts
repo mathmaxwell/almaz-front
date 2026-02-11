@@ -162,5 +162,11 @@ const ru = {
 	show_password: 'Показать пароль',
 	change_as_superuser: 'Вы хотите изменить это как superUser?',
 	change_as_regular_user: 'Вы хотите изменить это как простой user?',
+	select_game: 'Выберите игру',
+	try_on: 'Примерить',
+	game_name: 'Название игры',
+	price_for_all: 'Цена для всех',
+	superuser_price: 'Цена для superUser',
+	dollar_rate: 'Курс доллара',
 }
 export default ru

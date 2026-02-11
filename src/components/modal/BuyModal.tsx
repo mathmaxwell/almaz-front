@@ -173,7 +173,24 @@ const BuyModal = () => {
 				</Box>
 
 				<Divider sx={{ my: 2.5, borderColor: 'rgba(0, 255, 136, 0.18)' }} />
-
+				<TextField
+					label={t.player_id}
+					fullWidth
+					variant='outlined'
+					value={playerId}
+					onChange={e => setPlayerId(e.target.value)}
+					sx={{ mb: 4 }}
+					InputProps={{
+						sx: {
+							borderRadius: '12px',
+							background: 'rgba(255,255,255,0.04)',
+							'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
+							'&:hover fieldset': { borderColor: '#00ff88' },
+							'&.Mui-focused fieldset': { borderColor: '#00ff88' },
+						},
+					}}
+					InputLabelProps={{ sx: { color: '#aaa' } }}
+				/>
 				{!withOutServerId && (
 					<TextField
 						label={t.server_id}
@@ -194,25 +211,6 @@ const BuyModal = () => {
 						InputLabelProps={{ sx: { color: '#aaa' } }}
 					/>
 				)}
-
-				<TextField
-					label={t.player_id}
-					fullWidth
-					variant='outlined'
-					value={playerId}
-					onChange={e => setPlayerId(e.target.value)}
-					sx={{ mb: 4 }}
-					InputProps={{
-						sx: {
-							borderRadius: '12px',
-							background: 'rgba(255,255,255,0.04)',
-							'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
-							'&:hover fieldset': { borderColor: '#00ff88' },
-							'&.Mui-focused fieldset': { borderColor: '#00ff88' },
-						},
-					}}
-					InputLabelProps={{ sx: { color: '#aaa' } }}
-				/>
 
 				<Button
 					variant='contained'

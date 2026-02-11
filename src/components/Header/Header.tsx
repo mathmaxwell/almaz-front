@@ -19,6 +19,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import GroupIcon from '@mui/icons-material/Group'
 import PercentIcon from '@mui/icons-material/Percent'
+import StarIcon from '@mui/icons-material/Star'
 import {
 	Divider,
 	Drawer,
@@ -275,6 +276,20 @@ export default function Header() {
 											<PercentIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.promo_code} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/superusers')
+										}}
+									>
+										<ListItemIcon>
+											<StarIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.super_users} />
 									</ListItemButton>
 								</ListItem>
 							)}

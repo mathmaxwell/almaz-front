@@ -114,10 +114,11 @@ const Users = () => {
 			<Box
 				sx={{
 					display: 'flex',
-					gap: 2,
+					gap: { xs: 1, sm: 2 },
 					flexWrap: 'wrap',
 					alignItems: 'flex-end',
-					p: 2,
+					px: { xs: 1, sm: 2 },
+					py: 1,
 				}}
 			>
 				<TextField
@@ -168,24 +169,30 @@ const Users = () => {
 						startAdornment: <InputAdornment position='start'>≥</InputAdornment>,
 					}}
 				/>
-				<Button
-					variant={userType ? 'outlined' : 'contained'}
-					fullWidth
-					onClick={() => {
-						userType ? setUserType('') : setUserType('superUser')
-					}}
-				>
-					{t.super_users}
-				</Button>
-				<Button
-					fullWidth
-					variant={showPassword ? 'outlined' : 'contained'}
-					onClick={() => {
-						setShowPassword(prev => !prev)
-					}}
-				>
-					{t.show_password}
-				</Button>
+				<Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+					<Button
+						variant={userType ? 'outlined' : 'contained'}
+						fullWidth
+						size='small'
+						sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+						onClick={() => {
+							userType ? setUserType('') : setUserType('superUser')
+						}}
+					>
+						{t.super_users}
+					</Button>
+					<Button
+						fullWidth
+						size='small'
+						sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+						variant={showPassword ? 'outlined' : 'contained'}
+						onClick={() => {
+							setShowPassword(prev => !prev)
+						}}
+					>
+						{t.show_password}
+					</Button>
+				</Box>
 			</Box>
 			<Paper
 				sx={{
@@ -195,24 +202,57 @@ const Users = () => {
 					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
 					height: '100%',
 					overflowY: 'scroll',
+					mb: 7,
 				}}
 			>
 				<TableContainer>
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell align='center' sx={{ fontWeight: 700 }}>
+								<TableCell
+									align='center'
+									sx={{
+										fontWeight: 700,
+										px: { xs: 0.5, sm: 2 },
+										fontSize: { xs: '0.75rem', sm: '0.875rem' },
+										whiteSpace: 'nowrap',
+									}}
+								>
 									Login
 								</TableCell>
 								{showPassword && (
-									<TableCell align='center' sx={{ fontWeight: 700 }}>
+									<TableCell
+										align='center'
+										sx={{
+											fontWeight: 700,
+											px: { xs: 0.5, sm: 2 },
+											fontSize: { xs: '0.75rem', sm: '0.875rem' },
+											whiteSpace: 'nowrap',
+										}}
+									>
 										{t.password}
 									</TableCell>
 								)}
-								<TableCell align='center' sx={{ fontWeight: 700 }}>
+								<TableCell
+									align='center'
+									sx={{
+										fontWeight: 700,
+										px: { xs: 0.5, sm: 2 },
+										fontSize: { xs: '0.75rem', sm: '0.875rem' },
+										whiteSpace: 'nowrap',
+									}}
+								>
 									{t.balance}
 								</TableCell>
-								<TableCell align='center' sx={{ fontWeight: 700 }}>
+								<TableCell
+									align='center'
+									sx={{
+										fontWeight: 700,
+										px: { xs: 0.5, sm: 2 },
+										fontSize: { xs: '0.75rem', sm: '0.875rem' },
+										whiteSpace: 'nowrap',
+									}}
+								>
 									{t.actions}
 								</TableCell>
 							</TableRow>
@@ -247,13 +287,42 @@ const Users = () => {
 										key={index}
 										onClick={() => navigate(`/users/${row.token}`)}
 									>
-										<TableCell align='center'>{row.login ?? '—'}</TableCell>
+										<TableCell
+										align='center'
+										sx={{
+											px: { xs: 0.5, sm: 2 },
+											py: { xs: 0.5, sm: 1 },
+											fontSize: { xs: '0.75rem', sm: '0.875rem' },
+											whiteSpace: 'nowrap',
+										}}
+									>
+										{row.login ?? '—'}
+									</TableCell>
 										{showPassword && (
-											<TableCell align='center'>
+											<TableCell
+												align='center'
+												sx={{
+													px: { xs: 0.5, sm: 2 },
+													py: { xs: 0.5, sm: 1 },
+													fontSize: { xs: '0.7rem', sm: '0.875rem' },
+													maxWidth: { xs: 80, sm: 'none' },
+													overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+												}}
+											>
 												{row.password ?? '—'}
 											</TableCell>
 										)}
-										<TableCell align='center'>
+										<TableCell
+											align='center'
+											sx={{
+												px: { xs: 0.5, sm: 2 },
+												py: { xs: 0.5, sm: 1 },
+												fontSize: { xs: '0.75rem', sm: '0.875rem' },
+												whiteSpace: 'nowrap',
+											}}
+										>
 											{row.balance != null
 												? updateNumberFormat(row.balance) + ` ${t.som}`
 												: '—'}
@@ -263,9 +332,11 @@ const Users = () => {
 											align='center'
 											sx={{
 												display: 'flex',
-												gap: 0.5,
+												gap: { xs: 0, sm: 0.5 },
 												alignItems: 'center',
 												justifyContent: 'center',
+												px: { xs: 0, sm: 2 },
+												py: { xs: 0.5, sm: 1 },
 											}}
 										>
 											<IconButton
@@ -290,20 +361,25 @@ const Users = () => {
 													refetch()
 												}}
 												size='small'
+												sx={{ p: { xs: 0.3, sm: 0.5 } }}
 												color={
 													row.userRole === 'superUser' ? 'warning' : 'warning'
 												}
 												title={t.delete}
 											>
 												{row.userRole === 'superUser' ? (
-													<StarIcon />
+													<StarIcon sx={{ fontSize: { xs: 18, sm: 24 } }} />
 												) : (
-													<StarOutlineIcon color='info' />
+													<StarOutlineIcon
+														color='info'
+														sx={{ fontSize: { xs: 18, sm: 24 } }}
+													/>
 												)}
 											</IconButton>
 
 											<IconButton
 												size='small'
+												sx={{ p: { xs: 0.3, sm: 0.5 } }}
 												color='default'
 												title={t.update_balance}
 												onClick={async e => {
@@ -329,7 +405,9 @@ const Users = () => {
 													}
 												}}
 											>
-												<EditIcon fontSize='small' />
+												<EditIcon
+													sx={{ fontSize: { xs: 16, sm: 20 } }}
+												/>
 											</IconButton>
 
 											<IconButton
@@ -344,10 +422,13 @@ const Users = () => {
 													}
 												}}
 												size='small'
+												sx={{ p: { xs: 0.3, sm: 0.5 } }}
 												color='error'
 												title={t.delete}
 											>
-												<DeleteIcon fontSize='small' />
+												<DeleteIcon
+													sx={{ fontSize: { xs: 16, sm: 20 } }}
+												/>
 											</IconButton>
 										</TableCell>
 									</TableRow>
@@ -368,6 +449,18 @@ const Users = () => {
 					labelDisplayedRows={({ from, to, count }) =>
 						`${from}–${to} ${t.from} ${count !== -1 ? count : `больше ${to}`}`
 					}
+					sx={{
+						'.MuiTablePagination-toolbar': {
+							flexWrap: { xs: 'wrap', sm: 'nowrap' },
+							justifyContent: { xs: 'center', sm: 'flex-end' },
+							px: { xs: 0.5, sm: 2 },
+							minHeight: { xs: 48, sm: 52 },
+						},
+						'.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows':
+							{
+								fontSize: { xs: '0.75rem', sm: '0.875rem' },
+							},
+					}}
 				/>
 			</Paper>
 
