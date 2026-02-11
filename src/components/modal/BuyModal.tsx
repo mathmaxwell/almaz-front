@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 	Divider,
 	IconButton,
+	Link,
 	TextField,
 	Typography,
 	Zoom,
@@ -24,6 +25,8 @@ import { useTokenStore } from '../../store/token/useTokenStore'
 import { useQuery } from '@tanstack/react-query'
 import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
+import SupportAgentIcon from '@mui/icons-material/SupportAgent'
+import InfoIcon from '@mui/icons-material/Info'
 const BuyModal = () => {
 	const { token } = useTokenStore()
 	const apiUrl = import.meta.env.VITE_API_URL
@@ -127,16 +130,16 @@ const BuyModal = () => {
 						: updateNumberFormat(offer?.price || '')}
 					{t.som}
 				</Typography>
-
 				<Box
 					sx={{
-						mb: 3,
+						mb: 1,
 						p: 1.5,
 						borderRadius: '12px',
 						background: 'rgba(255, 0, 0, 0.12)',
 						border: '1px solid rgba(255, 0, 0, 0.35)',
 						cursor: 'pointer',
 						transition: 'all 0.2s',
+						width: '100%',
 						'&:hover': {
 							background: 'rgba(255, 0, 0, 0.22)',
 							transform: 'translateY(-2px)',
@@ -144,10 +147,6 @@ const BuyModal = () => {
 					}}
 				>
 					<Typography
-						onClick={() => {
-							navigate('/about')
-							closeModal()
-						}}
 						variant='body1'
 						align='center'
 						sx={{
@@ -159,27 +158,53 @@ const BuyModal = () => {
 							gap: 1,
 						}}
 					>
-						<PlayCircleOutlineIcon
-							fontSize='large'
-							onClick={() => {
-								openVideo({
-									title: isRu ? game.howToUseRu : game.howToUseUz,
-									video: { url: `${apiUrl}${game.video}`, type: 'backend' },
-								})
-							}}
-						/>
 						{t.support_notice}
 					</Typography>
 				</Box>
-
-				<Divider sx={{ my: 2.5, borderColor: 'rgba(0, 255, 136, 0.18)' }} />
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-evenly',
+						gap: 1,
+						width: '100%',
+						mt: 2,
+					}}
+				>
+					<PlayCircleOutlineIcon
+						fontSize='large'
+						color='success'
+						onClick={() => {
+							openVideo({
+								title: isRu ? game.howToUseRu : game.howToUseUz,
+								video: { url: `${apiUrl}${game.video}`, type: 'backend' },
+							})
+						}}
+					/>
+					<Link
+						href='https://t.me/fastpin_support_bot'
+						target='_blank'
+						rel='noopener noreferrer'
+						sx={{ display: 'flex', alignItems: 'center' }}
+					>
+						<SupportAgentIcon fontSize='large' />
+					</Link>
+					<InfoIcon
+						fontSize='large'
+						color='warning'
+						onClick={() => {
+							alert(isRu ? offer?.ruDesc : offer?.uzDesc)
+						}}
+					/>
+				</Box>
+				<Divider sx={{ my: 1, borderColor: 'rgba(0, 255, 136, 0.18)' }} />
 				<TextField
 					label={t.player_id}
 					fullWidth
 					variant='outlined'
 					value={playerId}
 					onChange={e => setPlayerId(e.target.value)}
-					sx={{ mb: 4 }}
+					sx={{ mb: 1 }}
 					InputProps={{
 						sx: {
 							borderRadius: '12px',
