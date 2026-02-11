@@ -35,7 +35,7 @@ const GamePage = () => {
 	const { openModal } = useGamesStoreModal()
 	const { openModal: offerCreate } = useOfferStoreModal()
 	const { data, isLoading } = useQuery<IOffer[], Error>({
-		queryKey: ['offer', token],
+		queryKey: ['offer', token, game.id],
 		queryFn: async () => {
 			const result = await getOffer({ token, gameId: game.id })
 			return result ?? []
@@ -70,7 +70,7 @@ const GamePage = () => {
 						width: '75px',
 						height: '75px',
 						objectFit: 'contain',
-						borderRadius: '50%',
+						borderRadius: '12px',
 					}}
 				/>
 				<Typography sx={{ fontFamily: 'Bitcount' }} variant='h4'>

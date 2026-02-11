@@ -89,18 +89,28 @@ const GameCard = ({ offer }: { offer: IOffer }) => {
 						objectPosition: 'center',
 					}}
 				/>
-				<CardContent>
+				<CardContent
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'end',
+						height: '100%',
+						p: 0,
+					}}
+				>
 					<Typography
-						sx={{ fontFamily: 'Bitcount', color: theme.palette.common.black }}
+						sx={{ fontFamily: 'Playwrite', color: theme.palette.common.black }}
 						align='center'
-						variant={isMobile ? 'h5' : 'h4'}
+						variant={isMobile ? 'h6' : 'h5'}
 					>
 						{lang == 'ru' ? offer.ruName : offer.uzName}
 					</Typography>
 					<Typography
 						sx={{
-							fontFamily: 'Bitcount',
+							fontFamily: 'Roboto',
 							color: theme.palette.common.black,
+							fontWeight: 900,
 						}}
 						variant={isMobile ? 'h6' : 'h5'}
 						align='center'

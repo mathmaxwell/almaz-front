@@ -4,7 +4,6 @@ import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
-	Divider,
 	IconButton,
 	Link,
 	TextField,
@@ -27,7 +26,9 @@ import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import InfoIcon from '@mui/icons-material/Info'
+import { useTextModalStore } from '../../store/modal/useTextModal'
 const BuyModal = () => {
+	const { openModal } = useTextModalStore()
 	const { token } = useTokenStore()
 	const apiUrl = import.meta.env.VITE_API_URL
 	const { open, closeModal, offer } = useBuyModalStore()
@@ -119,15 +120,13 @@ const BuyModal = () => {
 					fontWeight={900}
 					align='center'
 					sx={{
-						mb: 3,
-						fontFamily: '"Bitcount", system-ui, sans-serif',
 						color: '#00ffaa',
 						textShadow: '0 0 20px rgba(0, 255, 170, 0.6)',
 					}}
 				>
 					{userInfo?.userRole === 'superUser'
 						? updateNumberFormat(offer?.superPrice || '')
-						: updateNumberFormat(offer?.price || '')}
+						: updateNumberFormat(offer?.price || '')}{' '}
 					{t.som}
 				</Typography>
 				<Box
@@ -168,7 +167,7 @@ const BuyModal = () => {
 						justifyContent: 'space-evenly',
 						gap: 1,
 						width: '100%',
-						mt: 2,
+						my: 2,
 					}}
 				>
 					<PlayCircleOutlineIcon
@@ -193,11 +192,11 @@ const BuyModal = () => {
 						fontSize='large'
 						color='warning'
 						onClick={() => {
-							alert(isRu ? offer?.ruDesc : offer?.uzDesc)
+							openModal((isRu ? offer?.ruDesc : offer?.uzDesc) || '')
 						}}
 					/>
 				</Box>
-				<Divider sx={{ my: 1, borderColor: 'rgba(0, 255, 136, 0.18)' }} />
+
 				<TextField
 					label={t.player_id}
 					fullWidth

@@ -24,6 +24,7 @@ import BuyModal from './components/modal/BuyModal'
 import PromoCode from './pages/promocode/PromoCode'
 import Status from './pages/Status/Status'
 import SuperUsers from './pages/SuperUsers/SuperUsers'
+import TextModal from './components/modal/TextModal'
 
 function App() {
 	return (
@@ -62,6 +63,7 @@ function App() {
 			<GameModal />
 			<VideoModal />
 			<BuyModal />
+			<TextModal />
 		</>
 	)
 }

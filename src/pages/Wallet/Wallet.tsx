@@ -106,19 +106,11 @@ const Wallet = () => {
 					}}
 				>
 					{cost ? (
-						<Typography
-							sx={{ fontFamily: 'Bitcount' }}
-							align='center'
-							variant='h4'
-						>
+						<Typography align='center' variant='h4'>
 							{t.selected_amount}: {cost} {t.som}
 						</Typography>
 					) : (
-						<Typography
-							sx={{ fontFamily: 'Bitcount' }}
-							align='center'
-							variant='h4'
-						>
+						<Typography align='center' variant='h4'>
 							{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
 						</Typography>
 					)}

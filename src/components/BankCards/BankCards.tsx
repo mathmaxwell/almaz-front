@@ -101,11 +101,7 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 									}}
 								>
 									<CreditCardIcon fontSize='large' />
-									<Typography
-										sx={{ fontFamily: 'Bitcount' }}
-										variant={isMobile ? 'h6' : 'h5'}
-										fontWeight={500}
-									>
+									<Typography variant={isMobile ? 'h6' : 'h5'} fontWeight={500}>
 										{card.name}
 									</Typography>
 									{isAdmin && (
@@ -130,7 +126,7 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 								<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 									<Typography
 										variant={isMobile ? 'h6' : 'h5'}
-										sx={{ userSelect: 'all', fontFamily: 'Bitcount' }}
+										sx={{ userSelect: 'all' }}
 										noWrap
 									>
 										{card.number}

@@ -65,7 +65,7 @@ const History = () => {
 					gap: 2,
 				}}
 			>
-				<Typography sx={{ fontFamily: 'Bitcount' }} align='center' variant='h5'>
+				<Typography align='center' variant='h5'>
 					{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
 				</Typography>
 				<Box
