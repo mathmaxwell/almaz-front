@@ -18,8 +18,8 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports'
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import GroupIcon from '@mui/icons-material/Group'
-import PercentIcon from '@mui/icons-material/Percent'
 import StarIcon from '@mui/icons-material/Star'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import {
 	Divider,
 	Drawer,
@@ -213,6 +213,20 @@ export default function Header() {
 								<ListItem disablePadding>
 									<ListItemButton
 										onClick={() => {
+											navigate('/statistics')
+										}}
+									>
+										<ListItemIcon>
+											<TrendingUpIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.statistics} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
 											navigate('/users')
 										}}
 									>
@@ -265,7 +279,7 @@ export default function Header() {
 									</ListItemButton>
 								</ListItem>
 							)}
-							{isAdmin && (
+							{/* {isAdmin && (
 								<ListItem disablePadding>
 									<ListItemButton
 										onClick={() => {
@@ -278,7 +292,7 @@ export default function Header() {
 										<ListItemText primary={t.promo_code} />
 									</ListItemButton>
 								</ListItem>
-							)}
+							)} */}
 							{isAdmin && (
 								<ListItem disablePadding>
 									<ListItemButton

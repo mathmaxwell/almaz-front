@@ -107,9 +107,9 @@ const Users = () => {
 			<Typography
 				variant='h5'
 				textAlign='center'
-				sx={{ fontWeight: 600, fontFamily: 'Bitcount', mt: 2 }}
+				sx={{ fontWeight: 600, mt: 7 }}
 			>
-				{t.users}
+				{t.users} ({data?.total})
 			</Typography>
 			<Box
 				sx={{
@@ -118,7 +118,6 @@ const Users = () => {
 					flexWrap: 'wrap',
 					alignItems: 'flex-end',
 					px: { xs: 1, sm: 2 },
-					py: 1,
 				}}
 			>
 				<TextField
@@ -197,11 +196,9 @@ const Users = () => {
 			<Paper
 				sx={{
 					width: '100%',
-					overflow: 'hidden',
 					background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
 					height: '100%',
-					overflowY: 'scroll',
 					mb: 7,
 				}}
 			>
@@ -288,16 +285,16 @@ const Users = () => {
 										onClick={() => navigate(`/users/${row.token}`)}
 									>
 										<TableCell
-										align='center'
-										sx={{
-											px: { xs: 0.5, sm: 2 },
-											py: { xs: 0.5, sm: 1 },
-											fontSize: { xs: '0.75rem', sm: '0.875rem' },
-											whiteSpace: 'nowrap',
-										}}
-									>
-										{row.login ?? '—'}
-									</TableCell>
+											align='center'
+											sx={{
+												px: { xs: 0.5, sm: 2 },
+												py: { xs: 0.5, sm: 1 },
+												fontSize: { xs: '0.75rem', sm: '0.875rem' },
+												whiteSpace: 'nowrap',
+											}}
+										>
+											{row.login ?? '—'}
+										</TableCell>
 										{showPassword && (
 											<TableCell
 												align='center'
@@ -405,9 +402,7 @@ const Users = () => {
 													}
 												}}
 											>
-												<EditIcon
-													sx={{ fontSize: { xs: 16, sm: 20 } }}
-												/>
+												<EditIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
 											</IconButton>
 
 											<IconButton
@@ -426,9 +421,7 @@ const Users = () => {
 												color='error'
 												title={t.delete}
 											>
-												<DeleteIcon
-													sx={{ fontSize: { xs: 16, sm: 20 } }}
-												/>
+												<DeleteIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
 											</IconButton>
 										</TableCell>
 									</TableRow>

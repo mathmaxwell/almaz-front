@@ -25,12 +25,14 @@ import PromoCode from './pages/promocode/PromoCode'
 import Status from './pages/Status/Status'
 import SuperUsers from './pages/SuperUsers/SuperUsers'
 import TextModal from './components/modal/TextModal'
+import Statistics from './pages/statistics/Statistics'
 
 function App() {
 	return (
 		<>
 			<Routes>
 				<Route path='/' element={<HomePage />} />
+				<Route path='/statistics' element={<Statistics />} />
 				<Route path='/promocode' element={<PromoCode />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/users' element={<Users />} />

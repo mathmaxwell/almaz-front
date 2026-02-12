@@ -45,3 +45,36 @@ export async function deleteTransactions({ id }: { id: string }) {
 		throw error
 	}
 }
+export async function getByPeriod({
+	token,
+	startDay,
+	startMonth,
+	startYear,
+	endDay,
+	endMonth,
+	endYear,
+}: {
+	token: string
+	startDay: number
+	startMonth: number
+	startYear: number
+	endDay: number
+	endMonth: number
+	endYear: number
+}) {
+	try {
+		const responce = await api.post('/transactions/getByPeriod', {
+			token,
+			startDay,
+			startMonth,
+			startYear,
+			endDay,
+			endMonth,
+			endYear,
+		})
+		const result = responce.data as ITransactions[]
+		return result
+	} catch (error) {
+		throw new Error('getTransactions error')
+	}
+}
