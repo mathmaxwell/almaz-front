@@ -1,4 +1,5 @@
 import {
+	Alert,
 	Box,
 	Button,
 	Dialog,
@@ -42,6 +43,24 @@ const BuyModal = () => {
 	const theme = useTheme()
 	const isRu = lang === 'ru'
 	const withOutServerId = game.description !== 'two'
+	const [loading, setLoading] = useState(false)
+	const [cooldown, setCooldown] = useState(0)
+	const [errorMsg, setErrorMsg] = useState('')
+
+	const mapError = (msg: string): string => {
+		if (msg.includes('недостаточно средств') || msg.includes('Недостаточно средств'))
+			return t.error_insufficient_balance
+		if (msg.includes('пользователь не найден') || msg.includes('Пользователь не найден'))
+			return t.error_user_not_found
+		if (msg.includes('offer не найдено')) return t.error_offer_not_found
+		if (msg.includes('игра не найдена')) return t.error_game_not_found
+		if (msg.includes('некорректная цена')) return t.error_invalid_price
+		if (msg.includes('не указан server id')) return t.error_no_server_id
+		if (msg.includes('недостаточно средств у провайдера')) return t.error_provider_balance
+		if (msg.includes('баланс провайдера ниже')) return t.error_provider_threshold
+		return t.error_unknown
+	}
+
 	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token],
 		queryFn: async () => {
@@ -299,26 +318,68 @@ const BuyModal = () => {
 					/>
 				)}
 
+				{errorMsg && (
+					<Alert
+						severity='error'
+						sx={{
+							mb: 2,
+							borderRadius: 3,
+							fontWeight: 600,
+							'& .MuiAlert-message': { width: '100%', textAlign: 'center' },
+						}}
+					>
+						{errorMsg}
+						{cooldown > 0 && (
+							<Typography variant='caption' display='block' sx={{ mt: 0.5, fontWeight: 500 }}>
+								{t.error_wait} ({cooldown}s)
+							</Typography>
+						)}
+					</Alert>
+				)}
+
 				<Button
 					variant='contained'
 					fullWidth
 					size='large'
 					onClick={async () => {
-						const result = await createBuy({
-							token,
-							gameId: game.id,
-							playerId,
-							serverId,
-							botId: offer?.botId!,
-							offerId: offer?.id!,
-						})
-						navigate(`/status/${game.id}/${result.order}`)
-						closeModal()
+						if (loading || cooldown > 0) return
+						setErrorMsg('')
+						try {
+							setLoading(true)
+							const result = await createBuy({
+								token,
+								gameId: game.id,
+								playerId,
+								serverId,
+								botId: offer?.botId!,
+								offerId: offer?.id!,
+							})
+							navigate(`/status/${game.id}/${result.order}`)
+							closeModal()
+						} catch (error: any) {
+							const translated = mapError(error.message || '')
+							setErrorMsg(translated)
+							setCooldown(15)
+							const interval = setInterval(() => {
+								setCooldown(prev => {
+									if (prev <= 1) {
+										clearInterval(interval)
+										setErrorMsg('')
+										return 0
+									}
+									return prev - 1
+								})
+							}, 1000)
+						} finally {
+							setLoading(false)
+						}
 					}}
 					disabled={
-						withOutServerId
+						loading ||
+						cooldown > 0 ||
+						(withOutServerId
 							? !playerId.trim()
-							: !playerId.trim() || !serverId.trim()
+							: !playerId.trim() || !serverId.trim())
 					}
 					sx={{
 						py: 1.8,
@@ -351,7 +412,11 @@ const BuyModal = () => {
 						},
 					}}
 				>
-					{t.buy}
+					{loading
+						? '...'
+						: cooldown > 0
+							? `${t.error_wait} (${cooldown}s)`
+							: t.buy}
 				</Button>
 			</DialogContent>
 		</Dialog>

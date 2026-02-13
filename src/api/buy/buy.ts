@@ -1,3 +1,4 @@
+import axios from 'axios'
 import type { IStatus } from '../../types/buy/buy'
 import api from '../api'
 
@@ -27,8 +28,13 @@ export async function createBuy({
 		})
 		const result = responce.data as any
 		return result
-	} catch (error) {
-		throw new Error('games error')
+	} catch (error: any) {
+		if (axios.isAxiosError(error)) {
+			// сервер отправил ошибку
+			throw new Error(error.response?.data || 'Server error')
+		}
+
+		throw new Error('Unknown error')
 	}
 }
 export async function orderStatus({

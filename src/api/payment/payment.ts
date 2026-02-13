@@ -1,6 +1,39 @@
 import type { IPayment } from '../../types/payment/payment'
 import api from '../api'
 
+export async function getPaymentByPeriod({
+	token,
+	startDay,
+	startMonth,
+	startYear,
+	endDay,
+	endMonth,
+	endYear,
+}: {
+	token: string
+	startDay: number
+	startMonth: number
+	startYear: number
+	endDay: number
+	endMonth: number
+	endYear: number
+}) {
+	try {
+		const responce = await api.post('/payment/getPaymentByPeriod', {
+			token,
+			startDay,
+			startMonth,
+			startYear,
+			endDay,
+			endMonth,
+			endYear,
+		})
+		const result = responce.data as IPayment[]
+		return result
+	} catch (error) {
+		throw new Error('payment error')
+	}
+}
 export async function getPayment(token: string) {
 	try {
 		const responce = await api.post('/payment/getPayment', {

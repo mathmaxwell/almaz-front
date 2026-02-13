@@ -20,6 +20,7 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import GroupIcon from '@mui/icons-material/Group'
 import StarIcon from '@mui/icons-material/Star'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import ViewListIcon from '@mui/icons-material/ViewList'
 import {
 	Divider,
 	Drawer,
@@ -262,6 +263,20 @@ export default function Header() {
 											<ShoppingCartCheckoutIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.payments} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/booking')
+										}}
+									>
+										<ListItemIcon>
+											<ViewListIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.book_now} />
 									</ListItemButton>
 								</ListItem>
 							)}

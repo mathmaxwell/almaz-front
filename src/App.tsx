@@ -26,6 +26,7 @@ import Status from './pages/Status/Status'
 import SuperUsers from './pages/SuperUsers/SuperUsers'
 import TextModal from './components/modal/TextModal'
 import Statistics from './pages/statistics/Statistics'
+import Booking from './pages/booking/Booking'
 
 function App() {
 	return (
@@ -36,6 +37,7 @@ function App() {
 				<Route path='/promocode' element={<PromoCode />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/users' element={<Users />} />
+				<Route path='/booking' element={<Booking />} />
 				<Route path='/status/:gameId/:order' element={<Status />} />
 				<Route path='/users/:userId' element={<History />} />
 				<Route path='/profile' element={<Profile />} />

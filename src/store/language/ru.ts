@@ -191,5 +191,15 @@ const ru = {
 	payment_system_deposits: 'Пополнения через платежные системы',
 	units: 'шт',
 	no_deposits: 'Нет пополнений',
+	error_insufficient_balance: 'Недостаточно средств на балансе',
+	error_user_not_found: 'Пользователь не найден',
+	error_offer_not_found: 'Предложение не найдено',
+	error_game_not_found: 'Игра не найдена',
+	error_invalid_price: 'Некорректная цена',
+	error_no_server_id: 'Не указан Server ID',
+	error_provider_balance: 'Сервис временно недоступен, попробуйте позже',
+	error_provider_threshold: 'Сервис временно недоступен, попробуйте позже',
+	error_unknown: 'Произошла ошибка, попробуйте позже',
+	error_wait: 'Подождите перед повторной попыткой',
 }
 export default ru

@@ -193,6 +193,15 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	payment_system_deposits: "To'lov tizimlari orqali to'ldirishlar",
 	units: 'dona',
 	no_deposits: "To'ldirishlar yo'q",
-	
+	error_insufficient_balance: "Balansingizda mablag' yetarli emas",
+	error_user_not_found: 'Foydalanuvchi topilmadi',
+	error_offer_not_found: 'Taklif topilmadi',
+	error_game_not_found: "O'yin topilmadi",
+	error_invalid_price: "Narx noto'g'ri",
+	error_no_server_id: 'Server ID kiritilmagan',
+	error_provider_balance: "Xizmat vaqtincha mavjud emas, keyinroq urinib ko'ring",
+	error_provider_threshold: "Xizmat vaqtincha mavjud emas, keyinroq urinib ko'ring",
+	error_unknown: "Xatolik yuz berdi, keyinroq urinib ko'ring",
+	error_wait: "Qayta urinishdan oldin kuting",
 }
 export default uz
