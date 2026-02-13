@@ -1,7 +1,8 @@
-import { Button, Typography, useTheme } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { useGameStore } from '../../store/game/useGameStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 const Instructions = () => {
 	const { game } = useGameStore()
 	const { open } = useVideoModalStore()
@@ -9,33 +10,60 @@ const Instructions = () => {
 	const theme = useTheme()
 	const apiUrl = import.meta.env.VITE_API_URL
 	return (
-		<>
-			<Typography sx={{ fontFamily: 'Bitcount' }} align='center' variant='h3'>
+		<Box sx={{ pb: 2 }}>
+			<Typography
+				sx={{ fontFamily: 'Bitcount', mb: 2 }}
+				align='center'
+				variant='h4'
+			>
 				{t.instructions}
 			</Typography>
-			<Typography variant='h4' sx={{ my: 2, fontFamily: 'Bitcount' }}>
+			<Typography
+				variant='body1'
+				sx={{
+					my: 2,
+					fontFamily: 'Bitcount',
+					lineHeight: 1.8,
+					whiteSpace: 'pre-line',
+				}}
+			>
 				{lang == 'ru' ? game.howToUseRu : game.howToUseUz}
 			</Typography>
 			<Button
 				variant='contained'
 				fullWidth
-				sx={{
-					my: 2,
-					bgcolor: theme.palette.error.main,
-					boxShadow: '0 4px 12px rgba(0,0,0,1)',
-				}}
+				color='error'
+				size='large'
+				startIcon={<PlayCircleOutlineIcon />}
+				sx={{ my: 2, py: 1.5 }}
 				onClick={() => {
 					open({ video: { type: 'backend', url: `${apiUrl}${game.video}` } })
 				}}
 			>
 				{t.watch_video}
 			</Button>
-			<img
-				src={`${apiUrl}${game.helpImage}`}
-				alt='image'
-				style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-			/>
-		</>
+			<Box
+				sx={{
+					borderRadius: 3,
+					overflow: 'hidden',
+					boxShadow:
+						theme.palette.mode === 'dark'
+							? '0 4px 20px rgba(0, 0, 0, 0.4)'
+							: '0 4px 20px rgba(0, 0, 0, 0.1)',
+				}}
+			>
+				<img
+					src={`${apiUrl}${game.helpImage}`}
+					alt='image'
+					style={{
+						width: '100%',
+						height: 'auto',
+						objectFit: 'contain',
+						display: 'block',
+					}}
+				/>
+			</Box>
+		</Box>
 	)
 }
 

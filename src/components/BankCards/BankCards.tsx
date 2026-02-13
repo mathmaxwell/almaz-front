@@ -60,25 +60,34 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
-						gap: 2.5,
+						gap: 2,
 						overflowX: 'auto',
-						scrollbarWidth: 'thin',
+						scrollbarWidth: 'none',
+						'&::-webkit-scrollbar': { display: 'none' },
 						scrollSnapType: 'x mandatory',
+						pb: 1,
 					}}
 				>
 					{cards.map((card, index) => (
 						<Card
 							key={index}
-							elevation={3}
+							elevation={0}
 							sx={{
-								borderRadius: 4,
-								background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+								borderRadius: 2,
+								background:
+									theme.palette.mode === 'dark'
+										? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+										: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
 								color: 'white',
 								position: 'relative',
 								overflow: 'hidden',
-								minHeight: '150px',
+								minHeight: '160px',
 								scrollSnapAlign: 'start',
-								minWidth: isMobile ? 320 : 400,
+								minWidth: isMobile ? 300 : 380,
+								boxShadow:
+									theme.palette.mode === 'dark'
+										? '0 8px 30px rgba(102, 126, 234, 0.3)'
+										: '0 8px 30px rgba(79, 172, 254, 0.3)',
 							}}
 						>
 							<CardContent
@@ -90,6 +99,8 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 									justifyContent: 'space-between',
 									height: '100%',
 									width: '100%',
+									p: 2.5,
+									'&:last-child': { pb: 2.5 },
 								}}
 							>
 								<Box
@@ -97,11 +108,11 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 										display: 'flex',
 										alignItems: 'center',
 										gap: 1,
-										mb: 1,
+										mb: 2,
 									}}
 								>
-									<CreditCardIcon fontSize='large' />
-									<Typography variant={isMobile ? 'h6' : 'h5'} fontWeight={500}>
+									<CreditCardIcon fontSize='large' sx={{ opacity: 0.9 }} />
+									<Typography variant={isMobile ? 'h6' : 'h5'} fontWeight={600}>
 										{card.name}
 									</Typography>
 									{isAdmin && (
@@ -110,8 +121,8 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 											sx={{
 												ml: 'auto',
 												color: 'white',
-												bgcolor: 'rgba(0,0,0,0.3)',
-												'&:hover': { bgcolor: 'rgba(255,0,0,0.6)' },
+												bgcolor: 'rgba(255,255,255,0.15)',
+												'&:hover': { bgcolor: 'rgba(255,0,0,0.5)' },
 											}}
 											onClick={async () => {
 												if (!confirm(t.confirm_delete)) return
@@ -123,10 +134,14 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 										</IconButton>
 									)}
 								</Box>
-								<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+								<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 									<Typography
 										variant={isMobile ? 'h6' : 'h5'}
-										sx={{ userSelect: 'all' }}
+										sx={{
+											userSelect: 'all',
+											fontWeight: 500,
+											letterSpacing: '1px',
+										}}
 										noWrap
 									>
 										{card.number}
@@ -136,8 +151,9 @@ const BankCards = ({ cardType }: { cardType: string }) => {
 											size='small'
 											sx={{
 												color: 'white',
-												bgcolor: 'rgba(255,255,255,0.15)',
+												bgcolor: 'rgba(255,255,255,0.2)',
 												ml: 'auto',
+												'&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
 											}}
 											onClick={() => copyToClipboard(card.number)}
 										>

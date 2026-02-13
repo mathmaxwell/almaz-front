@@ -9,6 +9,7 @@ import {
 	TextField,
 	Typography,
 	Zoom,
+	useTheme,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useBuyModalStore } from '../../store/modal/useBuyModalStore'
@@ -38,6 +39,7 @@ const BuyModal = () => {
 	const [serverId, setServerId] = useState('')
 	const { game } = useGameStore()
 	const { open: openVideo } = useVideoModalStore()
+	const theme = useTheme()
 	const isRu = lang === 'ru'
 	const withOutServerId = game.description !== 'two'
 	const { data: userInfo } = useQuery<IUser, Error>({
@@ -58,11 +60,21 @@ const BuyModal = () => {
 			transitionDuration={400}
 			sx={{
 				'& .MuiDialog-paper': {
-					borderRadius: '20px',
+					borderRadius: '24px',
 					overflow: 'hidden',
-					background: `linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)`,
-					boxShadow: '0 20px 60px rgba(0, 255, 135, 0.18)',
-					border: '1px solid rgba(0, 255, 136, 0.25)',
+					background:
+						theme.palette.mode === 'dark'
+							? `linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)`
+							: `linear-gradient(135deg, #f8fafc 0%, #e8ecf4 50%, #f0f4ff 100%)`,
+					boxShadow:
+						theme.palette.mode === 'dark'
+							? '0 20px 60px rgba(0, 255, 135, 0.15)'
+							: '0 20px 60px rgba(0, 0, 0, 0.15)',
+					border: `1px solid ${
+						theme.palette.mode === 'dark'
+							? 'rgba(0, 255, 136, 0.2)'
+							: 'rgba(0, 0, 0, 0.06)'
+					}`,
 				},
 			}}
 		>
@@ -73,7 +85,10 @@ const BuyModal = () => {
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'space-between',
-					background: 'rgba(0,0,0,0.3)',
+					background:
+						theme.palette.mode === 'dark'
+							? 'rgba(0,0,0,0.3)'
+							: 'rgba(0,0,0,0.03)',
 				}}
 			>
 				<Typography
@@ -82,7 +97,10 @@ const BuyModal = () => {
 					fontWeight={800}
 					sx={{
 						fontFamily: '"Bitcount", system-ui, sans-serif',
-						background: 'linear-gradient(90deg, #00ff88, #00d4ff)',
+						background:
+							theme.palette.mode === 'dark'
+								? 'linear-gradient(90deg, #00ff88, #00d4ff)'
+								: 'linear-gradient(90deg, #007BFF, #00B8D4)',
 						WebkitBackgroundClip: 'text',
 						WebkitTextFillColor: 'transparent',
 						letterSpacing: '-0.5px',
@@ -91,26 +109,37 @@ const BuyModal = () => {
 					{isRu ? offer?.ruName : offer?.uzName}
 				</Typography>
 
-				<IconButton onClick={closeModal} size='small' sx={{ color: '#aaa' }}>
+				<IconButton
+					onClick={closeModal}
+					size='small'
+					sx={{ color: theme.palette.text.secondary }}
+				>
 					<CloseIcon />
 				</IconButton>
 			</DialogTitle>
 
-			<DialogContent sx={{ px: 4, pb: 4, pt: 2 }}>
+			<DialogContent sx={{ px: { xs: 3, sm: 4 }, pb: 4, pt: 2 }}>
 				<Box sx={{ textAlign: 'center', mb: 3 }}>
 					<Box
 						component='img'
 						src={`${apiUrl}${offer?.image}`}
 						alt='offer'
 						sx={{
-							width: 140,
-							height: 140,
+							width: 120,
+							height: 120,
 							objectFit: 'contain',
 							borderRadius: '16px',
-							boxShadow: '0 12px 30px rgba(0, 255, 136, 0.25)',
-							border: '2px solid rgba(0, 255, 136, 0.3)',
+							boxShadow:
+								theme.palette.mode === 'dark'
+									? '0 12px 30px rgba(0, 255, 136, 0.2)'
+									: '0 12px 30px rgba(0, 0, 0, 0.1)',
+							border: `2px solid ${
+								theme.palette.mode === 'dark'
+									? 'rgba(0, 255, 136, 0.25)'
+									: 'rgba(0, 123, 255, 0.2)'
+							}`,
 							transition: 'transform 0.3s ease',
-							'&:hover': { transform: 'scale(1.08)' },
+							'&:hover': { transform: 'scale(1.05)' },
 						}}
 					/>
 				</Box>
@@ -120,8 +149,15 @@ const BuyModal = () => {
 					fontWeight={900}
 					align='center'
 					sx={{
-						color: '#00ffaa',
-						textShadow: '0 0 20px rgba(0, 255, 170, 0.6)',
+						color:
+							theme.palette.mode === 'dark'
+								? '#00ffaa'
+								: theme.palette.primary.main,
+						textShadow:
+							theme.palette.mode === 'dark'
+								? '0 0 20px rgba(0, 255, 170, 0.4)'
+								: 'none',
+						mb: 2,
 					}}
 				>
 					{userInfo?.userRole === 'superUser'
@@ -131,30 +167,35 @@ const BuyModal = () => {
 				</Typography>
 				<Box
 					sx={{
-						mb: 1,
+						mb: 2,
 						p: 1.5,
-						borderRadius: '12px',
-						background: 'rgba(255, 0, 0, 0.12)',
-						border: '1px solid rgba(255, 0, 0, 0.35)',
+						borderRadius: 3,
+						background:
+							theme.palette.mode === 'dark'
+								? 'rgba(255, 0, 0, 0.1)'
+								: 'rgba(255, 0, 0, 0.05)',
+						border: `1px solid ${
+							theme.palette.mode === 'dark'
+								? 'rgba(255, 0, 0, 0.3)'
+								: 'rgba(255, 0, 0, 0.15)'
+						}`,
 						cursor: 'pointer',
 						transition: 'all 0.2s',
 						width: '100%',
 						'&:hover': {
-							background: 'rgba(255, 0, 0, 0.22)',
-							transform: 'translateY(-2px)',
+							background:
+								theme.palette.mode === 'dark'
+									? 'rgba(255, 0, 0, 0.18)'
+									: 'rgba(255, 0, 0, 0.08)',
 						},
 					}}
 				>
 					<Typography
-						variant='body1'
+						variant='body2'
 						align='center'
 						sx={{
 							fontWeight: 600,
-							color: '#ff6666',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							gap: 1,
+							color: theme.palette.error.main,
 						}}
 					>
 						{t.support_notice}
@@ -164,14 +205,13 @@ const BuyModal = () => {
 					sx={{
 						display: 'flex',
 						alignItems: 'center',
-						justifyContent: 'space-evenly',
-						gap: 1,
+						justifyContent: 'center',
+						gap: 2,
 						width: '100%',
-						my: 2,
+						mb: 2,
 					}}
 				>
-					<PlayCircleOutlineIcon
-						fontSize='large'
+					<IconButton
 						color='success'
 						onClick={() => {
 							openVideo({
@@ -179,22 +219,65 @@ const BuyModal = () => {
 								video: { url: `${apiUrl}${game.video}`, type: 'backend' },
 							})
 						}}
-					/>
+						sx={{
+							bgcolor:
+								theme.palette.mode === 'dark'
+									? 'rgba(0, 255, 159, 0.1)'
+									: 'rgba(0, 200, 83, 0.08)',
+							'&:hover': {
+								bgcolor:
+									theme.palette.mode === 'dark'
+										? 'rgba(0, 255, 159, 0.2)'
+										: 'rgba(0, 200, 83, 0.15)',
+							},
+						}}
+					>
+						<PlayCircleOutlineIcon />
+					</IconButton>
 					<Link
 						href='https://t.me/fastpin_support_bot'
 						target='_blank'
 						rel='noopener noreferrer'
 						sx={{ display: 'flex', alignItems: 'center' }}
 					>
-						<SupportAgentIcon fontSize='large' />
+						<IconButton
+							sx={{
+								bgcolor:
+									theme.palette.mode === 'dark'
+										? 'rgba(0, 212, 255, 0.1)'
+										: 'rgba(0, 123, 255, 0.08)',
+								color: theme.palette.primary.main,
+								'&:hover': {
+									bgcolor:
+										theme.palette.mode === 'dark'
+											? 'rgba(0, 212, 255, 0.2)'
+											: 'rgba(0, 123, 255, 0.15)',
+								},
+							}}
+						>
+							<SupportAgentIcon />
+						</IconButton>
 					</Link>
-					<InfoIcon
-						fontSize='large'
+					<IconButton
 						color='warning'
 						onClick={() => {
 							openModal((isRu ? offer?.ruDesc : offer?.uzDesc) || '')
 						}}
-					/>
+						sx={{
+							bgcolor:
+								theme.palette.mode === 'dark'
+									? 'rgba(255, 215, 0, 0.1)'
+									: 'rgba(255, 171, 0, 0.08)',
+							'&:hover': {
+								bgcolor:
+									theme.palette.mode === 'dark'
+										? 'rgba(255, 215, 0, 0.2)'
+										: 'rgba(255, 171, 0, 0.15)',
+							},
+						}}
+					>
+						<InfoIcon />
+					</IconButton>
 				</Box>
 
 				<TextField
@@ -203,17 +286,7 @@ const BuyModal = () => {
 					variant='outlined'
 					value={playerId}
 					onChange={e => setPlayerId(e.target.value)}
-					sx={{ mb: 1 }}
-					InputProps={{
-						sx: {
-							borderRadius: '12px',
-							background: 'rgba(255,255,255,0.04)',
-							'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
-							'&:hover fieldset': { borderColor: '#00ff88' },
-							'&.Mui-focused fieldset': { borderColor: '#00ff88' },
-						},
-					}}
-					InputLabelProps={{ sx: { color: '#aaa' } }}
+					sx={{ mb: 1.5 }}
 				/>
 				{!withOutServerId && (
 					<TextField
@@ -222,17 +295,7 @@ const BuyModal = () => {
 						variant='outlined'
 						value={serverId}
 						onChange={e => setServerId(e.target.value)}
-						sx={{ mb: 2.5 }}
-						InputProps={{
-							sx: {
-								borderRadius: '12px',
-								background: 'rgba(255,255,255,0.04)',
-								'& fieldset': { borderColor: 'rgba(0, 255, 136, 0.3)' },
-								'&:hover fieldset': { borderColor: '#00ff88' },
-								'&.Mui-focused fieldset': { borderColor: '#00ff88' },
-							},
-						}}
-						InputLabelProps={{ sx: { color: '#aaa' } }}
+						sx={{ mb: 2 }}
 					/>
 				)}
 
@@ -259,19 +322,31 @@ const BuyModal = () => {
 					}
 					sx={{
 						py: 1.8,
-						borderRadius: '14px',
+						borderRadius: 3,
 						fontSize: '1.1rem',
 						fontWeight: 700,
-						background: 'linear-gradient(90deg, #00c853, #00e676)',
-						boxShadow: '0 8px 25px rgba(0, 230, 118, 0.4)',
+						background:
+							theme.palette.mode === 'dark'
+								? 'linear-gradient(90deg, #00c853, #00e676)'
+								: 'linear-gradient(90deg, #007BFF, #00B8D4)',
+						boxShadow:
+							theme.palette.mode === 'dark'
+								? '0 8px 25px rgba(0, 230, 118, 0.3)'
+								: '0 8px 25px rgba(0, 123, 255, 0.3)',
 						textTransform: 'none',
 						'&:hover': {
-							background: 'linear-gradient(90deg, #00e676, #69f0ae)',
-							transform: 'translateY(-2px)',
-							boxShadow: '0 14px 35px rgba(0, 230, 118, 0.55)',
+							background:
+								theme.palette.mode === 'dark'
+									? 'linear-gradient(90deg, #00e676, #69f0ae)'
+									: 'linear-gradient(90deg, #0056B3, #007BFF)',
+							transform: 'translateY(-1px)',
+							boxShadow:
+								theme.palette.mode === 'dark'
+									? '0 12px 30px rgba(0, 230, 118, 0.4)'
+									: '0 12px 30px rgba(0, 123, 255, 0.4)',
 						},
 						'&:disabled': {
-							background: 'rgba(100,100,100,0.4)',
+							background: 'rgba(100,100,100,0.3)',
 							boxShadow: 'none',
 						},
 					}}

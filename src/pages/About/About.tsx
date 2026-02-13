@@ -1,12 +1,12 @@
 import {
-	ImageList,
-	ImageListItem,
-	ImageListItemBar,
 	Typography,
 	Box,
 	Link,
 	useMediaQuery,
 	useTheme,
+	Card,
+	CardMedia,
+	CardContent,
 } from '@mui/material'
 import Header from '../../components/Header/Header'
 import telegram from '../../images/telegram.png'
@@ -18,7 +18,6 @@ const About = () => {
 	const { t } = useTranslationStore()
 	const theme = useTheme()
 	const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-	const isDesctop = useMediaQuery(theme.breakpoints.down('md'))
 
 	const contacts = [
 		{
@@ -29,9 +28,9 @@ const About = () => {
 		},
 		{
 			title: 'Instagram',
-			subtitle: '@Fastpin.uz', // Заменить на реальный аккаунт
+			subtitle: '@Fastpin.uz',
 			image: instagram,
-			link: 'https://www.instagram.com/fastpin.uz?igsh=MWpvNjNyODNveWg1OQ==', // Заменить
+			link: 'https://www.instagram.com/fastpin.uz?igsh=MWpvNjNyODNveWg1OQ==',
 		},
 		{
 			title: 'Администратор',
@@ -44,15 +43,15 @@ const About = () => {
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
 		>
 			<Header />
-			<Box sx={{ px: { xs: 2, sm: 4 } }}>
+			<Box sx={{ px: { xs: 1.5, sm: 3, md: 4 }, pb: 2 }}>
 				<Typography
-					sx={{ fontFamily: 'Bitcount' }}
+					sx={{ fontFamily: 'Bitcount', mb: 0.5 }}
 					variant='h4'
 					textAlign='center'
 					fontWeight='bold'
@@ -60,47 +59,58 @@ const About = () => {
 					{t.contact_us}
 				</Typography>
 				<Typography
-					variant='body1'
+					variant='body2'
 					textAlign='center'
 					color='text.secondary'
-					sx={{ fontFamily: 'Bitcount' }}
-					mb={2}
+					mb={3}
 				>
 					{t.contact_message}
 				</Typography>
 
-				<ImageList
-					cols={isMobile ? 1 : isDesctop ? 2 : 3}
-					gap={24}
+				<Box
 					sx={{
-						'& .MuiImageListItem-root': {
-							borderRadius: '16px',
-							overflow: 'hidden',
-						},
+						display: 'grid',
+						gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+						gap: 2,
 					}}
 				>
 					{contacts.map((item, index) => (
-						<ImageListItem
+						<Link
 							key={index}
-							component={Link}
 							href={item.link}
 							target='_blank'
 							rel='noopener noreferrer'
-							sx={{ cursor: 'pointer' }}
+							underline='none'
 						>
-							<img
-								src={item.image}
-								alt={item.title}
-								loading='lazy'
-								style={{
-									width: '100%',
-									height: '320px',
-									objectFit: 'cover',
-									borderRadius: '16px',
+							<Card
+								sx={{
+									borderRadius: 4,
+									overflow: 'hidden',
+									transition: 'all 0.3s ease',
+									boxShadow:
+										theme.palette.mode === 'dark'
+											? '0 4px 20px rgba(0, 0, 0, 0.4)'
+											: '0 4px 20px rgba(0, 0, 0, 0.1)',
+									'&:hover': {
+										transform: 'translateY(-4px)',
+										boxShadow:
+											theme.palette.mode === 'dark'
+												? '0 12px 30px rgba(0, 0, 0, 0.5)'
+												: '0 12px 30px rgba(0, 0, 0, 0.15)',
+									},
 								}}
-							/>
-							<ImageListItemBar
-								title={
+							>
+								<CardMedia
+									component='img'
+									image={item.image}
+									alt={item.title}
+									sx={{ height: 280, objectFit: 'cover' }}
+								/>
+								<CardContent
+									sx={{
+										background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+									}}
+								>
 									<Typography
 										sx={{ fontFamily: 'Bitcount' }}
 										variant='h6'
@@ -108,26 +118,17 @@ const About = () => {
 									>
 										{item.title}
 									</Typography>
-								}
-								subtitle={
 									<Typography
 										variant='body2'
-										sx={{ color: '#fff', fontFamily: 'Bitcount' }}
+										sx={{ color: theme.palette.text.secondary }}
 									>
 										{item.subtitle}
 									</Typography>
-								}
-								sx={{
-									background:
-										'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 70%, transparent 100%)',
-									borderRadius: '0 0 16px 16px',
-									'.MuiImageListItemBar-title': { color: '#fff' },
-									'.MuiImageListItemBar-subtitle': { color: '#fff' },
-								}}
-							/>
-						</ImageListItem>
+								</CardContent>
+							</Card>
+						</Link>
 					))}
-				</ImageList>
+				</Box>
 			</Box>
 			<BottomNavigate />
 		</Box>

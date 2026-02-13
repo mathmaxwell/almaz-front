@@ -9,6 +9,7 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import GameCard from '../../components/game/GameCard'
 import GameCardSkeleton from '../games/GameCardSkeleton'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 const Cart = () => {
 	const { token } = useTokenStore()
 	const { items } = useSavedGamesStore()
@@ -40,41 +41,65 @@ const Cart = () => {
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
 		>
 			<Header />
-			{loading && (
-				<>
-					<GameCardSkeleton />
-				</>
-			)}
-			{!loading && offers.length == 0 && (
-				<Typography
-					sx={{ fontFamily: 'Bitcount' }}
-					textAlign={'center'}
-					variant='h5'
+			<Box sx={{ px: { xs: 1.5, sm: 2 } }}>
+				{loading && (
+					<>
+						<GameCardSkeleton />
+					</>
+				)}
+				{!loading && offers.length == 0 && (
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							justifyContent: 'center',
+							py: 8,
+							gap: 2,
+						}}
+					>
+						<FavoriteBorderIcon
+							sx={{
+								fontSize: 64,
+								color: theme.palette.text.secondary,
+								opacity: 0.5,
+							}}
+						/>
+						<Typography
+							sx={{
+								fontFamily: 'Bitcount',
+								color: theme.palette.text.secondary,
+							}}
+							textAlign={'center'}
+							variant='h6'
+						>
+							{t.no_saved_purchases}
+						</Typography>
+					</Box>
+				)}
+				<Box
+					sx={{
+						width: '100%',
+						display: 'grid',
+						gap: { xs: 1.5, sm: 2 },
+						gridTemplateColumns: isMobile
+							? '1fr 1fr'
+							: isDesctop
+								? '1fr 1fr 1fr'
+								: '1fr 1fr 1fr 1fr',
+						pb: 2,
+					}}
 				>
-					{t.no_saved_purchases}
-				</Typography>
-			)}
-			<Box
-				sx={{
-					width: '100%',
-					display: 'grid',
-					gap: 2,
-					gridTemplateColumns: isMobile
-						? '1fr 1fr'
-						: isDesctop
-							? '1fr 1fr 1fr'
-							: '1fr 1fr 1fr 1fr',
-				}}
-			>
-				{offers?.map((offer, index) => {
-					return <GameCard key={index} offer={offer} />
-				})}
+					{offers?.map((offer, index) => {
+						return <GameCard key={index} offer={offer} />
+					})}
+				</Box>
 			</Box>
 			<BottomNavigate />
 		</Box>

@@ -41,130 +41,161 @@ const GamePage = () => {
 			return result ?? []
 		},
 	})
+
+	const glassCard = {
+		backgroundColor:
+			theme.palette.mode === 'dark'
+				? 'rgba(18, 24, 34, 0.7)'
+				: 'rgba(255, 255, 255, 0.7)',
+		backdropFilter: 'blur(16px)',
+		WebkitBackdropFilter: 'blur(16px)',
+		border: `1px solid ${
+			theme.palette.mode === 'dark'
+				? 'rgba(255,255,255,0.06)'
+				: 'rgba(0,0,0,0.04)'
+		}`,
+	}
+
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
 		>
 			<Header />
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'start',
-					gap: 2,
-					p: 2,
-					background: `linear-gradient(0deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientStart} 100%)`,
-					mb: 2,
-					borderRadius: '30px',
-					boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-				}}
-			>
-				<img
-					src={`${apiUrl}${game.image}`}
-					alt='game name'
-					style={{
-						width: '75px',
-						height: '75px',
-						objectFit: 'contain',
-						borderRadius: '12px',
-					}}
-				/>
-				<Typography sx={{ fontFamily: 'Bitcount' }} variant='h4'>
-					{game.name}
-				</Typography>
-				{isAdmin && (
-					<IconButton
-						sx={{ ml: 'auto' }}
-						onClick={e => {
-							offerCreate()
-							e.stopPropagation()
-						}}
-					>
-						<AddCircleIcon />
-					</IconButton>
-				)}
-				{isAdmin && (
-					<IconButton
-						onClick={e => {
-							openModal(game)
-							e.stopPropagation()
-						}}
-					>
-						<EditIcon />
-					</IconButton>
-				)}
-			</Box>
-			<Box
-				sx={{
-					width: '100%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					my: 2,
-				}}
-			>
-				<Button
-					onClick={() => {
-						setActive('buy')
-					}}
-					fullWidth
-					variant={active == 'buy' ? 'contained' : 'outlined'}
+			<Box sx={{ px: { xs: 1.5, sm: 2 } }}>
+				<Box
 					sx={{
-						p: '10px',
-						borderRadius: '20px 0 0 20px',
-						boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-						fontSize: isDesctop ? '' : '',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'start',
+						gap: 2,
+						p: 2,
+						...glassCard,
+						borderRadius: 4,
+						mb: 2,
+						boxShadow:
+							theme.palette.mode === 'dark'
+								? '0 4px 20px rgba(0, 0, 0, 0.3)'
+								: '0 4px 20px rgba(0, 0, 0, 0.08)',
 					}}
 				>
-					{t.buy}
-				</Button>
-				<Button
-					onClick={() => {
-						setActive('instructions')
-					}}
-					fullWidth
-					variant={active == 'instructions' ? 'contained' : 'outlined'}
-					sx={{
-						p: '10px',
-						borderRadius: '0 20px 20px 0',
-						boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-					}}
-				>
-					{t.instructions}
-				</Button>
-			</Box>
-			{isLoading ? (
-				<>
-					<GameCardSkeleton />
-				</>
-			) : (
-				<>
-					{active == 'buy' ? (
-						<Box
+					<img
+						src={`${apiUrl}${game.image}`}
+						alt='game name'
+						style={{
+							width: '60px',
+							height: '60px',
+							objectFit: 'contain',
+							borderRadius: '14px',
+						}}
+					/>
+					<Typography
+						sx={{ fontFamily: 'Bitcount', fontWeight: 700 }}
+						variant='h5'
+					>
+						{game.name}
+					</Typography>
+					{isAdmin && (
+						<IconButton
 							sx={{
-								width: '100%',
-								display: 'grid',
-								gap: 2,
-								gridTemplateColumns: isMobile
-									? '1fr 1fr'
-									: isDesctop
-										? '1fr 1fr 1fr'
-										: '1fr 1fr 1fr 1fr',
+								ml: 'auto',
+								color: theme.palette.primary.main,
+							}}
+							onClick={e => {
+								offerCreate()
+								e.stopPropagation()
 							}}
 						>
-							{data?.map((offer, index) => {
-								return <GameCard key={index} offer={offer} />
-							})}
-						</Box>
-					) : (
-						<Instructions />
+							<AddCircleIcon />
+						</IconButton>
 					)}
-				</>
-			)}
+					{isAdmin && (
+						<IconButton
+							sx={{ color: theme.palette.text.secondary }}
+							onClick={e => {
+								openModal(game)
+								e.stopPropagation()
+							}}
+						>
+							<EditIcon />
+						</IconButton>
+					)}
+				</Box>
+				<Box
+					sx={{
+						width: '100%',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						mb: 2,
+						...glassCard,
+						borderRadius: 3,
+						overflow: 'hidden',
+						p: 0.5,
+					}}
+				>
+					<Button
+						onClick={() => {
+							setActive('buy')
+						}}
+						fullWidth
+						variant={active == 'buy' ? 'contained' : 'text'}
+						sx={{
+							py: 1.2,
+							borderRadius: 2.5,
+							fontWeight: 600,
+						}}
+					>
+						{t.buy}
+					</Button>
+					<Button
+						onClick={() => {
+							setActive('instructions')
+						}}
+						fullWidth
+						variant={active == 'instructions' ? 'contained' : 'text'}
+						sx={{
+							py: 1.2,
+							borderRadius: 2.5,
+							fontWeight: 600,
+						}}
+					>
+						{t.instructions}
+					</Button>
+				</Box>
+				{isLoading ? (
+					<>
+						<GameCardSkeleton />
+					</>
+				) : (
+					<>
+						{active == 'buy' ? (
+							<Box
+								sx={{
+									width: '100%',
+									display: 'grid',
+									gap: { xs: 1.5, sm: 2 },
+									gridTemplateColumns: isMobile
+										? '1fr 1fr'
+										: isDesctop
+											? '1fr 1fr 1fr'
+											: '1fr 1fr 1fr 1fr',
+									pb: 2,
+								}}
+							>
+								{data?.map((offer, index) => {
+									return <GameCard key={index} offer={offer} />
+								})}
+							</Box>
+						) : (
+							<Instructions />
+						)}
+					</>
+				)}
+			</Box>
 			<BottomNavigate />
 		</Box>
 	)

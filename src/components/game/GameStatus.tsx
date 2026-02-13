@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+
 const statusConfig = {
 	top: {
 		label: 'TOP',
@@ -22,52 +23,53 @@ const statusConfig = {
 		border: '1px solid rgba(255,255,255,0.2)',
 	},
 }
-const GameStatus = ({
-	status,
-}: {
-	status: 'vip' | 'sale' | 'top' | '' | '-'
-}) => {
-	if (status == '-' || status == '') {
-		return <></>
-	}
+
+type StatusType = 'vip' | 'sale' | 'top' | '' | '-'
+
+const GameStatus = ({ status }: { status: StatusType }) => {
+	if (!status || status === '-') return null
+
+	const conf = statusConfig[status]
+
 	return (
-		<>
+		<Box
+			sx={{
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: '100px', // ширина области ленточки
+				height: '100px',
+				overflow: 'visible',
+				pointerEvents: 'none',
+				zIndex: 2,
+			}}
+		>
 			<Box
+				component='span'
 				sx={{
 					position: 'absolute',
 					top: 0,
 					left: 0,
-					width: 140,
-					height: 140,
-					overflow: 'hidden',
-					pointerEvents: 'none',
-					zIndex: 2,
+					display: 'block',
+					width: '140%', // чуть больше, чтобы полоска выходила за угол
+					padding: '6px 0',
+					background: conf.bg,
+					color: conf.color,
+					fontWeight: 700,
+					fontSize: '12px',
+					textAlign: 'center',
+					textTransform: 'uppercase',
+					letterSpacing: '1px',
+					transform: 'rotate(-45deg) translate(-70px, 15px)',
+					transformOrigin: 'top left',
+					boxShadow: conf.glow,
+					border: conf.border,
+					whiteSpace: 'nowrap',
 				}}
 			>
-				<Box
-					component='span'
-					sx={{
-						position: 'absolute',
-						display: 'block',
-						width: 225,
-						padding: '8px 0',
-						background: statusConfig[status].bg,
-						boxShadow: '0 5px 10px rgba(0,0,0,0.25)',
-						color: statusConfig[status].color,
-						fontWeight: 900,
-						fontSize: '13px',
-						letterSpacing: '1px',
-						textAlign: 'center',
-						textTransform: 'uppercase',
-						transform: 'rotate(-45deg) translate3d(-110px, 30px, 0)',
-						transformOrigin: 'top left',
-						whiteSpace: 'nowrap',
-					}}
-				>
-					{statusConfig[status].label}
-				</Box>
+				{conf.label}
 			</Box>
-		</>
+		</Box>
 	)
 }
 

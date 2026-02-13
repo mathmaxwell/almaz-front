@@ -46,10 +46,25 @@ const History = () => {
 			(await getTransactionsByUser(userId ? userId : token)) ?? [],
 		enabled: !!token,
 	})
+	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
+	const glassCard = {
+		backgroundColor:
+			theme.palette.mode === 'dark'
+				? 'rgba(18, 24, 34, 0.7)'
+				: 'rgba(255, 255, 255, 0.7)',
+		backdropFilter: 'blur(16px)',
+		WebkitBackdropFilter: 'blur(16px)',
+		border: `1px solid ${
+			theme.palette.mode === 'dark'
+				? 'rgba(255,255,255,0.06)'
+				: 'rgba(0,0,0,0.04)'
+		}`,
+	}
+
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
@@ -63,18 +78,45 @@ const History = () => {
 					alignItems: 'center',
 					justifyContent: 'center',
 					gap: 2,
+					px: { xs: 1.5, sm: 2 },
 				}}
 			>
-				<Typography align='center' variant='h5'>
-					{t.balance}: {updateNumberFormat(userInfo?.balance || '')} {t.som}
-				</Typography>
+				<Box
+					sx={{
+						...glassCard,
+						borderRadius: 3,
+						p: 2.5,
+						width: '100%',
+						textAlign: 'center',
+						boxShadow:
+							theme.palette.mode === 'dark'
+								? '0 8px 32px rgba(0, 0, 0, 0.3)'
+								: '0 8px 32px rgba(0, 0, 0, 0.08)',
+					}}
+				>
+					<Typography
+						variant='body2'
+						sx={{ color: theme.palette.text.secondary, mb: 0.5 }}
+					>
+						{t.balance}
+					</Typography>
+					<Typography
+						variant='h5'
+						sx={{ fontWeight: 700, color: theme.palette.primary.main }}
+					>
+						{updateNumberFormat(userInfo?.balance || '')} {t.som}
+					</Typography>
+				</Box>
 				<Box
 					sx={{
 						width: '100%',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
-						my: 2,
+						...glassCard,
+						borderRadius: 3,
+						overflow: 'hidden',
+						p: 0.5,
 					}}
 				>
 					<Button
@@ -82,11 +124,11 @@ const History = () => {
 							setActive('buy')
 						}}
 						fullWidth
-						variant={active == 'buy' ? 'contained' : 'outlined'}
+						variant={active == 'buy' ? 'contained' : 'text'}
 						sx={{
-							p: '10px',
-							borderRadius: '20px 0 0 20px',
-							boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+							py: 1.2,
+							borderRadius: 2.5,
+							fontWeight: 600,
 						}}
 					>
 						{t.top_up}
@@ -96,11 +138,11 @@ const History = () => {
 							setActive('instructions')
 						}}
 						fullWidth
-						variant={active == 'instructions' ? 'contained' : 'outlined'}
+						variant={active == 'instructions' ? 'contained' : 'text'}
 						sx={{
-							p: '10px',
-							borderRadius: '0 20px 20px 0',
-							boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+							py: 1.2,
+							borderRadius: 2.5,
+							fontWeight: 600,
 						}}
 					>
 						{t.purchases}
@@ -109,23 +151,25 @@ const History = () => {
 				<TableContainer
 					component={Paper}
 					sx={{
-						background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
-						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+						...glassCard,
+						borderRadius: 3,
+						boxShadow:
+							theme.palette.mode === 'dark'
+								? '0 4px 20px rgba(0, 0, 0, 0.3)'
+								: '0 4px 20px rgba(0, 0, 0, 0.08)',
 					}}
 				>
 					<Table aria-label='simple table'>
 						<TableHead>
 							<TableRow>
 								<TableCell align='center'>{t.time}</TableCell>
-								{active == 'instructions' && (
-									<TableCell align='center'>{t.game_title}</TableCell>
-								)}
+						
 								{active == 'instructions' && (
 									<TableCell align='center'>
 										{userId ? t.filled_by : t.donation_name}
 									</TableCell>
 								)}
-								{active == 'buy' && (
+								{active == 'buy' && isAdmin && (
 									<TableCell align='center'>{t.created_by}</TableCell>
 								)}
 								<TableCell align='center'>
@@ -139,7 +183,10 @@ const History = () => {
 								.map((row, index) => (
 									<TableRow
 										key={index}
-										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+										sx={{
+											'&:last-child td, &:last-child th': { border: 0 },
+											cursor: active == 'instructions' ? 'pointer' : 'default',
+										}}
 										onClick={() => {
 											active == 'instructions' &&
 												navigate(`/status/${row.gameName}/${row.order}`)
@@ -150,20 +197,23 @@ const History = () => {
 											{row.minute.toString().padStart(2, '0')}, {row.day}.
 											{row.month.toString().padStart(2, '0')}.{row.year}
 										</TableCell>
-										{active == 'instructions' && (
-											<TableCell align='center'>{row.gameName}</TableCell>
-										)}
+									
 										{active == 'instructions' && (
 											<TableCell align='center'>
 												{userId ? row.createdBy : row.donatName}
 											</TableCell>
 										)}
-										{active == 'buy' && (
+										{active == 'buy' && isAdmin && (
 											<TableCell align='center'>{row.createdBy}</TableCell>
 										)}
 										<TableCell
 											sx={{
-												fontSize: '24px',
+												fontSize: '1.1rem',
+												fontWeight: 700,
+												color:
+													row.price > 0
+														? theme.palette.success.main
+														: theme.palette.error.main,
 											}}
 											align='center'
 										>

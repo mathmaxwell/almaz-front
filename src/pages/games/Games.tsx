@@ -33,9 +33,13 @@ const Games = () => {
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'start',
-							gap: 2,
+							gap: 1.5,
 							width: '100%',
 							overflowX: 'auto',
+							py: 2,
+							px: 0.5,
+							scrollbarWidth: 'none',
+							'&::-webkit-scrollbar': { display: 'none' },
 						}}
 					>
 						{data
@@ -44,12 +48,33 @@ const Games = () => {
 								<Box
 									key={index}
 									sx={{
-										my: 2,
-										width: 100,
-										borderRadius: 20,
+										width: 80,
+										height: 80,
+										borderRadius: '18px',
 										cursor: 'pointer',
 										flexShrink: 0,
-										aspectRatio: '1 / 1',
+										overflow: 'hidden',
+										border: `2px solid ${
+											theme.palette.mode === 'dark'
+												? 'rgba(0, 212, 255, 0.3)'
+												: 'rgba(0, 123, 255, 0.2)'
+										}`,
+										boxShadow:
+											theme.palette.mode === 'dark'
+												? '0 4px 15px rgba(0, 0, 0, 0.4)'
+												: '0 4px 15px rgba(0, 0, 0, 0.1)',
+										transition: 'all 0.25s ease',
+										'&:hover': {
+											transform: 'scale(1.08)',
+											borderColor: theme.palette.primary.main,
+											boxShadow:
+												theme.palette.mode === 'dark'
+													? '0 6px 20px rgba(0, 212, 255, 0.25)'
+													: '0 6px 20px rgba(0, 123, 255, 0.2)',
+										},
+										'&:active': {
+											transform: 'scale(0.95)',
+										},
 									}}
 									onClick={() => {
 										setGame(g)
@@ -63,7 +88,6 @@ const Games = () => {
 											width: '100%',
 											height: '100%',
 											objectFit: 'cover',
-											borderRadius: 20,
 										}}
 									/>
 								</Box>
@@ -73,12 +97,13 @@ const Games = () => {
 						sx={{
 							width: '100%',
 							display: 'grid',
-							gap: 2,
+							gap: { xs: 1.5, sm: 2 },
 							gridTemplateColumns: isMobile
 								? '1fr 1fr'
 								: isDesctop
 									? '1fr 1fr 1fr'
 									: '1fr 1fr 1fr 1fr',
+							pb: 2,
 						}}
 					>
 						{data
@@ -87,8 +112,24 @@ const Games = () => {
 								return (
 									<Card
 										sx={{
-											borderRadius: 8,
-											boxShadow: '8px 8px 40px rgba(0,0,0,9)',
+											borderRadius: '16px',
+											boxShadow:
+												theme.palette.mode === 'dark'
+													? '0 4px 20px rgba(0, 0, 0, 0.5)'
+													: '0 4px 20px rgba(0, 0, 0, 0.12)',
+											overflow: 'hidden',
+											cursor: 'pointer',
+											transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+											'&:hover': {
+												transform: 'translateY(-4px)',
+												boxShadow:
+													theme.palette.mode === 'dark'
+														? '0 12px 30px rgba(0, 0, 0, 0.6)'
+														: '0 12px 30px rgba(0, 0, 0, 0.18)',
+											},
+											'&:active': {
+												transform: 'translateY(-1px)',
+											},
 										}}
 										key={index}
 									>
@@ -106,9 +147,6 @@ const Games = () => {
 											component='img'
 											image={`${apiUrl}${g.image}`}
 											alt={g.id}
-											// height={
-											// 	isMobile ? '200px' : isDesctop ? '230px' : '260px'
-											// }
 										/>
 									</Card>
 								)

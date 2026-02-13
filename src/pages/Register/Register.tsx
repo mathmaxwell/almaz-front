@@ -69,26 +69,36 @@ const Register = () => {
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
-				backgroundColor: theme.palette.background.default,
 				p: isMobile ? 2 : 0,
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
-				overflowY: 'auto',
 			}}
 		>
 			<Box
 				sx={{
 					width: '100%',
 					maxWidth: '420px',
-					p: { xs: 2, sm: 4, md: 5 },
+					p: { xs: 3, sm: 4, md: 5 },
 					display: 'flex',
 					flexDirection: 'column',
+					alignItems: 'center',
 					gap: { xs: 2.5, sm: 3 },
-					borderRadius: 3,
-					border: '1px solid',
-					borderColor: 'divider',
-					backgroundColor: theme.palette.background.paper,
-					boxShadow: 4,
+					borderRadius: 4,
+					border: `1px solid ${
+						theme.palette.mode === 'dark'
+							? 'rgba(255,255,255,0.08)'
+							: 'rgba(0,0,0,0.06)'
+					}`,
+					backgroundColor:
+						theme.palette.mode === 'dark'
+							? 'rgba(18, 24, 34, 0.9)'
+							: 'rgba(255, 255, 255, 0.9)',
+					backdropFilter: 'blur(20px)',
+					WebkitBackdropFilter: 'blur(20px)',
+					boxShadow:
+						theme.palette.mode === 'dark'
+							? '0 20px 60px rgba(0, 0, 0, 0.5)'
+							: '0 20px 60px rgba(0, 0, 0, 0.1)',
 				}}
 			>
 				<Typography
@@ -96,8 +106,9 @@ const Register = () => {
 					sx={{
 						color: theme.palette.primary.main,
 						textAlign: 'center',
-						fontWeight: 600,
+						fontWeight: 700,
 						fontFamily: 'Bitcount',
+						letterSpacing: '2px',
 					}}
 				>
 					FASTPIN
@@ -108,6 +119,8 @@ const Register = () => {
 					variant='outlined'
 					placeholder='Login'
 					value={form.login}
+					error={isLoginError}
+					helperText={isLoginError ? `${t.register}: min ${MIN_LOGIN}` : ''}
 					inputProps={{ minLength: MIN_LOGIN }}
 					onChange={e => setForm({ ...form, login: e.target.value })}
 					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
@@ -120,6 +133,8 @@ const Register = () => {
 					placeholder='Password'
 					type={isShow ? 'text' : 'password'}
 					value={form.password}
+					error={isPasswordError}
+					helperText={isPasswordError ? `Password: min ${MIN_PASSWORD}` : ''}
 					onChange={e => setForm({ ...form, password: e.target.value })}
 					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
 					size={isMobile ? 'small' : 'medium'}
@@ -149,21 +164,21 @@ const Register = () => {
 					color='info'
 					sx={{
 						mt: 1,
-						py: { xs: 0.5, sm: 1, md: 1.5 },
+						py: { xs: 1.2, sm: 1.5 },
 						fontSize: { xs: '1rem', sm: '1.1rem' },
 					}}
 				>
 					{isLogin ? t.system_login : t.create_account}
 				</Button>
-				{/* Красивая линия с "or" */}
 				<Divider
 					sx={{
+						width: '100%',
 						'&::before, &::after': {
 							borderColor: 'divider',
 						},
 					}}
 				>
-					<Typography variant='body2' sx={{ color: 'text.secondary' }}>
+					<Typography variant='body2' sx={{ color: 'text.secondary', px: 1 }}>
 						{t.or}
 					</Typography>
 				</Divider>
@@ -173,7 +188,7 @@ const Register = () => {
 					fullWidth
 					onClick={() => setIsLogin(prev => !prev)}
 					sx={{
-						py: { xs: 0.5, sm: 1, md: 1.5 },
+						py: { xs: 1, sm: 1.2 },
 						fontSize: { xs: '1rem', sm: '1.1rem' },
 					}}
 				>

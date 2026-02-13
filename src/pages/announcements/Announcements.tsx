@@ -73,16 +73,29 @@ const Announcements = () => {
 		}
 	}, [imageFile])
 
+	const glassCard = {
+		backgroundColor:
+			theme.palette.mode === 'dark'
+				? 'rgba(18, 24, 34, 0.7)'
+				: 'rgba(255, 255, 255, 0.7)',
+		backdropFilter: 'blur(16px)',
+		WebkitBackdropFilter: 'blur(16px)',
+		border: `1px solid ${
+			theme.palette.mode === 'dark'
+				? 'rgba(255,255,255,0.06)'
+				: 'rgba(0,0,0,0.04)'
+		}`,
+	}
+
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
 		>
 			<Header />
-
 			{isAdmin && (
 				<Box
 					sx={{
@@ -91,7 +104,7 @@ const Announcements = () => {
 						alignItems: 'center',
 						gap: 2,
 						width: '100%',
-						p: 2,
+						p: { xs: 1.5, sm: 2 },
 					}}
 				>
 					<Box
@@ -195,7 +208,7 @@ const Announcements = () => {
 			) : (
 				<Box
 					sx={{
-						p: 2,
+						p: { xs: 1.5, sm: 2 },
 						display: 'grid',
 						gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
 						gap: 2,
@@ -205,15 +218,27 @@ const Announcements = () => {
 						<Card
 							key={index}
 							sx={{
-								borderRadius: '20px',
-								boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-								background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
+								borderRadius: 2,
+								overflow: 'hidden',
+								...glassCard,
+								boxShadow:
+									theme.palette.mode === 'dark'
+										? '0 4px 20px rgba(0, 0, 0, 0.3)'
+										: '0 4px 20px rgba(0, 0, 0, 0.08)',
+								transition: 'all 0.3s ease',
+								'&:hover': {
+									transform: 'translateY(-3px)',
+									boxShadow:
+										theme.palette.mode === 'dark'
+											? '0 8px 30px rgba(0, 0, 0, 0.4)'
+											: '0 8px 30px rgba(0, 0, 0, 0.12)',
+								},
 							}}
 						>
 							<CardActionArea>
 								<CardMedia
 									component='img'
-									height='300'
+									height='280'
 									image={`${apiUrl}${slider.image}`}
 									alt={slider.ru}
 								/>
@@ -228,15 +253,15 @@ const Announcements = () => {
 										<Typography
 											sx={{ fontFamily: 'Bitcount' }}
 											gutterBottom
-											variant='h5'
+											variant='h6'
 											component='div'
 										>
 											{lang == 'ru' ? slider.ru : slider.uz}
 										</Typography>
 										<Typography
-											variant='body1'
+											variant='body2'
 											sx={{
-												color: 'text.secondary',
+												color: theme.palette.text.secondary,
 												fontFamily: 'Bitcount',
 											}}
 										>
@@ -245,6 +270,13 @@ const Announcements = () => {
 									</Box>
 									{isAdmin && (
 										<DeleteIcon
+											sx={{
+												color: theme.palette.error.main,
+												cursor: 'pointer',
+												opacity: 0.7,
+												transition: 'opacity 0.2s',
+												'&:hover': { opacity: 1 },
+											}}
 											onClick={async () => {
 												let isDelete = confirm(`${t.delete}?`)
 												if (isDelete) {

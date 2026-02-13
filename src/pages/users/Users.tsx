@@ -89,6 +89,21 @@ const Users = () => {
 	}
 
 	const hasFilters = filterLogin || filterToken || filterBalanceMin
+
+	const glassCard = {
+		backgroundColor:
+			theme.palette.mode === 'dark'
+				? 'rgba(18, 24, 34, 0.7)'
+				: 'rgba(255, 255, 255, 0.7)',
+		backdropFilter: 'blur(16px)',
+		WebkitBackdropFilter: 'blur(16px)',
+		border: `1px solid ${
+			theme.palette.mode === 'dark'
+				? 'rgba(255,255,255,0.06)'
+				: 'rgba(0,0,0,0.04)'
+		}`,
+	}
+
 	return (
 		<Box
 			sx={{
@@ -98,7 +113,7 @@ const Users = () => {
 				justifyContent: 'start',
 				gap: 2,
 				width: '100%',
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
@@ -107,17 +122,18 @@ const Users = () => {
 			<Typography
 				variant='h5'
 				textAlign='center'
-				sx={{ fontWeight: 600, mt: 7 }}
+				sx={{ fontWeight: 700, mt: 1 }}
 			>
 				{t.users} ({data?.total})
 			</Typography>
 			<Box
 				sx={{
 					display: 'flex',
-					gap: { xs: 1, sm: 2 },
+					gap: 1.5,
 					flexWrap: 'wrap',
 					alignItems: 'flex-end',
-					px: { xs: 1, sm: 2 },
+					px: { xs: 1.5, sm: 2 },
+					width: '100%',
 				}}
 			>
 				<TextField
@@ -173,7 +189,7 @@ const Users = () => {
 						variant={userType ? 'outlined' : 'contained'}
 						fullWidth
 						size='small'
-						sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+						sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' }, py: 1 }}
 						onClick={() => {
 							userType ? setUserType('') : setUserType('superUser')
 						}}
@@ -183,7 +199,7 @@ const Users = () => {
 					<Button
 						fullWidth
 						size='small'
-						sx={{ fontSize: { xs: '0.7rem', sm: '0.875rem' } }}
+						sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' }, py: 1 }}
 						variant={showPassword ? 'outlined' : 'contained'}
 						onClick={() => {
 							setShowPassword(prev => !prev)
@@ -195,11 +211,15 @@ const Users = () => {
 			</Box>
 			<Paper
 				sx={{
-					width: '100%',
-					background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
-					boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
-					height: '100%',
-					mb: 7,
+					width: 'calc(100% - 24px)',
+					mx: { xs: 1.5, sm: 2 },
+					...glassCard,
+					borderRadius: 3,
+					boxShadow:
+						theme.palette.mode === 'dark'
+							? '0 4px 20px rgba(0, 0, 0, 0.3)'
+							: '0 4px 20px rgba(0, 0, 0, 0.08)',
+					mb: 10,
 				}}
 			>
 				<TableContainer>
@@ -283,6 +303,7 @@ const Users = () => {
 										hover
 										key={index}
 										onClick={() => navigate(`/users/${row.token}`)}
+										sx={{ cursor: 'pointer' }}
 									>
 										<TableCell
 											align='center'
@@ -318,6 +339,8 @@ const Users = () => {
 												py: { xs: 0.5, sm: 1 },
 												fontSize: { xs: '0.75rem', sm: '0.875rem' },
 												whiteSpace: 'nowrap',
+												fontWeight: 600,
+												color: theme.palette.primary.main,
 											}}
 										>
 											{row.balance != null
@@ -352,7 +375,7 @@ const Users = () => {
 													await updateUser({
 														token,
 														userId: row.token,
-														userRole: isSuper ? 'user' : 'superUser', // ✅ FIX
+														userRole: isSuper ? 'user' : 'superUser',
 													})
 
 													refetch()
@@ -360,16 +383,16 @@ const Users = () => {
 												size='small'
 												sx={{ p: { xs: 0.3, sm: 0.5 } }}
 												color={
-													row.userRole === 'superUser' ? 'warning' : 'warning'
+													row.userRole === 'superUser' ? 'warning' : 'default'
 												}
 												title={t.delete}
 											>
 												{row.userRole === 'superUser' ? (
-													<StarIcon sx={{ fontSize: { xs: 18, sm: 24 } }} />
+													<StarIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
 												) : (
 													<StarOutlineIcon
 														color='info'
-														sx={{ fontSize: { xs: 18, sm: 24 } }}
+														sx={{ fontSize: { xs: 18, sm: 22 } }}
 													/>
 												)}
 											</IconButton>

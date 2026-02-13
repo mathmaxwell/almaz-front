@@ -39,24 +39,49 @@ const AddCard = () => {
 	const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNumber(formatCardNumber(e.target.value))
 	}
+
+	const glassCard = {
+		backgroundColor:
+			theme.palette.mode === 'dark'
+				? 'rgba(18, 24, 34, 0.7)'
+				: 'rgba(255, 255, 255, 0.7)',
+		backdropFilter: 'blur(16px)',
+		WebkitBackdropFilter: 'blur(16px)',
+		border: `1px solid ${
+			theme.palette.mode === 'dark'
+				? 'rgba(255,255,255,0.06)'
+				: 'rgba(0,0,0,0.04)'
+		}`,
+	}
+
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
 		>
 			<Header />
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 2,
+					p: { xs: 1.5, sm: 2 },
+				}}
+			>
 				<BankCards cardType='all' />
 				<Card
 					variant='outlined'
 					sx={{
-						borderRadius: 3,
+						borderRadius: 2,
 						p: 1,
-						background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
-						boxShadow: '0 0px 24px rgba(0,0,0,0.9)',
+						...glassCard,
+						boxShadow:
+							theme.palette.mode === 'dark'
+								? '0 4px 20px rgba(0, 0, 0, 0.3)'
+								: '0 4px 20px rgba(0, 0, 0, 0.08)',
 					}}
 				>
 					<CardContent
@@ -67,7 +92,7 @@ const AddCard = () => {
 						}}
 					>
 						<Typography
-							sx={{ fontFamily: 'Bitcount' }}
+							sx={{ fontFamily: 'Bitcount', fontWeight: 700 }}
 							variant='h6'
 							color='primary'
 						>
@@ -101,6 +126,7 @@ const AddCard = () => {
 							variant='contained'
 							size='large'
 							startIcon={<AddCardIcon />}
+							sx={{ py: 1.5 }}
 							onClick={handleAddCard}
 							disabled={!name.trim() || number.replace(/\s/g, '').length !== 16}
 						>
