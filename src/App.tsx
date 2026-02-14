@@ -26,7 +26,8 @@ import Status from './pages/Status/Status'
 import SuperUsers from './pages/SuperUsers/SuperUsers'
 import TextModal from './components/modal/TextModal'
 import Statistics from './pages/statistics/Statistics'
-import Booking from './pages/booking/Booking'
+import Booking from './pages/booking/SelectBooking'
+import Donation from './pages/donation/Donation'
 
 function App() {
 	return (
@@ -34,6 +35,7 @@ function App() {
 			<Routes>
 				<Route path='/' element={<HomePage />} />
 				<Route path='/statistics' element={<Statistics />} />
+				<Route path='/donation' element={<Donation />} />
 				<Route path='/promocode' element={<PromoCode />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/users' element={<Users />} />

@@ -1,18 +1,18 @@
 import { Box, useTheme } from '@mui/material'
 import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
+import { useTokenStore } from '../../store/token/useTokenStore'
+import dayjs from 'dayjs'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getPaymentByPeriod } from '../../api/payment/payment'
+import type { IPayment } from '../../types/payment/payment'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import dayjs from 'dayjs'
-import { useTokenStore } from '../../store/token/useTokenStore'
-import { useQuery } from '@tanstack/react-query'
-import type { ITransactions } from '../../types/transactions/transactions'
-import { getByPeriod } from '../../api/transactions/transactions'
-import LoadingProgress from '../../components/Loading/LoadingProgress'
-import GameStatistics from '../../components/statistics/GameStatistics'
 import DataPicker from '../../components/data/DataPicker'
-const Statistics = () => {
+import LoadingProgress from '../../components/Loading/LoadingProgress'
+import SelectBooking from '../../components/selectBook/SelectBook'
+const Booking = () => {
 	const { token } = useTokenStore()
 	const theme = useTheme()
 	const today = dayjs()
@@ -27,10 +27,10 @@ const Statistics = () => {
 		endMonth: today.month() + 1,
 		endYear: today.year(),
 	})
-	const { data, isLoading } = useQuery<ITransactions[], Error>({
+	const { data, isLoading } = useQuery<IPayment[], Error>({
 		queryKey: ['getByPeriod', token, start, end],
 		queryFn: async () =>
-			(await getByPeriod({
+			(await getPaymentByPeriod({
 				token,
 				startDay: start.startDay,
 				startMonth: start.startMonth,
@@ -45,7 +45,7 @@ const Statistics = () => {
 	return (
 		<Box
 			sx={{
-				height: '100vh',
+				minHeight: '100vh',
 				background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
 				overflowY: 'auto',
 			}}
@@ -58,12 +58,12 @@ const Statistics = () => {
 					setEnd={setEnd}
 					end={end}
 				/>
-				{data && <GameStatistics data={data} />}
 			</LocalizationProvider>
+			{data && <SelectBooking data={data} />}
 			{isLoading ? <LoadingProgress /> : <></>}
 			<BottomNavigate />
 		</Box>
 	)
 }
 
-export default Statistics
+export default Booking

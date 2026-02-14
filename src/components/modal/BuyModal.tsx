@@ -46,18 +46,25 @@ const BuyModal = () => {
 	const [loading, setLoading] = useState(false)
 	const [cooldown, setCooldown] = useState(0)
 	const [errorMsg, setErrorMsg] = useState('')
-
 	const mapError = (msg: string): string => {
-		if (msg.includes('недостаточно средств') || msg.includes('Недостаточно средств'))
+		if (
+			msg.includes('недостаточно средств') ||
+			msg.includes('Недостаточно средств')
+		)
 			return t.error_insufficient_balance
-		if (msg.includes('пользователь не найден') || msg.includes('Пользователь не найден'))
+		if (
+			msg.includes('пользователь не найден') ||
+			msg.includes('Пользователь не найден')
+		)
 			return t.error_user_not_found
 		if (msg.includes('offer не найдено')) return t.error_offer_not_found
 		if (msg.includes('игра не найдена')) return t.error_game_not_found
 		if (msg.includes('некорректная цена')) return t.error_invalid_price
 		if (msg.includes('не указан server id')) return t.error_no_server_id
-		if (msg.includes('недостаточно средств у провайдера')) return t.error_provider_balance
-		if (msg.includes('баланс провайдера ниже')) return t.error_provider_threshold
+		if (msg.includes('недостаточно средств у провайдера'))
+			return t.error_provider_balance
+		if (msg.includes('баланс провайдера ниже'))
+			return t.error_provider_threshold
 		return t.error_unknown
 	}
 
@@ -330,7 +337,11 @@ const BuyModal = () => {
 					>
 						{errorMsg}
 						{cooldown > 0 && (
-							<Typography variant='caption' display='block' sx={{ mt: 0.5, fontWeight: 500 }}>
+							<Typography
+								variant='caption'
+								display='block'
+								sx={{ mt: 0.5, fontWeight: 500 }}
+							>
 								{t.error_wait} ({cooldown}s)
 							</Typography>
 						)}

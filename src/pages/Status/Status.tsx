@@ -50,7 +50,7 @@ const Status = () => {
 		if (
 			lower.includes('success') ||
 			lower.includes('done') ||
-			lower.includes('completed')
+			lower.includes('Completed')
 		) {
 			return {
 				icon: <CheckCircleOutlineIcon sx={{ fontSize: 64 }} />,

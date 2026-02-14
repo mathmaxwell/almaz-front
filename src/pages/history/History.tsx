@@ -3,6 +3,7 @@ import BottomNavigate from '../home/BottomNavigate'
 import {
 	Box,
 	Button,
+	CircularProgress,
 	Paper,
 	Table,
 	TableBody,
@@ -23,12 +24,26 @@ import type { ITransactions } from '../../types/transactions/transactions'
 import { useNavigate, useParams } from 'react-router-dom'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
 import { updateNumberFormat } from '../../func/number'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getGames } from '../../api/games/games'
+import type { IGames } from '../../types/games/games'
+import type { IStatus } from '../../types/buy/buy'
+import { orderStatus } from '../../api/buy/buy'
+const statusColor = {
+	Completed: 'success.main',
+	'In progress': 'info.main',
+	Pending: 'warning.main',
+	Partial: 'secondary.main',
+	Canceled: 'error.main',
+	Refunded: 'error.light',
+} as const
+
 const History = () => {
 	const { token, setBalance } = useTokenStore()
 	const { userId } = useParams()
 	const theme = useTheme()
 	const { t } = useTranslationStore()
+	const [games, setGames] = useState<IGames[]>([])
 	const navigate = useNavigate()
 	const [active, setActive] = useState<'buy' | 'instructions'>('buy')
 	const { data: userInfo } = useQuery<IUser, Error>({
@@ -46,6 +61,51 @@ const History = () => {
 			(await getTransactionsByUser(userId ? userId : token)) ?? [],
 		enabled: !!token,
 	})
+	const [orderStatuses, setOrderStatuses] = useState<
+		Record<string, IStatus | null>
+	>({})
+	const purchases = data?.filter(g => g.price < 0) ?? []
+	useEffect(() => {
+		getGames()
+			.then(g => setGames(g))
+			.catch(() => {})
+	}, [])
+	const findGameId = (gameName: string): string | null => {
+		const game = games.find(g => g.name === gameName)
+		return game ? game.id : null
+	}
+	useEffect(() => {
+		if (!purchases.length || !games.length) return
+
+		const fetchStatuses = async () => {
+			const promises = purchases.map(async row => {
+				const gameId = findGameId(row.gameName)
+				if (!gameId || !row.order) return null
+
+				try {
+					const status = await orderStatus({ order: row.order, gameId })
+					return { order: row.order, status }
+				} catch (err) {
+					console.error(`Ошибка статуса для ${row.order}:`, err)
+					return { order: row.order, status: null }
+				}
+			})
+
+			const results = await Promise.all(promises)
+			const newStatuses: Record<string, IStatus | null> = {}
+
+			results.forEach(r => {
+				if (r) newStatuses[r.order] = r.status
+			})
+
+			setOrderStatuses(prev => ({ ...prev, ...newStatuses }))
+		}
+
+		fetchStatuses()
+		// Можно добавить интервал обновления каждые 15–30 сек, если нужно
+		// const interval = setInterval(fetchStatuses, 20000)
+		// return () => clearInterval(interval)
+	}, [purchases.length, games.length, data]) // зависимости минимальные
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const glassCard = {
 		backgroundColor:
@@ -60,7 +120,6 @@ const History = () => {
 				: 'rgba(0,0,0,0.04)'
 		}`,
 	}
-
 	return (
 		<Box
 			sx={{
@@ -95,15 +154,12 @@ const History = () => {
 					}}
 				>
 					<Typography
-						variant='body2'
-						sx={{ color: theme.palette.text.secondary, mb: 0.5 }}
-					>
-						{t.balance}
-					</Typography>
-					<Typography
 						variant='h5'
 						sx={{ fontWeight: 700, color: theme.palette.primary.main }}
 					>
+						{userInfo?.login}
+					</Typography>
+					<Typography>
 						{updateNumberFormat(userInfo?.balance || '')} {t.som}
 					</Typography>
 				</Box>
@@ -163,7 +219,6 @@ const History = () => {
 						<TableHead>
 							<TableRow>
 								<TableCell align='center'>{t.time}</TableCell>
-						
 								{active == 'instructions' && (
 									<TableCell align='center'>
 										{userId ? t.filled_by : t.donation_name}
@@ -175,58 +230,105 @@ const History = () => {
 								<TableCell align='center'>
 									{t.price} ({t.som})
 								</TableCell>
+								{active == 'instructions' && (
+									<TableCell align='center'>{t.status}</TableCell>
+								)}
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{data
-								?.filter(g => (active == 'buy' ? g.price > 0 : g.price < 0))
-								.map((row, index) => (
-									<TableRow
-										key={index}
-										sx={{
-											'&:last-child td, &:last-child th': { border: 0 },
-											cursor: active == 'instructions' ? 'pointer' : 'default',
-										}}
-										onClick={() => {
-											active == 'instructions' &&
-												navigate(`/status/${row.gameName}/${row.order}`)
-										}}
-									>
-										<TableCell align='center' component='th' scope='row'>
-											{row.hour.toString().padStart(2, '0')}:
-											{row.minute.toString().padStart(2, '0')}, {row.day}.
-											{row.month.toString().padStart(2, '0')}.{row.year}
-										</TableCell>
-									
-										{active == 'instructions' && (
-											<TableCell align='center'>
-												{userId ? row.createdBy : row.donatName}
-											</TableCell>
-										)}
-										{active == 'buy' && isAdmin && (
-											<TableCell align='center'>{row.createdBy}</TableCell>
-										)}
-										<TableCell
+								?.filter(g => (active === 'buy' ? g.price > 0 : g.price < 0))
+								.map((row, index) => {
+									const status =
+										active === 'instructions'
+											? orderStatuses[row.order ?? '']
+											: null
+
+									return (
+										<TableRow
+											key={index}
 											sx={{
-												fontSize: '1.1rem',
-												fontWeight: 700,
-												color:
-													row.price > 0
-														? theme.palette.success.main
-														: theme.palette.error.main,
+												'&:last-child td, &:last-child th': { border: 0 },
+												cursor:
+													active === 'instructions' ? 'pointer' : 'default',
 											}}
-											align='center'
+											onClick={() =>
+												active === 'instructions' &&
+												navigate(`/status/${row.gameName}/${row.order}`)
+											}
 										>
-											{row.price > 0 ? '+' : ''}
-											{updateNumberFormat(row.price)}
-										</TableCell>
-									</TableRow>
-								))}
+											<TableCell align='center' component='th' scope='row'>
+												{row.hour.toString().padStart(2, '0')}:
+												{row.minute.toString().padStart(2, '0')}, {row.day}.
+												{row.month.toString().padStart(2, '0')}.{row.year}
+											</TableCell>
+
+											{active === 'instructions' && (
+												<TableCell align='center'>
+													{userId ? row.createdBy : row.donatName}
+												</TableCell>
+											)}
+
+											{active === 'buy' && isAdmin && (
+												<TableCell align='center'>{row.createdBy}</TableCell>
+											)}
+
+											<TableCell
+												sx={{
+													fontSize: '1.1rem',
+													fontWeight: 700,
+													color:
+														row.price > 0
+															? theme.palette.success.main
+															: theme.palette.error.main,
+												}}
+												align='center'
+											>
+												{row.price > 0 ? '+' : ''}
+												{updateNumberFormat(row.price)}
+											</TableCell>
+
+											{active === 'instructions' && (
+												<TableCell align='center'>
+													{row.order ? (
+														status === undefined ? (
+															<CircularProgress size={20} thickness={5} />
+														) : status === null ? (
+															<Typography color='error'>{t.no_data}</Typography>
+														) : (
+															<Typography
+																color={
+																	statusColor[status.status] || 'text.secondary'
+																}
+																fontWeight={600}
+															>
+																{status.status === 'Canceled'
+																	? t.canceled
+																	: status.status == 'Completed'
+																		? t.Completed
+																		: status.status == 'In progress'
+																			? t.in_progress
+																			: status.status == 'Partial'
+																				? t.partial
+																				: status.status == 'Pending'
+																					? t.pending
+																					: status.status == 'Refunded'
+																						? t.Refunded
+																						: '-'}
+															</Typography>
+														)
+													) : (
+														'—'
+													)}
+												</TableCell>
+											)}
+										</TableRow>
+									)
+								})}
 						</TableBody>
 					</Table>
 				</TableContainer>
 			</Box>
-
 			<BottomNavigate />
 		</Box>
 	)

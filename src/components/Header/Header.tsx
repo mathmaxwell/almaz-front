@@ -21,6 +21,7 @@ import GroupIcon from '@mui/icons-material/Group'
 import StarIcon from '@mui/icons-material/Star'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import ViewListIcon from '@mui/icons-material/ViewList'
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism'
 import {
 	Divider,
 	Drawer,
@@ -221,6 +222,20 @@ export default function Header() {
 											<TrendingUpIcon />
 										</ListItemIcon>
 										<ListItemText primary={t.statistics} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
+											navigate('/donation')
+										}}
+									>
+										<ListItemIcon>
+											<VolunteerActivismIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.donation} />
 									</ListItemButton>
 								</ListItem>
 							)}
