@@ -28,7 +28,7 @@ const Booking = () => {
 		endYear: today.year(),
 	})
 	const { data, isLoading } = useQuery<IPayment[], Error>({
-		queryKey: ['getByPeriod', token, start, end],
+		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
 			(await getPaymentByPeriod({
 				token,

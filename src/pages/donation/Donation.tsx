@@ -11,7 +11,7 @@ import LoadingProgress from '../../components/Loading/LoadingProgress'
 import BottomNavigate from '../home/BottomNavigate'
 import DonationStatistic from '../../components/Donation/DonationStatistic'
 import type { ITransactions } from '../../types/transactions/transactions'
-import { getByPeriod } from '../../api/transactions/transactions'
+import { getTransactionsByPeriod } from '../../api/transactions/transactions'
 
 const Donation = () => {
 	const { token } = useTokenStore()
@@ -28,9 +28,9 @@ const Donation = () => {
 		endYear: today.year(),
 	})
 	const { data, isLoading } = useQuery<ITransactions[], Error>({
-		queryKey: ['getByPeriod', token, start, end],
+		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
-			(await getByPeriod({
+			(await getTransactionsByPeriod({
 				token,
 				startDay: start.startDay,
 				startMonth: start.startMonth,

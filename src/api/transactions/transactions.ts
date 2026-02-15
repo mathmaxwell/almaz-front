@@ -45,7 +45,7 @@ export async function deleteTransactions({ id }: { id: string }) {
 		throw error
 	}
 }
-export async function getByPeriod({
+export async function getTransactionsByPeriod({
 	token,
 	startDay,
 	startMonth,
@@ -63,7 +63,7 @@ export async function getByPeriod({
 	endYear: number
 }) {
 	try {
-		const responce = await api.post('/transactions/getByPeriod', {
+		const responce = await api.post('/transactions/getTransactionsByPeriod', {
 			token,
 			startDay,
 			startMonth,

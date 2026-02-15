@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useQuery } from '@tanstack/react-query'
 import type { ITransactions } from '../../types/transactions/transactions'
-import { getByPeriod } from '../../api/transactions/transactions'
+import { getTransactionsByPeriod } from '../../api/transactions/transactions'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
 import GameStatistics from '../../components/statistics/GameStatistics'
 import DataPicker from '../../components/data/DataPicker'
@@ -28,9 +28,9 @@ const Statistics = () => {
 		endYear: today.year(),
 	})
 	const { data, isLoading } = useQuery<ITransactions[], Error>({
-		queryKey: ['getByPeriod', token, start, end],
+		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
-			(await getByPeriod({
+			(await getTransactionsByPeriod({
 				token,
 				startDay: start.startDay,
 				startMonth: start.startMonth,

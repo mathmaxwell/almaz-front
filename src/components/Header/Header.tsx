@@ -36,6 +36,9 @@ import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { useThemeStore } from '../../store/theme/theme'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useGamesStoreModal } from '../../store/modal/useGameModal'
+import { useQuery } from '@tanstack/react-query'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import { getBalance } from '../../api/buy/buy'
 export default function Header() {
 	const { t, lang, setLang } = useTranslationStore()
 	const { openModal } = useGamesStoreModal()
@@ -45,6 +48,15 @@ export default function Header() {
 	const theme = useTheme()
 	const { resetToken, token, resetBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
+	const { data } = useQuery<string, Error>({
+		queryKey: ['adminBalance', token, open],
+		queryFn: async () => {
+			const result = await getBalance({ token })
+			return result
+		},
+		enabled: !!token && isAdmin && open,
+	})
+
 	return (
 		<>
 			<Box
@@ -131,9 +143,10 @@ export default function Header() {
 						sx={{
 							width: 250,
 							background: `linear-gradient(135deg, ${theme.palette.custom.gradientStart} 0%, ${theme.palette.custom.neonGreen} 50%, ${theme.palette.custom.gradientEnd} 100%)`,
-							height: '100vh',
 							display: 'flex',
 							flexDirection: 'column',
+							overflowY: 'auto',
+							height: '100%',
 						}}
 						role='presentation'
 						onClick={() => {
@@ -210,6 +223,17 @@ export default function Header() {
 									<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
 								</ListItemButton>
 							</ListItem>
+							{isAdmin && data && <Divider />}
+							{isAdmin && data && (
+								<ListItem disablePadding>
+									<ListItemButton>
+										<ListItemIcon>
+											<AttachMoneyIcon />
+										</ListItemIcon>
+										<ListItemText primary={data} />
+									</ListItemButton>
+								</ListItem>
+							)}
 							{isAdmin && <Divider />}
 							{isAdmin && (
 								<ListItem disablePadding>
@@ -338,6 +362,7 @@ export default function Header() {
 								</ListItem>
 							)}
 						</List>
+						<Divider />
 						<ListItem disablePadding sx={{ mt: 'auto' }}>
 							<ListItemButton
 								onClick={() => {

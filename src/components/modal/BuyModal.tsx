@@ -282,7 +282,7 @@ const BuyModal = () => {
 							}}
 						>
 							<SupportAgentIcon />
-						</IconButton>
+						</IconButton>x
 					</Link>
 					<IconButton
 						color='warning'
