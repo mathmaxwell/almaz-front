@@ -17,10 +17,11 @@ const Donation = () => {
 	const { token } = useTokenStore()
 	const theme = useTheme()
 	const today = dayjs()
+	const monthAgo = dayjs().subtract(1, 'month')
 	const [start, setStart] = useState({
-		startDay: today.date(),
-		startMonth: today.month() + 1,
-		startYear: today.year(),
+		startDay: monthAgo.date(),
+		startMonth: monthAgo.month() + 1,
+		startYear: monthAgo.year(),
 	})
 	const [end, setEnd] = useState({
 		endDay: today.date(),

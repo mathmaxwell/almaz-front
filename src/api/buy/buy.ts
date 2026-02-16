@@ -55,6 +55,33 @@ export async function orderStatus({
 		throw new Error('games error')
 	}
 }
+export async function ordersStatus({
+	orders,
+	gameId,
+}: {
+	orders: string[]
+	gameId: string
+}) {
+	try {
+		const responce = await api.post('/buy/ordersStatus', {
+			orders: orders,
+			gameId,
+		})
+		const result = responce.data as Record<
+			string,
+			{
+				charge: string
+				start_count: string
+				status: IStatus['status']
+				remains: string
+				currency: string
+			}
+		>
+		return result
+	} catch (error) {
+		throw new Error('games error')
+	}
+}
 export async function getBalance({ token }: { token: string }) {
 	try {
 		const responce = await api.post('/buy/getBalance', {

@@ -3,7 +3,6 @@ import BottomNavigate from '../home/BottomNavigate'
 import {
 	Box,
 	Button,
-	CircularProgress,
 	Paper,
 	Table,
 	TableBody,
@@ -28,7 +27,7 @@ import { useEffect, useState } from 'react'
 import { getGames } from '../../api/games/games'
 import type { IGames } from '../../types/games/games'
 import type { IStatus } from '../../types/buy/buy'
-import { orderStatus } from '../../api/buy/buy'
+import { ordersStatus } from '../../api/buy/buy'
 const statusColor = {
 	Completed: 'success.main',
 	'In progress': 'info.main',
@@ -74,38 +73,46 @@ const History = () => {
 		const game = games.find(g => g.name === gameName)
 		return game ? game.id : null
 	}
+
 	useEffect(() => {
 		if (!purchases.length || !games.length) return
-
 		const fetchStatuses = async () => {
-			const promises = purchases.map(async row => {
+			// Group orders by gameId
+			const grouped: Record<string, { gameId: string; orders: string[] }> = {}
+			for (const row of purchases) {
+				if (row.createdBy === 'admin') continue
 				const gameId = findGameId(row.gameName)
-				if (!gameId || !row.order) return null
+				if (!gameId || !row.order) continue
+				if (!grouped[gameId]) grouped[gameId] = { gameId, orders: [] }
+				grouped[gameId].orders.push(row.order)
+			}
 
+			const newStatuses: Record<string, IStatus | null> = {}
+
+			// Send one request per gameId
+			const promises = Object.values(grouped).map(async ({ gameId, orders }) => {
 				try {
-					const status = await orderStatus({ order: row.order, gameId })
-					return { order: row.order, status }
+					const result = await ordersStatus({ orders, gameId })
+					for (const order of orders) {
+						const orderData = result[order]
+						newStatuses[order] = orderData
+							? { status: orderData.status }
+							: null
+					}
 				} catch (err) {
-					console.error(`Ошибка статуса для ${row.order}:`, err)
-					return { order: row.order, status: null }
+					console.error(`Ошибка статуса для gameId ${gameId}:`, err)
+					for (const order of orders) {
+						newStatuses[order] = null
+					}
 				}
 			})
 
-			const results = await Promise.all(promises)
-			const newStatuses: Record<string, IStatus | null> = {}
-
-			results.forEach(r => {
-				if (r) newStatuses[r.order] = r.status
-			})
-
+			await Promise.all(promises)
 			setOrderStatuses(prev => ({ ...prev, ...newStatuses }))
 		}
 
 		fetchStatuses()
-		// Можно добавить интервал обновления каждые 15–30 сек, если нужно
-		// const interval = setInterval(fetchStatuses, 20000)
-		// return () => clearInterval(interval)
-	}, [purchases.length, games.length, data]) // зависимости минимальные
+	}, [purchases.length, games.length, data])
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const glassCard = {
 		backgroundColor:
@@ -252,10 +259,12 @@ const History = () => {
 												cursor:
 													active === 'instructions' ? 'pointer' : 'default',
 											}}
-											onClick={() =>
-												active === 'instructions' &&
-												navigate(`/status/${row.gameName}/${row.order}`)
-											}
+											onClick={() => {
+												if (row.gameName !== '-' && row.order !== '-') {
+													active === 'instructions' &&
+														navigate(`/status/${row.gameName}/${row.order}`)
+												}
+											}}
 										>
 											<TableCell align='center' component='th' scope='row'>
 												{row.hour.toString().padStart(2, '0')}:
@@ -292,7 +301,7 @@ const History = () => {
 												<TableCell align='center'>
 													{row.order ? (
 														status === undefined ? (
-															<CircularProgress size={20} thickness={5} />
+															'-'
 														) : status === null ? (
 															<Typography color='error'>{t.no_data}</Typography>
 														) : (

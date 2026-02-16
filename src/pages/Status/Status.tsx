@@ -73,7 +73,6 @@ const Status = () => {
 	}
 
 	const statusConfig = getStatusConfig(data?.status)
-
 	return (
 		<>
 			<Box
@@ -147,7 +146,19 @@ const Status = () => {
 								textAlign: 'center',
 							}}
 						>
-							{statusConfig.label}
+							{statusConfig.label == 'Completed'
+								? t.Completed
+								: statusConfig.label == 'Pending'
+									? t.pending
+									: statusConfig.label == 'In progress'
+										? t.in_progress
+										: statusConfig.label == 'partial'
+											? t.partial
+											: statusConfig.label == 'canceled'
+												? t.canceled
+												: statusConfig.label == 'Refunded'
+													? t.Refunded
+													: statusConfig.label}
 						</Typography>
 						<Button
 							fullWidth

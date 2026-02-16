@@ -223,14 +223,14 @@ export default function Header() {
 									<ListItemText primary={lang == 'ru' ? t.uzbek : t.russian} />
 								</ListItemButton>
 							</ListItem>
-							{isAdmin && data && <Divider />}
-							{isAdmin && data && (
+							{isAdmin && <Divider />}
+							{isAdmin && (
 								<ListItem disablePadding>
 									<ListItemButton>
 										<ListItemIcon>
 											<AttachMoneyIcon />
 										</ListItemIcon>
-										<ListItemText primary={data} />
+										<ListItemText primary={data || 0} />
 									</ListItemButton>
 								</ListItem>
 							)}

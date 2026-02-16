@@ -36,7 +36,7 @@ import type { IStatus } from '../../types/buy/buy'
 import type { IGames } from '../../types/games/games'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
 import { getGames } from '../../api/games/games'
-import { orderStatus } from '../../api/buy/buy'
+import { ordersStatus } from '../../api/buy/buy'
 import { useNavigate } from 'react-router-dom'
 import SummaryCard from './SummaryCard'
 import {
@@ -101,19 +101,36 @@ const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
 				newStatuses[tx.id] = 'loading'
 			}
 			setStatuses({ ...newStatuses })
+
+			// Group orders by gameId
+			const grouped: Record<string, { gameId: string; txs: typeof donations }> = {}
 			for (const tx of donations) {
 				const gameId = findGameId(tx.gameName)
 				if (!gameId) {
 					newStatuses[tx.id] = 'error'
 					continue
 				}
-				try {
-					const result = await orderStatus({ order: tx.order, gameId })
-					newStatuses[tx.id] = result.status
-				} catch {
-					newStatuses[tx.id] = 'error'
-				}
+				if (!grouped[gameId]) grouped[gameId] = { gameId, txs: [] }
+				grouped[gameId].txs.push(tx)
 			}
+
+			// Send one request per gameId
+			const promises = Object.values(grouped).map(async ({ gameId, txs }) => {
+				const orders = txs.map(tx => tx.order)
+				try {
+					const result = await ordersStatus({ orders, gameId })
+					for (const tx of txs) {
+						const orderData = result[tx.order]
+						newStatuses[tx.id] = orderData ? orderData.status : 'error'
+					}
+				} catch {
+					for (const tx of txs) {
+						newStatuses[tx.id] = 'error'
+					}
+				}
+			})
+
+			await Promise.all(promises)
 			setStatuses({ ...newStatuses })
 			setStatusesLoaded(true)
 		}
@@ -124,6 +141,7 @@ const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
 		setStatusesLoaded(false)
 		setStatuses({})
 	}
+
 	const stats = useMemo(() => {
 		let totalAmount = 0
 		const gameStats: Record<string, IStatsItem> = {}
@@ -148,14 +166,12 @@ const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
 			donorStats[tx.userId].total += absPrice
 			donorStats[tx.userId].count += 1
 		})
-
 		const uniqueDonors = new Set(donations.map(tx => tx.userId)).size
 		const avgDonation =
 			donations.length > 0 ? totalAmount / donations.length : 0
 
 		const sortEntries = (obj: Record<string, IStatsItem>) =>
 			Object.entries(obj).sort((a, b) => b[1].total - a[1].total)
-
 		return {
 			totalAmount,
 			uniqueDonors,
