@@ -1,5 +1,4 @@
 import {
-	Alert,
 	Box,
 	Button,
 	Dialog,
@@ -45,26 +44,26 @@ const BuyModal = () => {
 	const withOutServerId = game.description !== 'two'
 	const [loading, setLoading] = useState(false)
 	const [cooldown, setCooldown] = useState(0)
-	const [errorMsg, setErrorMsg] = useState('')
 	const mapError = (msg: string): string => {
-		if (
-			msg.includes('недостаточно средств') ||
-			msg.includes('Недостаточно средств')
-		)
-			return t.error_insufficient_balance
-		if (
-			msg.includes('пользователь не найден') ||
-			msg.includes('Пользователь не найден')
-		)
-			return t.error_user_not_found
-		if (msg.includes('offer не найдено')) return t.error_offer_not_found
-		if (msg.includes('игра не найдена')) return t.error_game_not_found
-		if (msg.includes('некорректная цена')) return t.error_invalid_price
-		if (msg.includes('не указан server id')) return t.error_no_server_id
-		if (msg.includes('недостаточно средств у провайдера'))
+		const m = msg.toLowerCase()
+		if (m.includes('недостаточно средств у провайдера'))
 			return t.error_provider_balance
-		if (msg.includes('баланс провайдера ниже'))
-			return t.error_provider_threshold
+		if (m.includes('баланс провайдера ниже')) return t.error_provider_threshold
+		if (m.includes('недостаточно средств') || m.includes('insufficient funds'))
+			return t.error_insufficient_balance
+		if (m.includes('пользователь не найден') || m.includes('user not found'))
+			return t.error_user_not_found
+		if (m.includes('offer не найдено')) return t.error_offer_not_found
+		if (m.includes('игра не найдена')) return t.error_game_not_found
+		if (m.includes('некорректная цена')) return t.error_invalid_price
+		if (m.includes('не указан server id')) return t.error_no_server_id
+		if (m.includes('ошибка базы данных')) return t.error_database
+		if (m.includes('ошибка при получении игры')) return t.error_getting_game
+		if (m.includes('некорректный bot id')) return t.error_invalid_bot_id
+		if (m.includes('провайдер игры не поддерживается'))
+			return t.error_provider_not_supported
+		if (m.includes('invalid player id')) return t.error_invalid_player_id
+		if (m.includes('bad request')) return t.error_bad_request
 		return t.error_unknown
 	}
 
@@ -282,7 +281,7 @@ const BuyModal = () => {
 							}}
 						>
 							<SupportAgentIcon />
-						</IconButton>x
+						</IconButton>
 					</Link>
 					<IconButton
 						color='warning'
@@ -325,36 +324,12 @@ const BuyModal = () => {
 					/>
 				)}
 
-				{errorMsg && (
-					<Alert
-						severity='error'
-						sx={{
-							mb: 2,
-							borderRadius: 3,
-							fontWeight: 600,
-							'& .MuiAlert-message': { width: '100%', textAlign: 'center' },
-						}}
-					>
-						{errorMsg}
-						{cooldown > 0 && (
-							<Typography
-								variant='caption'
-								display='block'
-								sx={{ mt: 0.5, fontWeight: 500 }}
-							>
-								{t.error_wait} ({cooldown}s)
-							</Typography>
-						)}
-					</Alert>
-				)}
-
 				<Button
 					variant='contained'
 					fullWidth
 					size='large'
 					onClick={async () => {
 						if (loading || cooldown > 0) return
-						setErrorMsg('')
 						try {
 							setLoading(true)
 							const result = await createBuy({
@@ -369,13 +344,12 @@ const BuyModal = () => {
 							closeModal()
 						} catch (error: any) {
 							const translated = mapError(error.message || '')
-							setErrorMsg(translated)
+							openModal(translated, 'error')
 							setCooldown(15)
 							const interval = setInterval(() => {
 								setCooldown(prev => {
 									if (prev <= 1) {
 										clearInterval(interval)
-										setErrorMsg('')
 										return 0
 									}
 									return prev - 1
