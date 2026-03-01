@@ -52,7 +52,7 @@ export default function Header() {
 		queryKey: ['adminBalance', token, open],
 		queryFn: async () => {
 			const result = await getBalance({ token })
-			const sum = Number(result.b2bulk) + Number(result.istar)
+			const sum = Number(result.b2bulk) + Number(result.istar) * 12.4
 			return sum
 		},
 		enabled: !!token && isAdmin && open,

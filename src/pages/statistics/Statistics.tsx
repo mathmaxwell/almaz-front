@@ -1,4 +1,4 @@
-import { Box, useTheme, Button, TextField } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
 import { useState } from 'react'
@@ -7,10 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useQuery } from '@tanstack/react-query'
-import type {
-	ITransactions,
-	ITransactionsPaginated,
-} from '../../types/transactions/transactions'
+import type { ITransactionsPaginated } from '../../types/transactions/transactions'
 import { getTransactionsByPeriod } from '../../api/transactions/transactions'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
 import GameStatistics from '../../components/statistics/GameStatistics'
@@ -31,12 +28,9 @@ const Statistics = () => {
 		endMonth: today.month() + 1,
 		endYear: today.year(),
 	})
-	const [limit, setLimit] = useState(100)
-	const [offset, setOffset] = useState(0)
-	const [allData, setAllData] = useState<ITransactions[]>([])
 
 	const { data, isLoading } = useQuery<ITransactionsPaginated, Error>({
-		queryKey: ['getTransactionsByPeriod', token, start, end, limit, offset],
+		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
 			(await getTransactionsByPeriod({
 				token,
@@ -46,20 +40,9 @@ const Statistics = () => {
 				endDay: end.endDay,
 				endMonth: end.endMonth,
 				endYear: end.endYear,
-				limit,
-				offset,
-			})) ?? { data: [], total: 0, limit, offset },
+			})) ?? { data: [], total: 0 },
 		enabled: !!token,
 	})
-
-	const handleLoadMore = () => {
-		if (data && allData.length < data.total) {
-			setOffset(offset + limit)
-			if (data) {
-				setAllData([...allData, ...data.data])
-			}
-		}
-	}
 
 	return (
 		<Box
@@ -79,33 +62,7 @@ const Statistics = () => {
 				/>
 				{data && (
 					<Box sx={{ p: 2 }}>
-						<GameStatistics data={offset === 0 ? data.data : allData} />
-						{allData.length < data.total && (
-							<Box
-								sx={{
-									display: 'flex',
-									gap: 2,
-									mt: 2,
-									justifyContent: 'center',
-								}}
-							>
-								<Button variant='contained' onClick={handleLoadMore}>
-									Load More ({allData.length}/{data.total})
-								</Button>
-								<TextField
-									size='small'
-									type='number'
-									value={limit}
-									onChange={e =>
-										setLimit(
-											Math.min(1000, Math.max(10, parseInt(e.target.value))),
-										)
-									}
-									label='Items per page'
-									inputProps={{ min: 10, max: 1000 }}
-								/>
-							</Box>
-						)}
+						<GameStatistics data={data.data} />
 					</Box>
 				)}
 			</LocalizationProvider>

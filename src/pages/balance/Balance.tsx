@@ -1,11 +1,6 @@
 import Header from '../../components/Header/Header'
 import BottomNavigate from '../home/BottomNavigate'
-import {
-	Box,
-	Paper,
-	Typography,
-	useTheme,
-} from '@mui/material'
+import { Box, Paper, Typography, useTheme } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
@@ -39,12 +34,11 @@ const Balance = () => {
 		}`,
 	}
 
-	const total =
-		data ? Number(data.b2bulk) + Number(data.istar) : 0
+	const total = data ? Number(data.b2bulk) + Number(data.istar) : 0
 
 	const providers = [
 		{ label: 'B2Bulk', value: data?.b2bulk ?? '0' },
-		{ label: 'istar', value: data?.istar ?? '0' },
+		{ label: 'istar', value: String(Number(data?.istar) * 1.24) ?? '0' },
 	]
 
 	return (

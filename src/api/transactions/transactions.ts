@@ -62,8 +62,6 @@ export async function getTransactionsByPeriod({
 	endDay,
 	endMonth,
 	endYear,
-	limit = 100,
-	offset = 0,
 }: {
 	token: string
 	startDay: number
@@ -72,8 +70,6 @@ export async function getTransactionsByPeriod({
 	endDay: number
 	endMonth: number
 	endYear: number
-	limit?: number
-	offset?: number
 }) {
 	try {
 		const responce = await api.post('/transactions/getTransactionsByPeriod', {
@@ -84,8 +80,6 @@ export async function getTransactionsByPeriod({
 			endDay,
 			endMonth,
 			endYear,
-			limit,
-			offset,
 		})
 		const result = responce.data as ITransactionsPaginated
 		return result
