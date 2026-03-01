@@ -28,18 +28,20 @@ const Donation = () => {
 		endMonth: today.month() + 1,
 		endYear: today.year(),
 	})
-	const { data, isLoading } = useQuery<ITransactions[], Error>({
+	const { data } = useQuery<ITransactions[], Error>({
 		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
-			(await getTransactionsByPeriod({
-				token,
-				startDay: start.startDay,
-				startMonth: start.startMonth,
-				startYear: start.startYear,
-				endDay: end.endDay,
-				endMonth: end.endMonth,
-				endYear: end.endYear,
-			})).data ?? [],
+			(
+				await getTransactionsByPeriod({
+					token,
+					startDay: start.startDay,
+					startMonth: start.startMonth,
+					startYear: start.startYear,
+					endDay: end.endDay,
+					endMonth: end.endMonth,
+					endYear: end.endYear,
+				})
+			).data ?? [],
 		enabled: !!token,
 	})
 
@@ -61,9 +63,8 @@ const Donation = () => {
 						end={end}
 					/>
 				</LocalizationProvider>
-				{data && <DonationStatistic data={data} />}
-				{isLoading ? <LoadingProgress /> : <></>}
 				<BottomNavigate />
+				{data ? <DonationStatistic data={data} /> : <LoadingProgress />}
 			</Box>
 		</>
 	)

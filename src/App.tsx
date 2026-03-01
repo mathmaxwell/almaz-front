@@ -56,7 +56,7 @@ function App() {
 				/>
 				<Route path='/cart' element={<Cart />} />
 				<Route path='/history' element={<History />} />
-			<Route path='/balance' element={<Balance />} />
+				<Route path='/balance' element={<Balance />} />
 				<Route
 					path='/:gameName/:gameId'
 					element={

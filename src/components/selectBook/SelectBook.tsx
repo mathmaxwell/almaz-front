@@ -23,7 +23,7 @@ const columns: GridColDef[] = [
 	},
 ]
 const paginationModel = { page: 0, pageSize: 20 }
-const SelectBooking = ({ data }: { data: IPayment[] }) => {
+const SelectBooking = ({ data = [] }: { data?: IPayment[] }) => {
 	const { t } = useTranslationStore()
 	const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>()
 	const { token } = useTokenStore()

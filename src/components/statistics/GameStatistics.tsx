@@ -139,7 +139,7 @@ const StatsRow = ({
 	)
 }
 
-const GameStatistics = ({ data }: { data: ITransactions[] }) => {
+const GameStatistics = ({ data }: { data: ITransactions[] | undefined }) => {
 	const [tab, setTab] = useState<TabValue>('overview')
 
 	const stats = useMemo(() => {
@@ -147,7 +147,7 @@ const GameStatistics = ({ data }: { data: ITransactions[] }) => {
 		const adminTopups: ITransactions[] = []
 		const paymentTopups: ITransactions[] = []
 
-		data.forEach(tx => {
+		;(data ?? []).forEach(tx => {
 			if (tx.price < 0) {
 				purchases.push(tx)
 			} else if (tx.price > 0) {
@@ -329,7 +329,7 @@ const GameStatistics = ({ data }: { data: ITransactions[] }) => {
 					>
 						<Chip
 							icon={<ReceiptLongIcon />}
-							label={`${t.total}: ${data.length} ${t.operations}`}
+							label={`${t.total}: ${data?.length ?? 0} ${t.operations}`}
 							variant='outlined'
 							size='small'
 						/>
@@ -673,7 +673,7 @@ const GameStatistics = ({ data }: { data: ITransactions[] }) => {
 							<Typography variant='body2' fontWeight={600}>
 								{t.total_deposits}:
 							</Typography>
-							<Typography variant='h6' fontWeight={700} >
+							<Typography variant='h6' fontWeight={700}>
 								{formatCurrency(stats.topupTotal)}
 							</Typography>
 						</CardContent>

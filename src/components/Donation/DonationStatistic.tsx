@@ -68,7 +68,7 @@ function getStatusIcon(status: string) {
 	}
 }
 
-const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
+const DonationStatistic = ({ data }: { data: ITransactions[] | undefined }) => {
 	const { t } = useTranslationStore()
 	const navigate = useNavigate()
 	const [games, setGames] = useState<IGames[]>([])
@@ -79,6 +79,9 @@ const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
 	const [statusesLoaded, setStatusesLoaded] = useState(false)
 	const [statusFilter, setStatusFilter] = useState<string>('all')
 	const donations = useMemo(() => {
+		if (!Array.isArray(data)) {
+			return []
+		}
 		return data.filter(tx => tx.order && tx.order !== '-' && tx.price < 0)
 	}, [data])
 	useEffect(() => {

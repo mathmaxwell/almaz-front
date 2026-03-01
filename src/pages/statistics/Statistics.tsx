@@ -29,7 +29,7 @@ const Statistics = () => {
 		endYear: today.year(),
 	})
 
-	const { data, isLoading } = useQuery<ITransactionsPaginated, Error>({
+	const { data } = useQuery<ITransactionsPaginated, Error>({
 		queryKey: ['getTransactionsByPeriod', token, start, end],
 		queryFn: async () =>
 			(await getTransactionsByPeriod({
@@ -60,13 +60,9 @@ const Statistics = () => {
 					setEnd={setEnd}
 					end={end}
 				/>
-				{data && (
-					<Box sx={{ p: 2 }}>
-						<GameStatistics data={data.data} />
-					</Box>
-				)}
+				{data ? <GameStatistics data={data.data} /> : <LoadingProgress />}
 			</LocalizationProvider>
-			{isLoading ? <LoadingProgress /> : <></>}
+
 			<BottomNavigate />
 		</Box>
 	)
