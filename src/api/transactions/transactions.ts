@@ -1,11 +1,20 @@
-import type { ITransactions } from '../../types/transactions/transactions'
+import type {
+	ITransactions,
+	ITransactionsPaginated,
+} from '../../types/transactions/transactions'
 import api from '../api'
-export async function getTransactionsByUser(userId: string) {
+export async function getTransactionsByUser(
+	userId: string,
+	limit = 100,
+	offset = 0,
+) {
 	try {
 		const responce = await api.post('/transactions/transactionsGet', {
 			userId,
+			limit,
+			offset,
 		})
-		const result = responce.data as ITransactions[]
+		const result = responce.data as ITransactionsPaginated
 		return result
 	} catch (error) {
 		throw new Error('getTransactions error')
@@ -53,6 +62,8 @@ export async function getTransactionsByPeriod({
 	endDay,
 	endMonth,
 	endYear,
+	limit = 100,
+	offset = 0,
 }: {
 	token: string
 	startDay: number
@@ -61,6 +72,8 @@ export async function getTransactionsByPeriod({
 	endDay: number
 	endMonth: number
 	endYear: number
+	limit?: number
+	offset?: number
 }) {
 	try {
 		const responce = await api.post('/transactions/getTransactionsByPeriod', {
@@ -71,8 +84,10 @@ export async function getTransactionsByPeriod({
 			endDay,
 			endMonth,
 			endYear,
+			limit,
+			offset,
 		})
-		const result = responce.data as ITransactions[]
+		const result = responce.data as ITransactionsPaginated
 		return result
 	} catch (error) {
 		throw new Error('getTransactions error')

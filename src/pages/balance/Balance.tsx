@@ -40,11 +40,11 @@ const Balance = () => {
 	}
 
 	const total =
-		data ? Number(data.b2bulk) + Number(data.fragment) : 0
+		data ? Number(data.b2bulk) + Number(data.istar) : 0
 
 	const providers = [
 		{ label: 'B2Bulk', value: data?.b2bulk ?? '0' },
-		{ label: 'Fragment', value: data?.fragment ?? '0' },
+		{ label: 'istar', value: data?.istar ?? '0' },
 	]
 
 	return (

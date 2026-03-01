@@ -11,7 +11,18 @@ export interface ITransactions {
 	donatName: string
 	createdBy: string
 	order: string
+	status?: string // pending | completed | failed
+	playerId?: string
+	serverId?: string
 }
+
+export interface ITransactionsPaginated {
+	data: ITransactions[]
+	total: number
+	limit: number
+	offset: number
+}
+
 export interface ICalculate {
 	gameName: string
 	donatName: string

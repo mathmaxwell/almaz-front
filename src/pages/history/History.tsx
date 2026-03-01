@@ -19,7 +19,7 @@ import { useTranslationStore } from '../../store/language/useTranslationStore'
 import type { IUser } from '../../types/user/user'
 import { getUserById } from '../../api/login/login'
 import { getTransactionsByUser } from '../../api/transactions/transactions'
-import type { ITransactions } from '../../types/transactions/transactions'
+import type { ITransactions, ITransactionsPaginated } from '../../types/transactions/transactions'
 import { useNavigate, useParams } from 'react-router-dom'
 import LoadingProgress from '../../components/Loading/LoadingProgress'
 import { updateNumberFormat } from '../../func/number'
@@ -28,6 +28,9 @@ import { getGames } from '../../api/games/games'
 import type { IGames } from '../../types/games/games'
 import type { IStatus } from '../../types/buy/buy'
 import { ordersStatus } from '../../api/buy/buy'
+
+const PAGE_SIZE = 100
+
 const statusColor = {
 	Completed: 'success.main',
 	'In progress': 'info.main',
@@ -37,6 +40,13 @@ const statusColor = {
 	Refunded: 'error.light',
 } as const
 
+// Map DB status (pending/completed/failed) to provider display status
+const dbStatusToDisplay = (status: string): IStatus['status'] | null => {
+	if (status === 'completed') return 'Completed'
+	if (status === 'failed') return 'Canceled'
+	return null
+}
+
 const History = () => {
 	const { token, setBalance } = useTokenStore()
 	const { userId } = useParams()
@@ -45,6 +55,8 @@ const History = () => {
 	const [games, setGames] = useState<IGames[]>([])
 	const navigate = useNavigate()
 	const [active, setActive] = useState<'buy' | 'instructions'>('buy')
+	const [offset, setOffset] = useState(0)
+
 	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token, userId],
 		queryFn: async () => {
@@ -54,21 +66,27 @@ const History = () => {
 		},
 		enabled: !!token,
 	})
-	const { data, isLoading: loadingPayment } = useQuery<ITransactions[], Error>({
-		queryKey: ['userPayments', token, userId],
+
+	const { data: paginated, isLoading: loadingPayment } = useQuery<ITransactionsPaginated, Error>({
+		queryKey: ['userPayments', token, userId, offset],
 		queryFn: async () =>
-			(await getTransactionsByUser(userId ? userId : token)) ?? [],
+			await getTransactionsByUser(userId ? userId : token, PAGE_SIZE, offset),
 		enabled: !!token,
 	})
-	const [orderStatuses, setOrderStatuses] = useState<
-		Record<string, IStatus | null>
-	>({})
-	const purchases = data?.filter(g => g.price < 0) ?? []
+
+	const data: ITransactions[] = paginated?.data ?? []
+	const total = paginated?.total ?? 0
+
+	const [orderStatuses, setOrderStatuses] = useState<Record<string, IStatus | null>>({})
+
+	const purchases = data.filter(g => g.price < 0)
+
 	useEffect(() => {
 		getGames()
 			.then(g => setGames(g))
 			.catch(() => {})
 	}, [])
+
 	const findGameId = (gameName: string): string | null => {
 		const game = games.find(g => g.name === gameName)
 		return game ? game.id : null
@@ -77,27 +95,27 @@ const History = () => {
 	useEffect(() => {
 		if (!purchases.length || !games.length) return
 		const fetchStatuses = async () => {
-			// Group orders by gameId
+			// Only fetch live status for pending transactions — completed/failed are stored in DB
 			const grouped: Record<string, { gameId: string; orders: string[] }> = {}
 			for (const row of purchases) {
 				if (row.createdBy === 'admin') continue
+				if (row.status && row.status !== 'pending') continue
 				const gameId = findGameId(row.gameName)
 				if (!gameId || !row.order) continue
 				if (!grouped[gameId]) grouped[gameId] = { gameId, orders: [] }
 				grouped[gameId].orders.push(row.order)
 			}
 
+			if (Object.keys(grouped).length === 0) return
+
 			const newStatuses: Record<string, IStatus | null> = {}
 
-			// Send one request per gameId
 			const promises = Object.values(grouped).map(async ({ gameId, orders }) => {
 				try {
 					const result = await ordersStatus({ orders, gameId })
 					for (const order of orders) {
 						const orderData = result[order]
-						newStatuses[order] = orderData
-							? { status: orderData.status }
-							: null
+						newStatuses[order] = orderData ? { status: orderData.status } : null
 					}
 				} catch (err) {
 					console.error(`Ошибка статуса для gameId ${gameId}:`, err)
@@ -113,6 +131,7 @@ const History = () => {
 
 		fetchStatuses()
 	}, [purchases.length, games.length, data])
+
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN === token
 	const glassCard = {
 		backgroundColor:
@@ -127,6 +146,7 @@ const History = () => {
 				: 'rgba(0,0,0,0.04)'
 		}`,
 	}
+
 	return (
 		<Box
 			sx={{
@@ -183,30 +203,18 @@ const History = () => {
 					}}
 				>
 					<Button
-						onClick={() => {
-							setActive('buy')
-						}}
+						onClick={() => setActive('buy')}
 						fullWidth
 						variant={active == 'buy' ? 'contained' : 'text'}
-						sx={{
-							py: 1.2,
-							borderRadius: 2.5,
-							fontWeight: 600,
-						}}
+						sx={{ py: 1.2, borderRadius: 2.5, fontWeight: 600 }}
 					>
 						{t.top_up}
 					</Button>
 					<Button
-						onClick={() => {
-							setActive('instructions')
-						}}
+						onClick={() => setActive('instructions')}
 						fullWidth
 						variant={active == 'instructions' ? 'contained' : 'text'}
-						sx={{
-							py: 1.2,
-							borderRadius: 2.5,
-							fontWeight: 600,
-						}}
+						sx={{ py: 1.2, borderRadius: 2.5, fontWeight: 600 }}
 					>
 						{t.purchases}
 					</Button>
@@ -244,20 +252,24 @@ const History = () => {
 						</TableHead>
 						<TableBody>
 							{data
-								?.filter(g => (active === 'buy' ? g.price > 0 : g.price < 0))
+								.filter(g => (active === 'buy' ? g.price > 0 : g.price < 0))
 								.map((row, index) => {
-									const status =
-										active === 'instructions'
-											? orderStatuses[row.order ?? '']
-											: null
+									// completed/failed → from DB; pending → live provider status
+									const resolvedStatus: IStatus | null | undefined = (() => {
+										if (active !== 'instructions') return null
+										if (row.status && row.status !== 'pending') {
+											const s = dbStatusToDisplay(row.status)
+											return s ? { status: s } : null
+										}
+										return orderStatuses[row.order ?? '']
+									})()
 
 									return (
 										<TableRow
 											key={index}
 											sx={{
 												'&:last-child td, &:last-child th': { border: 0 },
-												cursor:
-													active === 'instructions' ? 'pointer' : 'default',
+												cursor: active === 'instructions' ? 'pointer' : 'default',
 											}}
 											onClick={() => {
 												if (row.gameName !== '-' && row.order !== '-') {
@@ -300,28 +312,26 @@ const History = () => {
 											{active === 'instructions' && (
 												<TableCell align='center'>
 													{row.order ? (
-														status === undefined ? (
+														resolvedStatus === undefined ? (
 															'-'
-														) : status === null ? (
+														) : resolvedStatus === null ? (
 															<Typography color='error'>{t.no_data}</Typography>
 														) : (
 															<Typography
-																color={
-																	statusColor[status.status] || 'text.secondary'
-																}
+																color={statusColor[resolvedStatus.status] || 'text.secondary'}
 																fontWeight={600}
 															>
-																{status.status === 'Canceled'
+																{resolvedStatus.status === 'Canceled'
 																	? t.canceled
-																	: status.status == 'Completed'
+																	: resolvedStatus.status === 'Completed'
 																		? t.Completed
-																		: status.status == 'In progress'
+																		: resolvedStatus.status === 'In progress'
 																			? t.in_progress
-																			: status.status == 'Partial'
+																			: resolvedStatus.status === 'Partial'
 																				? t.partial
-																				: status.status == 'Pending'
+																				: resolvedStatus.status === 'Pending'
 																					? t.pending
-																					: status.status == 'Refunded'
+																					: resolvedStatus.status === 'Refunded'
 																						? t.Refunded
 																						: '-'}
 															</Typography>
@@ -337,6 +347,29 @@ const History = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+				{total > PAGE_SIZE && (
+					<Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+						<Button
+							variant='outlined'
+							size='small'
+							disabled={offset === 0}
+							onClick={() => setOffset(o => Math.max(0, o - PAGE_SIZE))}
+						>
+							←
+						</Button>
+						<Typography sx={{ alignSelf: 'center', fontSize: '0.85rem' }}>
+							{Math.floor(offset / PAGE_SIZE) + 1} / {Math.ceil(total / PAGE_SIZE)}
+						</Typography>
+						<Button
+							variant='outlined'
+							size='small'
+							disabled={offset + PAGE_SIZE >= total}
+							onClick={() => setOffset(o => o + PAGE_SIZE)}
+						>
+							→
+						</Button>
+					</Box>
+				)}
 			</Box>
 			<BottomNavigate />
 		</Box>
