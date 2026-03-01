@@ -14,7 +14,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import { useBuyModalStore } from '../../store/modal/useBuyModalStore'
 import { useTranslationStore } from '../../store/language/useTranslationStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGameStore } from '../../store/game/useGameStore'
 import { useVideoModalStore } from '../../store/modal/useVideoModalStore'
 import { useNavigate } from 'react-router-dom'
@@ -42,8 +42,18 @@ const BuyModal = () => {
 	const theme = useTheme()
 	const isRu = lang === 'ru'
 	const withOutServerId = game.description !== 'two'
+	const isTelegram = game.name === 'Telegram'
 	const [loading, setLoading] = useState(false)
 	const [cooldown, setCooldown] = useState(0)
+
+	useEffect(() => {
+		if (open) {
+			setPlayerId(isTelegram ? '@' : '')
+			setServerId('')
+		}
+	}, [open])
+
+	const telegramServerId = Number(offer?.botId) < 49 ? 'premium' : 'star'
 	const mapError = (msg: string): string => {
 		const m = msg.toLowerCase()
 		if (m.includes('недостаточно средств у провайдера'))
@@ -306,11 +316,18 @@ const BuyModal = () => {
 				</Box>
 
 				<TextField
-					label={t.player_id}
+					label={isTelegram ? t.username : t.player_id}
 					fullWidth
 					variant='outlined'
 					value={playerId}
-					onChange={e => setPlayerId(e.target.value)}
+					onChange={e => {
+						if (isTelegram) {
+							const val = e.target.value
+							setPlayerId(val.startsWith('@') ? val : '@')
+						} else {
+							setPlayerId(e.target.value)
+						}
+					}}
 					sx={{ mb: 1.5 }}
 				/>
 				{!withOutServerId && (
@@ -318,7 +335,8 @@ const BuyModal = () => {
 						label={t.server_id}
 						fullWidth
 						variant='outlined'
-						value={serverId}
+						disabled={isTelegram}
+						value={isTelegram ? telegramServerId : serverId}
 						onChange={e => setServerId(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
@@ -335,8 +353,8 @@ const BuyModal = () => {
 							const result = await createBuy({
 								token,
 								gameId: game.id,
-								playerId,
-								serverId,
+								playerId: isTelegram ? playerId.slice(1) : playerId,
+								serverId: isTelegram ? telegramServerId : serverId,
 								botId: offer?.botId!,
 								offerId: offer?.id!,
 							})
@@ -362,9 +380,11 @@ const BuyModal = () => {
 					disabled={
 						loading ||
 						cooldown > 0 ||
-						(withOutServerId
-							? !playerId.trim()
-							: !playerId.trim() || !serverId.trim())
+						(isTelegram
+							? playerId.trim().length <= 1
+							: withOutServerId
+								? !playerId.trim()
+								: !playerId.trim() || !serverId.trim())
 					}
 					sx={{
 						py: 1.8,

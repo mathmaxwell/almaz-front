@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { IStatus } from '../../types/buy/buy'
 import api from '../api'
+import type { IBalance } from '../../types/api/apiBalance'
 
 export async function createBuy({
 	token,
@@ -87,7 +88,7 @@ export async function getBalance({ token }: { token: string }) {
 		const responce = await api.post('/buy/getBalance', {
 			token,
 		})
-		const result = responce.data as any
+		const result = responce.data as IBalance
 		return result
 	} catch (error: any) {
 		if (axios.isAxiosError(error)) {

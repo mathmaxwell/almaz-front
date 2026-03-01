@@ -207,10 +207,13 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	error_wait: 'Qayta urinishdan oldin kuting',
 	error_bad_request: "Noto'g'ri so'rov. Ma'lumotlarni tekshirib qayta urining",
 	error_database: "Ma'lumotlar bazasi xatosi. Keyinroq urinib ko'ring",
-	error_getting_game: "O'yin ma'lumotlarini olishda xatolik. Keyinroq urinib ko'ring",
-	error_invalid_bot_id: "Noto'g'ri Bot ID. Qo'llab-quvvatlash xizmatiga murojaat qiling",
+	error_getting_game:
+		"O'yin ma'lumotlarini olishda xatolik. Keyinroq urinib ko'ring",
+	error_invalid_bot_id:
+		"Noto'g'ri Bot ID. Qo'llab-quvvatlash xizmatiga murojaat qiling",
 	error_provider_not_supported: "Bu o'yin provayderi qo'llab-quvvatlanmaydi",
-	error_invalid_player_id: "Noto'g'ri o'yinchi ID. Kiritgan ma'lumotlarni tekshiring",
+	error_invalid_player_id:
+		"Noto'g'ri o'yinchi ID. Kiritgan ma'lumotlarni tekshiring",
 	error_title: 'Xatolik',
 	donation: 'Donat',
 	donation_dashboard: 'Donat paneli',
@@ -236,5 +239,7 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	success_rate: 'Muvaffaqiyat foizi',
 	top_donors: 'Top donaterlar',
 	donations_count: 'Donatlar soni',
+	username: 'Foydalanuvchi nomi',
+	provider_balances: 'Provayderlar balansi',
 }
 export default uz

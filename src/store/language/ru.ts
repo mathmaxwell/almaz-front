@@ -232,5 +232,7 @@ const ru = {
 	success_rate: 'Процент успеха',
 	top_donors: 'Топ донатеры',
 	donations_count: 'Количество донатов',
+	username: 'Имя пользователя',
+	provider_balances: 'Балансы провайдеров',
 }
 export default ru

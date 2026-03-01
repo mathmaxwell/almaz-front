@@ -48,11 +48,12 @@ export default function Header() {
 	const theme = useTheme()
 	const { resetToken, token, resetBalance } = useTokenStore()
 	const isAdmin = import.meta.env.VITE_ADMINTOKEN == token
-	const { data } = useQuery<string, Error>({
+	const { data } = useQuery<number, Error>({
 		queryKey: ['adminBalance', token, open],
 		queryFn: async () => {
 			const result = await getBalance({ token })
-			return result
+			const sum = Number(result.b2bulk) + Number(result.fragment)
+			return sum
 		},
 		enabled: !!token && isAdmin && open,
 	})
@@ -226,7 +227,11 @@ export default function Header() {
 							{isAdmin && <Divider />}
 							{isAdmin && (
 								<ListItem disablePadding>
-									<ListItemButton>
+									<ListItemButton
+										onClick={() => {
+											navigate('/balance')
+										}}
+									>
 										<ListItemIcon>
 											<AttachMoneyIcon />
 										</ListItemIcon>

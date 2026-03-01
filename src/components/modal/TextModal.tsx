@@ -101,7 +101,9 @@ export default function TextModal() {
 					<Typography
 						sx={{
 							lineHeight: 1.7,
-							color: isError ? theme.palette.error.main : theme.palette.text.primary,
+							color: isError
+								? theme.palette.error.main
+								: theme.palette.text.primary,
 							pr: 3,
 							whiteSpace: 'pre-line',
 							fontWeight: isError ? 500 : 400,
