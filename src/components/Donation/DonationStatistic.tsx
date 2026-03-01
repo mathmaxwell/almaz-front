@@ -103,7 +103,8 @@ const DonationStatistic = ({ data }: { data: ITransactions[] }) => {
 			setStatuses({ ...newStatuses })
 
 			// Group orders by gameId
-			const grouped: Record<string, { gameId: string; txs: typeof donations }> = {}
+			const grouped: Record<string, { gameId: string; txs: typeof donations }> =
+				{}
 			for (const tx of donations) {
 				const gameId = findGameId(tx.gameName)
 				if (!gameId) {

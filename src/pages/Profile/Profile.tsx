@@ -40,7 +40,7 @@ const Profile = () => {
 	})
 	const { data, isLoading } = useQuery<ITransactions[], Error>({
 		queryKey: ['userPayments', token],
-		queryFn: async () => (await getTransactionsByUser(token)) ?? [],
+		queryFn: async () => (await getTransactionsByUser(token)).data ?? [],
 		enabled: !!token,
 	})
 	const information = calculateTransactions(data)

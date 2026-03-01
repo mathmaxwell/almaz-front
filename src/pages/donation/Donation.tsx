@@ -39,7 +39,7 @@ const Donation = () => {
 				endDay: end.endDay,
 				endMonth: end.endMonth,
 				endYear: end.endYear,
-			})) ?? [],
+			})).data ?? [],
 		enabled: !!token,
 	})
 
