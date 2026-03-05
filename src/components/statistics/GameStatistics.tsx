@@ -11,7 +11,10 @@ import {
 	ToggleButton,
 	ToggleButtonGroup,
 	LinearProgress,
+	Button,
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
@@ -50,7 +53,6 @@ const SummaryCard = ({
 	amount,
 	count,
 	gradient,
-
 	subLabel,
 }: {
 	icon: React.ReactNode
@@ -139,8 +141,12 @@ const StatsRow = ({
 	)
 }
 
+const SHOW_LIMIT = 10
+
 const GameStatistics = ({ data }: { data: ITransactions[] | undefined }) => {
 	const [tab, setTab] = useState<TabValue>('overview')
+	const [showAllDonats, setShowAllDonats] = useState(false)
+	const [showAllGames, setShowAllGames] = useState(false)
 
 	const stats = useMemo(() => {
 		const purchases: ITransactions[] = []
@@ -454,15 +460,33 @@ const GameStatistics = ({ data }: { data: ITransactions[] | undefined }) => {
 									Нет покупок
 								</Typography>
 							) : (
-								stats.gameStats.map(([game, s]) => (
-									<StatsRow
-										key={game}
-										name={game}
-										stats={s}
-										totalForPercent={stats.purchaseTotal}
-										color='error.main'
-									/>
-								))
+								<>
+									{(showAllGames
+										? stats.gameStats
+										: stats.gameStats.slice(0, SHOW_LIMIT)
+									).map(([game, s]) => (
+										<StatsRow
+											key={game}
+											name={game}
+											stats={s}
+											totalForPercent={stats.purchaseTotal}
+											color='error.main'
+										/>
+									))}
+									{stats.gameStats.length > SHOW_LIMIT && (
+										<Button
+											size='small'
+											fullWidth
+											onClick={() => setShowAllGames(v => !v)}
+											endIcon={showAllGames ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+											sx={{ mt: 0.5, textTransform: 'none' }}
+										>
+											{showAllGames
+												? t.show_less
+												: `${t.show_all} (${stats.gameStats.length - SHOW_LIMIT})`}
+										</Button>
+									)}
+								</>
 							)}
 							<Divider sx={{ my: 1 }} />
 							<Stack
@@ -509,15 +533,33 @@ const GameStatistics = ({ data }: { data: ITransactions[] | undefined }) => {
 									Нет покупок
 								</Typography>
 							) : (
-								stats.donatStats.map(([donat, s]) => (
-									<StatsRow
-										key={donat}
-										name={donat}
-										stats={s}
-										totalForPercent={stats.purchaseTotal}
-										color='secondary.main'
-									/>
-								))
+								<>
+									{(showAllDonats
+										? stats.donatStats
+										: stats.donatStats.slice(0, SHOW_LIMIT)
+									).map(([donat, s]) => (
+										<StatsRow
+											key={donat}
+											name={donat}
+											stats={s}
+											totalForPercent={stats.purchaseTotal}
+											color='secondary.main'
+										/>
+									))}
+									{stats.donatStats.length > SHOW_LIMIT && (
+										<Button
+											size='small'
+											fullWidth
+											onClick={() => setShowAllDonats(v => !v)}
+											endIcon={showAllDonats ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+											sx={{ mt: 0.5, textTransform: 'none' }}
+										>
+											{showAllDonats
+												? t.show_less
+												: `${t.show_all} (${stats.donatStats.length - SHOW_LIMIT})`}
+										</Button>
+									)}
+								</>
 							)}
 							<Divider sx={{ my: 1 }} />
 							<Stack

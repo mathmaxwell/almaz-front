@@ -241,5 +241,9 @@ Toʻlovni tasdiqlash Inson qoʻlida emas❌`,
 	donations_count: 'Donatlar soni',
 	username: 'Foydalanuvchi nomi',
 	provider_balances: 'Provayderlar balansi',
+	show_all: "Hammasini ko'rsatish",
+	show_less: "Yig'ish",
+	transactions_log: 'Tranzaktsiyalar jurnali',
+	search_placeholder: "userId, playerId, o'yin bo'yicha qidirish...",
 }
 export default uz

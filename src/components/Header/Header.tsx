@@ -245,6 +245,20 @@ export default function Header() {
 								<ListItem disablePadding>
 									<ListItemButton
 										onClick={() => {
+											navigate('/transactions-log')
+										}}
+									>
+										<ListItemIcon>
+											<ViewListIcon />
+										</ListItemIcon>
+										<ListItemText primary={t.transactions_log} />
+									</ListItemButton>
+								</ListItem>
+							)}
+							{isAdmin && (
+								<ListItem disablePadding>
+									<ListItemButton
+										onClick={() => {
 											navigate('/statistics')
 										}}
 									>

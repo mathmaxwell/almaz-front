@@ -234,5 +234,9 @@ const ru = {
 	donations_count: 'Количество донатов',
 	username: 'Имя пользователя',
 	provider_balances: 'Балансы провайдеров',
+	show_all: 'Показать все',
+	show_less: 'Свернуть',
+	transactions_log: 'Журнал транзакций',
+	search_placeholder: 'Поиск по userId, playerId, игре...',
 }
 export default ru

@@ -29,6 +29,7 @@ import Statistics from './pages/statistics/Statistics'
 import Booking from './pages/booking/SelectBooking'
 import Donation from './pages/donation/Donation'
 import Balance from './pages/balance/Balance'
+import TransactionsLog from './pages/transactionsLog/TransactionsLog'
 
 function App() {
 	return (
@@ -57,6 +58,7 @@ function App() {
 				<Route path='/cart' element={<Cart />} />
 				<Route path='/history' element={<History />} />
 				<Route path='/balance' element={<Balance />} />
+			<Route path='/transactions-log' element={<TransactionsLog />} />
 				<Route
 					path='/:gameName/:gameId'
 					element={

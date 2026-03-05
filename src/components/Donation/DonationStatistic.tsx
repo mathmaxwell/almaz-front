@@ -76,6 +76,7 @@ const DonationStatistic = ({ data }: { data: ITransactions[] | undefined }) => {
 		Record<string, IStatus['status'] | 'loading' | 'error'>
 	>({})
 	const [showAllDonations, setShowAllDonations] = useState(false)
+	const [showAllDonatStats, setShowAllDonatStats] = useState(false)
 	const [statusesLoaded, setStatusesLoaded] = useState(false)
 	const [statusFilter, setStatusFilter] = useState<string>('all')
 	const donations = useMemo(() => {
@@ -442,15 +443,33 @@ const DonationStatistic = ({ data }: { data: ITransactions[] | undefined }) => {
 							{t.no_data}
 						</Typography>
 					) : (
-						stats.donatStats.map(([donat, s]) => (
-							<GameStatsRow
-								key={donat}
-								name={donat}
-								stats={s}
-								totalForPercent={stats.totalAmount}
-								color='secondary.main'
-							/>
-						))
+						<>
+							{(showAllDonatStats
+								? stats.donatStats
+								: stats.donatStats.slice(0, 10)
+							).map(([donat, s]) => (
+								<GameStatsRow
+									key={donat}
+									name={donat}
+									stats={s}
+									totalForPercent={stats.totalAmount}
+									color='secondary.main'
+								/>
+							))}
+							{stats.donatStats.length > 10 && (
+								<Button
+									size='small'
+									fullWidth
+									onClick={() => setShowAllDonatStats(v => !v)}
+									endIcon={showAllDonatStats ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+									sx={{ mt: 0.5, textTransform: 'none' }}
+								>
+									{showAllDonatStats
+										? t.show_less
+										: `${t.show_all} (${stats.donatStats.length - 10})`}
+								</Button>
+							)}
+						</>
 					)}
 				</CardContent>
 			</Card>
