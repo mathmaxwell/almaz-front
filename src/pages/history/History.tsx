@@ -29,8 +29,6 @@ import type { IGames } from '../../types/games/games'
 import type { IStatus } from '../../types/buy/buy'
 import { ordersStatus } from '../../api/buy/buy'
 
-const PAGE_SIZE = 100
-
 const statusColor = {
 	Completed: 'success.main',
 	'In progress': 'info.main',
@@ -55,8 +53,6 @@ const History = () => {
 	const [games, setGames] = useState<IGames[]>([])
 	const navigate = useNavigate()
 	const [active, setActive] = useState<'buy' | 'instructions'>('buy')
-	const [offset, setOffset] = useState(0)
-
 	const { data: userInfo } = useQuery<IUser, Error>({
 		queryKey: ['userInfo', token, userId],
 		queryFn: async () => {
@@ -68,14 +64,13 @@ const History = () => {
 	})
 
 	const { data: paginated, isLoading: loadingPayment } = useQuery<ITransactionsPaginated, Error>({
-		queryKey: ['userPayments', token, userId, offset],
+		queryKey: ['userPayments', token, userId],
 		queryFn: async () =>
-			await getTransactionsByUser(userId ? userId : token, PAGE_SIZE, offset),
+			await getTransactionsByUser(userId ? userId : token),
 		enabled: !!token,
 	})
 
 	const data: ITransactions[] = paginated?.data ?? []
-	const total = paginated?.total ?? 0
 
 	const [orderStatuses, setOrderStatuses] = useState<Record<string, IStatus | null>>({})
 
@@ -347,30 +342,7 @@ const History = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				{total > PAGE_SIZE && (
-					<Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-						<Button
-							variant='outlined'
-							size='small'
-							disabled={offset === 0}
-							onClick={() => setOffset(o => Math.max(0, o - PAGE_SIZE))}
-						>
-							←
-						</Button>
-						<Typography sx={{ alignSelf: 'center', fontSize: '0.85rem' }}>
-							{Math.floor(offset / PAGE_SIZE) + 1} / {Math.ceil(total / PAGE_SIZE)}
-						</Typography>
-						<Button
-							variant='outlined'
-							size='small'
-							disabled={offset + PAGE_SIZE >= total}
-							onClick={() => setOffset(o => o + PAGE_SIZE)}
-						>
-							→
-						</Button>
-					</Box>
-				)}
-			</Box>
+				</Box>
 			<BottomNavigate />
 		</Box>
 	)

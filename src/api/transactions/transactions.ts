@@ -1,7 +1,4 @@
-import type {
-	ITransactions,
-	ITransactionsPaginated,
-} from '../../types/transactions/transactions'
+import type { ITransactions } from '../../types/transactions/transactions'
 import api from '../api'
 export async function getTransactionsByUser(
 	userId: string,
@@ -14,8 +11,7 @@ export async function getTransactionsByUser(
 			limit,
 			offset,
 		})
-		const result = responce.data as ITransactionsPaginated
-		return result
+		return { data: responce.data as ITransactions[] }
 	} catch (error) {
 		throw new Error('getTransactions error')
 	}
@@ -81,8 +77,7 @@ export async function getTransactionsByPeriod({
 			endMonth,
 			endYear,
 		})
-		const result = responce.data as ITransactionsPaginated
-		return result
+		return { data: responce.data as ITransactions[] }
 	} catch (error) {
 		throw new Error('getTransactions error')
 	}

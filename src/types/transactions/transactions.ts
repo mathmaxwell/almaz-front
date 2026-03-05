@@ -18,9 +18,6 @@ export interface ITransactions {
 
 export interface ITransactionsPaginated {
 	data: ITransactions[]
-	total: number
-	limit: number
-	offset: number
 }
 
 export interface ICalculate {

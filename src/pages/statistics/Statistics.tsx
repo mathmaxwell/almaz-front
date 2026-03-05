@@ -40,7 +40,7 @@ const Statistics = () => {
 				endDay: end.endDay,
 				endMonth: end.endMonth,
 				endYear: end.endYear,
-			})) ?? { data: [], total: 0 },
+			})) ?? { data: [] },
 		enabled: !!token,
 	})
 
