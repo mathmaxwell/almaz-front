@@ -34,7 +34,7 @@ const Balance = () => {
 		}`,
 	}
 
-	const total = data ? Number(data.b2bulk) + Number(data.istar) : 0
+	const total = data ? Number(data.b2bulk) + Number(data.istar) * 1.24 : 0
 
 	const providers = [
 		{ label: 'B2Bulk', value: data?.b2bulk ?? '0' },

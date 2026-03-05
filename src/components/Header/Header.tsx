@@ -39,6 +39,7 @@ import { useGamesStoreModal } from '../../store/modal/useGameModal'
 import { useQuery } from '@tanstack/react-query'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import { getBalance } from '../../api/buy/buy'
+import { updateNumberFormat } from '../../func/number'
 export default function Header() {
 	const { t, lang, setLang } = useTranslationStore()
 	const { openModal } = useGamesStoreModal()
@@ -52,7 +53,7 @@ export default function Header() {
 		queryKey: ['adminBalance', token, open],
 		queryFn: async () => {
 			const result = await getBalance({ token })
-			const sum = Number(result.b2bulk) + Number(result.istar) * 12.4
+			const sum = Number(result.b2bulk) + Number(result.istar) * 1.24
 			return sum
 		},
 		enabled: !!token && isAdmin && open,
@@ -235,7 +236,7 @@ export default function Header() {
 										<ListItemIcon>
 											<AttachMoneyIcon />
 										</ListItemIcon>
-										<ListItemText primary={data || 0} />
+										<ListItemText primary={data ? `${updateNumberFormat(data)} $` : '0 $'} />
 									</ListItemButton>
 								</ListItem>
 							)}
