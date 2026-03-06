@@ -53,7 +53,7 @@ const BuyModal = () => {
 		}
 	}, [open])
 
-	const telegramServerId = Number(offer?.botId) < 49 ? 'premium' : 'star'
+	const telegramServerId = Number(offer?.botId) < 49 ? 'premium' : 'stars'
 	const mapError = (msg: string): string => {
 		const m = msg.toLowerCase()
 		if (m.includes('недостаточно средств у провайдера'))
